@@ -1,0 +1,33 @@
+/* About Section Styles */
+
+.about-achievements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.about-achievement-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  background: rgba(20, 20, 40, 0.4);
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+.about-achievement-item:hover {
+  transform: translateY(-4px);
+  border-color: rgba(147, 51, 234, 0.4);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+}
+
+@media (max-width: 640px) {
+  .about-achievements {
+    grid-template-columns: 1fr;
+  }
+}

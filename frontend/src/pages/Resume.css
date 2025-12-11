@@ -1,0 +1,358 @@
+/* =========================================
+   RESUME PAGE - CLEAN PROFESSIONAL LAYOUT
+   Single page resume-style design
+   ========================================= */
+
+.resume-page {
+  background: #ffffff;
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.resume-container {
+  max-width: 850px;
+  width: 100%;
+  background: #ffffff;
+  padding: 3rem;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.resume-header {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #2563eb;
+  margin-bottom: 1.5rem;
+}
+
+.resume-name {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
+}
+
+.resume-title {
+  font-size: 1.125rem;
+  color: #2563eb;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.8125rem;
+  transition: color 200ms ease;
+}
+
+.contact-link:hover {
+  color: #2563eb;
+}
+
+/* =========================================
+   SECTIONS
+   ========================================= */
+
+.resume-section {
+  margin-bottom: 1.5rem;
+}
+
+.section-heading {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #2563eb;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 0.75rem;
+}
+
+/* =========================================
+   SUMMARY
+   ========================================= */
+
+.summary-text {
+  font-size: 0.9375rem;
+  color: #4b5563;
+  line-height: 1.7;
+}
+
+/* =========================================
+   SKILLS
+   ========================================= */
+
+.skills-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skill-row {
+  display: flex;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.skill-label {
+  font-weight: 600;
+  color: #1a1a1a;
+  min-width: 100px;
+}
+
+.skill-value {
+  color: #4b5563;
+}
+
+/* =========================================
+   EXPERIENCE
+   ========================================= */
+
+.experience-item {
+  margin-bottom: 1.25rem;
+}
+
+.experience-item:last-child {
+  margin-bottom: 0;
+}
+
+.experience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.experience-left {
+  flex: 1;
+}
+
+.experience-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.125rem;
+}
+
+.experience-company {
+  font-size: 0.9375rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.experience-date {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.experience-details {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.experience-details li {
+  position: relative;
+  padding-left: 1rem;
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.7;
+  margin-bottom: 0.25rem;
+}
+
+.experience-details li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.experience-details li:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================
+   CERTIFICATIONS
+   ========================================= */
+
+.certifications-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cert-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+
+.cert-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.cert-name {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.cert-issuer {
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+.cert-date {
+  font-size: 0.8125rem;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+/* =========================================
+   ACHIEVEMENTS
+   ========================================= */
+
+.achievements-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.5rem;
+}
+
+.achievements-list li {
+  position: relative;
+  padding-left: 1rem;
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.achievements-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.achievements-list li strong {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+.resume-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.resume-footer p {
+  font-size: 0.8125rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 768px) {
+  .resume-page {
+    padding: 1rem;
+  }
+
+  .resume-container {
+    padding: 1.5rem;
+  }
+
+  .resume-name {
+    font-size: 2rem;
+  }
+
+  .resume-contact {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .experience-header {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .experience-date {
+    font-size: 0.8125rem;
+  }
+
+  .skill-row {
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .skill-label {
+    min-width: auto;
+  }
+
+  .achievements-list {
+    grid-template-columns: 1fr;
+  }
+
+  .cert-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+/* =========================================
+   PRINT STYLES
+   ========================================= */
+
+@media print {
+  .resume-page {
+    padding: 0;
+    background: white;
+  }
+
+  .resume-container {
+    box-shadow: none;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .contact-link {
+    color: #1a1a1a;
+  }
+}

@@ -1,0 +1,307 @@
+/* ================================
+   Jake Mesina Portfolio - Main Styles
+   Clean, Modern, AI-Powered Design
+   Color Scheme: Blue (#3B82F6) & Purple (#9333EA)
+   ================================ */
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	scroll-behavior: smooth;
+	scrollbar-width: thin;
+}
+
+html,
+body {
+	overflow-x: hidden;
+	background: #030014;
+	scroll-behavior: smooth !important;
+	color: #FFFFFF;
+}
+
+/* ================================
+   CSS VARIABLES - COLOR SCHEME
+   ================================ */
+:root {
+  /* Primary Colors - Blue & Purple Gradient */
+  --color-primary-blue: #3B82F6;
+  --color-primary-purple: #9333EA;
+  --color-blue-light: #60A5FA;
+  --color-purple-light: #A855F7;
+  
+  /* Gradient Definitions */
+  --gradient-primary: linear-gradient(135deg, #3B82F6 0%, #9333EA 100%);
+  --gradient-primary-soft: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+  --gradient-hover: linear-gradient(135deg, #60A5FA 0%, #A855F7 100%);
+  --gradient-glow: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+  
+  /* Background Colors */
+  --bg-primary: #030014;
+  --bg-secondary: rgba(15, 15, 35, 0.8);
+  --bg-card: rgba(20, 20, 40, 0.6);
+  --bg-card-hover: rgba(30, 30, 50, 0.7);
+  
+  /* Text Colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.5);
+  
+  /* Border Colors */
+  --border-primary: rgba(59, 130, 246, 0.2);
+  --border-secondary: rgba(147, 51, 234, 0.2);
+  --border-glow: rgba(59, 130, 246, 0.4);
+  
+  /* Shadow Colors */
+  --shadow-blue: rgba(59, 130, 246, 0.2);
+  --shadow-purple: rgba(147, 51, 234, 0.2);
+  --shadow-blue-strong: rgba(59, 130, 246, 0.4);
+  --shadow-purple-strong: rgba(147, 51, 234, 0.4);
+  
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 4rem;
+  --spacing-xl: 6rem;
+}
+
+/* ================================
+   ANIMATIONS
+   ================================ */
+@keyframes blob {
+	0%, 100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-20px);
+	}
+}
+
+@keyframes shine {
+  from {
+	  left: -100%;
+  }
+	to {
+	  left: 200%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--shadow-blue), 0 0 40px var(--shadow-purple);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--shadow-blue-strong), 0 0 60px var(--shadow-purple-strong);
+  }
+}
+
+.animate-blob {
+	animation: blob 8s infinite;
+}
+
+.animate-shine {
+  animation: shine 1.5s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animation-delay-2000 {
+	animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+	animation-delay: 4s;
+}
+
+/* ================================
+   CUSTOM SCROLLBAR
+   ================================ */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+	background-color: transparent;
+}
+  
+::-webkit-scrollbar-track {
+	background: rgba(3, 0, 20, 0.4);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border: 1px solid var(--border-primary);
+}
+  
+::-webkit-scrollbar-thumb {
+	background: rgba(59, 130, 246, 0.3);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	border-radius: 20px;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	box-shadow: 
+	  inset 0 0 20px var(--shadow-purple),
+	  0 0 10px var(--shadow-blue);
+	transition: all 0.3s ease;
+}
+  
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(59, 130, 246, 0.5);
+	border: 1px solid var(--border-secondary);
+	box-shadow: 
+	  inset 0 0 30px var(--shadow-purple),
+	  0 0 15px var(--shadow-blue);
+}
+  
+::-webkit-scrollbar-thumb:active {
+	background: rgba(59, 130, 246, 0.6);
+	border: 1px solid var(--border-glow);
+	box-shadow: 
+	  inset 0 0 40px var(--shadow-purple-strong),
+	  0 0 20px var(--shadow-blue-strong);
+}
+  
+::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+/* ================================
+   UTILITY CLASSES
+   ================================ */
+
+/* Gradient Button */
+.btn-gradient {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gradient:hover {
+  background: var(--gradient-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px var(--shadow-blue);
+}
+
+.btn-gradient:active {
+  transform: translateY(0);
+}
+
+/* Card with Gradient Border */
+.card-gradient-border {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.card-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: var(--gradient-primary);
+  --webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.card-gradient-border:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px var(--shadow-blue);
+}
+
+/* Text Gradient */
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* Gradient Glow Effect */
+.glow-effect {
+  position: relative;
+}
+
+.glow-effect::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: var(--gradient-primary);
+  opacity: 0;
+  filter: blur(20px);
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.glow-effect:hover::before {
+  opacity: 0.7;
+}
+
+/* Section Container */
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+/* Section Title */
+.section-title {
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(20, 20, 40, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* AOS Animation Support */
+[data-aos] {
+	will-change: transform, opacity !important;
+}
+
+/* ================================
+   RESPONSIVE UTILITIES
+   ================================ */
+@media (max-width: 768px) {
+  :root {
+    --spacing-lg: 3rem;
+    --spacing-xl: 4rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .section-container {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+}
+
+
