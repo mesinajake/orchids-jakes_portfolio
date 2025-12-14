@@ -10,10 +10,19 @@ const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI lazily
+let openai = null;
+function getOpenAIClient() {
+  if (!openai) {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      console.warn('⚠️  OPENAI_API_KEY not set. Chat features will not work.');
+      return null;
+    }
+    openai = new OpenAI({ apiKey });
+  }
+  return openai;
+}
 
 // Load portfolio data for context
 let portfolioContext = '';
@@ -38,7 +47,7 @@ SKILLS:
 Frontend: ${portfolio.skills.frontend.map(s => s.name).join(', ')}
 Backend: ${portfolio.skills.backend.map(s => s.name).join(', ')}
 Tools: ${portfolio.skills.tools.map(s => s.name).join(', ')}
-Other: ${portfolio.skills.other.join(', ')}
+Other: ${portfolio.skills.other ? portfolio.skills.other.join(', ') : 'N/A'}
 
 EXPERIENCE:
 ${portfolio.experience.map(exp => `
@@ -204,7 +213,15 @@ router.post('/', validateChat, async (req, res) => {
     ];
 
     // Get AI response
-    const completion = await openai.chat.completions.create({
+    const openaiClient = getOpenAIClient();
+    if (!openaiClient) {
+      return res.status(500).json({
+        success: false,
+        message: 'OpenAI API not available. Please check your API key settings.'
+      });
+    }
+
+    const completion = await openaiClient.chat.completions.create({
       model: process.env.AI_MODEL || 'gpt-4',
       messages: openAIMessages,
       temperature: parseFloat(process.env.AI_TEMPERATURE) || 0.7,
@@ -280,7 +297,15 @@ router.post('/stream', validateChat, async (req, res) => {
       }))
     ];
 
-    const stream = await openai.chat.completions.create({
+    const openaiClient = getOpenAIClient();
+    if (!openaiClient) {
+      return res.status(500).json({
+        success: false,
+        message: 'OpenAI API not available. Please check your API key settings.'
+      });
+    }
+
+    const stream = await openaiClient.chat.completions.create({
       model: process.env.AI_MODEL || 'gpt-4',
       messages: openAIMessages,
       temperature: parseFloat(process.env.AI_TEMPERATURE) || 0.7,
