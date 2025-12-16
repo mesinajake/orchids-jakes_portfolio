@@ -166,7 +166,11 @@ const HomePage = () => {
             <h2 className="section-title">About</h2>
           </div>
           <h3 className="post-title">{personal.title}</h3>
-          <p className="post-content">{personal.bio}</p>
+          <p className="post-content">I'm a Web Developer and Front-End Developer with a passion for creating beautiful, responsive, and user-friendly web experiences. Currently pursuing IT at City College of Calamba, I specialize in modern front-end technologies like React, JavaScript, and CSS.
+
+I focus on building clean, intuitive interfaces with attention to design details, accessibility, and performance. From pixel-perfect layouts to smooth animations, I craft websites that not only look great but also deliver exceptional user experiences.
+
+My goal is to bridge the gap between design and development, turning creative visions into functional, high-quality web applications that make a real impact.</p>
           <div className="about-grid">
             <div className="about-chip">📍 {personal.location}</div>
             <div className="about-chip">📧 {personal.email}</div>
@@ -317,15 +321,10 @@ const HomePage = () => {
 
             <div className="profile-info">
               <div className="profile-name-row">
-                <h2 className="profile-name-text">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</h2>
-                <span className="profile-badge">ADMIN</span>
-              </div>
-              <div className="profile-member">
-                <span className="member-badge">⭐ PRO MEMBER</span>
-                <span className="verified-badge">✓</span>
+                <h2 className="profile-name-text">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}.</h2>
               </div>
               <p className="profile-bio">
-                I am {personal.name.split(' ')[0]}, {personal.title.toLowerCase()}. {personal.tagline}...
+                I build clean, intuitive interfaces with strong attention to design, accessibility, and performance—crafting websites that look great and deliver exceptional user experiences.
               </p>
             </div>
 
@@ -345,20 +344,6 @@ const HomePage = () => {
                 </div>
               </div>
             </div>
-
-            <div className="profile-streak">
-              <div className="streak-icon">🔥</div>
-              <div className="streak-content">
-                <div className="streak-number">{Math.min(streak, 999)}</div>
-                <div className="streak-label">day streak</div>
-                <div className="streak-best">Best: {Math.min(streak, 999)} days</div>
-              </div>
-              <div className="streak-emoji">🔥</div>
-            </div>
-
-            <button className="share-progress-btn">
-              📤 Share Progress
-            </button>
 
               <div className="quick-links">
                 <h3 className="quick-links-title">SOCIAL LINKS</h3>
