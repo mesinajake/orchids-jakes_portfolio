@@ -42,12 +42,6 @@ const HomePage = () => {
       { id: "Frontend", label: "Frontend Dev", icon: Award },
     ];
 
-    const aboutParagraphs = [
-      "I'm a Web Developer and Front-End Developer with a passion for creating beautiful, responsive, and user-friendly web experiences. Currently pursuing IT at City College of Calamba, I specialize in modern front-end technologies like React, JavaScript, and CSS.",
-      "I focus on building clean, intuitive interfaces with attention to design details, accessibility, and performance. From pixel-perfect layouts to smooth animations, I craft websites that not only look great but also deliver exceptional user experiences.",
-      "My goal is to bridge the gap between design and development, turning creative visions into functional, high-quality web applications that make a real impact.",
-    ];
-
     const renderHomeFeed = () => (
       <>
         <div className="feed-input">
@@ -164,40 +158,45 @@ const HomePage = () => {
       </>
     );
 
-      const renderAboutSection = () => (
-        <>
-          <div className="feed-post">
-            <div className="section-header">
-              <User size={20} />
-              <h2 className="section-title">About</h2>
-            </div>
+    const renderAboutSection = () => (
+      <>
+        <div className="feed-post">
+          <div className="section-header">
+            <User size={20} />
+            <h2 className="section-title">About</h2>
+          </div>
             <h3 className="post-title">{personal.title}</h3>
-            {aboutParagraphs.map((paragraph, idx) => (
-              <p key={`about-para-${idx}`} className="post-content">{paragraph}</p>
-            ))}
-            <div className="about-grid">
-              <div className="about-chip">📍 {personal.location}</div>
-              <div className="about-chip">📧 {personal.email}</div>
-            </div>
+            <p className="post-content">
+              I'm a Web Developer and Front-End Developer with a passion for creating beautiful, responsive, and user-friendly web experiences. Currently pursuing IT at City College of Calamba, I specialize in modern front-end technologies like React, JavaScript, and CSS.
+            </p>
+            <p className="post-content">
+              I focus on building clean, intuitive interfaces with attention to design details, accessibility, and performance. From pixel-perfect layouts to smooth animations, I craft websites that not only look great but also deliver exceptional user experiences.
+            </p>
+            <p className="post-content">
+              My goal is to bridge the gap between design and development, turning creative visions into functional, high-quality web applications that make a real impact.
+            </p>
+          <div className="about-grid">
+            <div className="about-chip">📍 {personal.location}</div>
+            <div className="about-chip">📧 {personal.email}</div>
           </div>
-          <div className="feed-post">
-            <div className="section-header">
-              <Briefcase size={20} />
-              <h2 className="section-title">Recent Experience</h2>
-            </div>
-            {experience.slice(0, 2).map((exp) => (
-              <div key={exp.id} className="about-exp-row">
-                <div>
-                  <div className="post-title">{exp.project}</div>
-                  <div className="post-content">{exp.position} — {exp.company}</div>
-                </div>
-                <div className="about-chip">{exp.duration}</div>
+        </div>
+        <div className="feed-post">
+          <div className="section-header">
+            <Briefcase size={20} />
+            <h2 className="section-title">Recent Experience</h2>
+          </div>
+          {experience.slice(0, 2).map((exp) => (
+            <div key={exp.id} className="about-exp-row">
+              <div>
+                <div className="post-title">{exp.project}</div>
+                <div className="post-content">{exp.position} — {exp.company}</div>
               </div>
-            ))}
-          </div>
-        </>
-      );
-
+              <div className="about-chip">{exp.duration}</div>
+            </div>
+          ))}
+        </div>
+      </>
+    );
 
     const renderCertificationsSection = () => (
       <div className="feed-post">
@@ -205,19 +204,18 @@ const HomePage = () => {
           <Award size={20} />
           <h2 className="section-title">Certifications</h2>
         </div>
-          <div className="cert-list">
-            {certifications.map((cert) => (
-              <div key={`${cert.name}-${cert.year || cert.date || cert.month}`} className="cert-row">
-                <div className="cert-icon">🎖️</div>
-                <div className="cert-info">
-                  <div className="post-title">{cert.name}</div>
-                  <div className="post-content">{cert.issuer}</div>
-                </div>
-                <div className="about-chip">{cert.year}</div>
+        <div className="cert-list">
+          {certifications.map((cert) => (
+            <div key={cert.id} className="cert-row">
+              <div className="cert-icon">🎖️</div>
+              <div className="cert-info">
+                <div className="post-title">{cert.name}</div>
+                <div className="post-content">{cert.issuer}</div>
               </div>
-            ))}
-          </div>
-
+              <div className="about-chip">{cert.year}</div>
+            </div>
+          ))}
+        </div>
       </div>
     );
 
