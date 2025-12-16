@@ -3,6 +3,9 @@ import React from 'react';
 import "./styles/clean.css";
 import HomePage from "./pages/HomePage";
 import Portfolio from "./pages/Portfolio";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Certifications from "./pages/Certifications";
 import ChatBot from "./components/ChatBot";
 
 function App() {
@@ -12,6 +15,24 @@ function App() {
         <Route path="/" element={
           <>
             <HomePage />
+            <ChatBot />
+          </>
+        } />
+        <Route path="/about" element={
+          <>
+            <About />
+            <ChatBot />
+          </>
+        } />
+        <Route path="/certifications" element={
+          <>
+            <Certifications />
+            <ChatBot />
+          </>
+        } />
+        <Route path="/contact" element={
+          <>
+            <Contact />
             <ChatBot />
           </>
         } />

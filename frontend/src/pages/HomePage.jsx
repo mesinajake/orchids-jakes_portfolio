@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { 
   Mail, Bell, User, Trophy, Flame, Calendar, 
   Briefcase, GraduationCap, Users, MessageSquare,
-  Award, ExternalLink, Pin, Heart, MessageCircle, Share2
+  Award, ExternalLink, Pin, Heart, MessageCircle, Share2, Code, Cpu
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import "./HomePage.css";
 import ProfilePhoto from "../assets/profile_jake.jpg";
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const [portfolioData, setPortfolioData] = useState(null);
   const [activeTab, setActiveTab] = useState("All");
   const [darkMode, setDarkMode] = useState(false);
@@ -52,12 +54,12 @@ const HomePage = () => {
           </div>
         </div>
 
-        <nav className="header-nav">
-          <button className="nav-tab nav-tab-active">Home</button>
-          <button className="nav-tab">Learn</button>
-          <button className="nav-tab">Calendar</button>
-          <button className="nav-tab">Admin</button>
-        </nav>
+          <nav className="header-nav">
+            <button className="nav-tab nav-tab-active" onClick={() => navigate('/')}>Home</button>
+            <button className="nav-tab" onClick={() => navigate('/about')}>About</button>
+            <button className="nav-tab" onClick={() => navigate('/certifications')}>Certifications</button>
+            <button className="nav-tab" onClick={() => navigate('/contact')}>Get In Touch</button>
+          </nav>
 
         <div className="header-actions">
           <button className="header-icon-btn">
@@ -262,11 +264,82 @@ const HomePage = () => {
                 </button>
               </div>
             </div>
-          ))}
-        </main>
+            ))}
 
-        {/* Right Sidebar */}
-        <aside className="home-sidebar-right">
+            {/* Tech Stack Section */}
+            <div className="tech-stack-section">
+              <div className="section-header">
+                <Code size={24} />
+                <h2 className="section-title">Tech Stack</h2>
+              </div>
+              <div className="tech-categories">
+                <div className="tech-category">
+                  <h3 className="tech-category-title">Frontend</h3>
+                  <div className="tech-grid">
+                    {skills.frontend.slice(0, 6).map((skill) => (
+                      <div key={skill.name} className="tech-card">
+                        <div className="tech-icon">💻</div>
+                        <div className="tech-info">
+                          <span className="tech-name">{skill.name}</span>
+                          <div className="tech-level-bar">
+                            <div className="tech-level-fill" style={{ width: `${skill.level}%` }}></div>
+                          </div>
+                          <span className="tech-level-text">{skill.level}%</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="tech-category">
+                  <h3 className="tech-category-title">Backend</h3>
+                  <div className="tech-grid">
+                    {skills.backend.slice(0, 6).map((skill) => (
+                      <div key={skill.name} className="tech-card">
+                        <div className="tech-icon">⚙️</div>
+                        <div className="tech-info">
+                          <span className="tech-name">{skill.name}</span>
+                          <div className="tech-level-bar">
+                            <div className="tech-level-fill" style={{ width: `${skill.level}%` }}></div>
+                          </div>
+                          <span className="tech-level-text">{skill.level}%</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Education Section */}
+            <div className="education-section">
+              <div className="section-header">
+                <GraduationCap size={24} />
+                <h2 className="section-title">Education</h2>
+              </div>
+              <div className="education-list">
+                {education.map((edu) => (
+                  <div key={edu.id} className="education-card">
+                    <div className="education-icon">🎓</div>
+                    <div className="education-content">
+                      <h3 className="education-degree">{edu.degree}</h3>
+                      <p className="education-school">{edu.school}</p>
+                      <p className="education-duration">{edu.duration}</p>
+                      {edu.highlights && (
+                        <ul className="education-highlights">
+                          {edu.highlights.slice(0, 2).map((highlight, idx) => (
+                            <li key={idx}>{highlight}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </main>
+
+          {/* Right Sidebar */}
+          <aside className="home-sidebar-right">
           <div className="streak-widget">
             <div className="widget-header">
               <Flame size={20} className="widget-icon" />
