@@ -2,7 +2,7 @@
   "projectId": "b6513060-adfd-426e-8ad5-256792547828",
   "createdAt": 1765738712779,
   "startupCommands": [
-    "cd frontend && npx vite",
-    "cd backend && npx nodemon server.js"
+    "cd frontend; npx vite",
+    "cd backend; npx nodemon server.js"
   ]
 }
