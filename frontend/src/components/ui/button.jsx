@@ -1,19 +1,19 @@
 import React from 'react';
 import './Button.css';
 
-export function Button({ 
-  children, 
-  variant = 'default', 
-  size = 'default', 
-  className = '', 
-  ...props 
-}) {
-  return (
-    <button 
-      className={`ui-button ui-button--${variant} ui-button--${size} ${className}`}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-}
+export const Button = React.forwardRef(
+  ({ className = '', variant = 'default', size = 'default', children, disabled, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={`ui-button ui-button--${variant} ui-button--${size} ${className}`}
+        disabled={disabled}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  }
+);
+
+Button.displayName = 'Button';

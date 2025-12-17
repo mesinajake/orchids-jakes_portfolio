@@ -1,46 +1,65 @@
 .ui-badge {
   display: inline-flex;
   align-items: center;
-  border-radius: 9999px;
-  padding: 0.25rem 0.625rem;
+  gap: var(--space-1);
+  border-radius: calc(var(--radius) * 1.5);
+  padding: 0.125rem var(--space-3);
   font-size: 0.75rem;
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.5;
   transition: all var(--transition-fast);
+  border: 1px solid transparent;
   white-space: nowrap;
 }
 
-/* Variants */
 .ui-badge--default {
-  background-color: var(--color-primary);
-  color: var(--color-primary-foreground);
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
 }
 
 .ui-badge--secondary {
-  background-color: var(--color-secondary);
-  color: var(--color-secondary-foreground);
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border-color: hsl(var(--secondary));
+}
+
+.ui-badge--destructive {
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+  border-color: hsl(var(--destructive));
 }
 
 .ui-badge--outline {
   background-color: transparent;
-  border: 1px solid var(--color-border);
-  color: var(--color-foreground);
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
 }
 
-.ui-badge--destructive {
-  background-color: #ef4444;
-  color: #ffffff;
+.ui-badge--success {
+  background-color: hsl(142, 76%, 36%);
+  color: hsl(0, 0%, 100%);
+  border-color: hsl(142, 76%, 36%);
 }
 
-/* Size variants */
-.ui-badge.h-5 {
-  height: 1.25rem;
+.ui-badge--warning {
+  background-color: hsl(38, 92%, 50%);
+  color: hsl(0, 0%, 100%);
+  border-color: hsl(38, 92%, 50%);
 }
 
-.ui-badge.w-5 {
-  width: 1.25rem;
+.ui-badge--info {
+  background-color: hsl(199, 89%, 48%);
+  color: hsl(0, 0%, 100%);
+  border-color: hsl(199, 89%, 48%);
 }
 
-.ui-badge.p-0 {
-  padding: 0;
+/* Dot indicator */
+.ui-badge--dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+  margin-right: var(--space-1);
 }

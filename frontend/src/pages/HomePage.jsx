@@ -4,10 +4,6 @@ import {
   Briefcase, GraduationCap, Users, MessageSquare,
   Award, ExternalLink, Pin, Heart, MessageCircle, Share2, Code, Cpu
 } from "lucide-react";
-import { Button } from "../components/ui/Button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/Card";
-import { Badge } from "../components/ui/Badge";
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/Avatar";
 import "./HomePage.css";
 import ProfilePhoto from "../assets/profile_jake.jpg";
 
@@ -46,262 +42,216 @@ const HomePage = () => {
       { id: "Frontend", label: "Frontend Dev", icon: Award },
     ];
 
-      const renderHomeFeed = () => (
-        <>
-          <Card className="mb-4">
-            <CardContent className="pt-6">
-              <div className="flex gap-3 items-start">
-                <Avatar>
-                  <AvatarImage src={ProfilePhoto} alt="You" />
-                  <AvatarFallback>{personal.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                </Avatar>
-                <input type="text" placeholder="Write something..." className="flex-1 px-4 py-2 rounded-md border border-input bg-background" />
-                <Button size="icon" variant="ghost">🖼️</Button>
-                <Button size="icon" variant="ghost">🎥</Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="flex gap-2 mb-4 overflow-x-auto">
-            {feedTabs.map(tab => (
-              <Button
-                key={tab.id}
-                variant={activeTab === tab.id ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setActiveTab(tab.id)}
-              >
-                {tab.icon && <tab.icon size={16} />}
-                {tab.label}
-              </Button>
-            ))}
+    const renderHomeFeed = () => (
+      <>
+        <div className="feed-input">
+          <img src={ProfilePhoto} alt="You" className="feed-input-avatar" />
+          <input type="text" placeholder="Write something..." className="feed-input-field" />
+          <div className="feed-input-actions">
+            <button className="feed-action-btn">🖼️</button>
+            <button className="feed-action-btn">🎥</button>
           </div>
+        </div>
 
-        <Card className="mb-4 border-primary/50">
-          <CardHeader className="pb-3">
-            <div className="flex items-center gap-2 text-primary mb-2">
-              <Pin size={16} />
-              <span className="text-xs font-semibold">PINNED POST</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <Avatar>
-                <AvatarImage src={ProfilePhoto} alt={personal.name} />
-                <AvatarFallback>{personal.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
-                  <Badge variant="secondary" className="text-xs">L4</Badge>
-                </div>
-                <span className="text-xs text-muted-foreground">2 days ago</span>
+        <div className="feed-tabs">
+          {feedTabs.map(tab => (
+            <button
+              key={tab.id}
+              className={`feed-tab ${activeTab === tab.id ? 'feed-tab-active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.icon && <tab.icon size={16} />}
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Pinned Post */}
+        <div className="feed-post pinned-post">
+          <div className="pinned-header">
+            <Pin size={16} />
+            PINNED POST
+          </div>
+          <div className="post-header">
+            <img src={ProfilePhoto} alt={personal.name} className="post-avatar" />
+            <div className="post-author-info">
+              <div className="post-author-row">
+                <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
+                <span className="post-level">L4</span>
               </div>
+              <span className="post-time">2 days ago</span>
             </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Badge>📢 Announcements</Badge>
-            <CardTitle className="text-xl">🚀 Platform Updates - Exciting New Features!</CardTitle>
-            <CardDescription className="text-sm">
-              Hey everyone! 👋 We've been working hard to improve your learning experience, 
-              and we're excited to share some major updates: {experience[0].keyMetrics[0].description}...
-            </CardDescription>
-            <div className="flex items-center justify-between pt-2 border-t">
-              <div className="flex items-center gap-1">
-                <span>🔥</span>
-                <span>😊</span>
-                <span>👍</span>
-                <span className="text-sm text-muted-foreground ml-1">You and 13 others</span>
-              </div>
-              <span className="text-sm text-muted-foreground">21 Comments</span>
+          </div>
+          <div className="post-tag">📢 Announcements</div>
+          <h3 className="post-title">🚀 Platform Updates - Exciting New Features!</h3>
+          <p className="post-content">
+            Hey everyone! 👋 We've been working hard to improve your learning experience, 
+            and we're excited to share some major updates: {experience[0].keyMetrics[0].description}...
+          </p>
+          <div className="post-reactions">
+            <div className="reaction-avatars">
+              <div className="reaction-avatar">🔥</div>
+              <div className="reaction-avatar">😊</div>
+              <div className="reaction-avatar">👍</div>
+              <span className="reaction-text">You and 13 others</span>
             </div>
-          </CardContent>
-          <CardFooter className="flex gap-2">
-            <Button variant="ghost" size="sm" className="flex-1">
+            <span className="post-comments">21 Comments</span>
+          </div>
+          <div className="post-actions">
+            <button className="post-action-btn">
               <Flame size={16} />
               Inspiring
-            </Button>
-            <Button variant="ghost" size="sm" className="flex-1">
+            </button>
+            <button className="post-action-btn">
               <MessageCircle size={16} />
               Comment
-            </Button>
-            <Button variant="ghost" size="sm" className="flex-1">
+            </button>
+            <button className="post-action-btn">
               <Share2 size={16} />
               Share
-            </Button>
-          </CardFooter>
-        </Card>
+            </button>
+          </div>
+        </div>
 
+        {/* Regular Posts */}
         {experience.map((exp, index) => (
-          <Card key={exp.id} className="mb-4">
-            <CardHeader className="pb-3">
-              <div className="flex items-start gap-3">
-                <Avatar>
-                  <AvatarImage src={ProfilePhoto} alt={personal.name} />
-                  <AvatarFallback>{personal.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
-                    <Badge variant="secondary" className="text-xs">L{index + 3}</Badge>
-                  </div>
-                  <span className="text-xs text-muted-foreground">{exp.duration.split('—')[0].trim()}</span>
+          <div key={exp.id} className="feed-post">
+            <div className="post-header">
+              <img src={ProfilePhoto} alt={personal.name} className="post-avatar" />
+              <div className="post-author-info">
+                <div className="post-author-row">
+                  <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
+                  <span className="post-level">L{index + 3}</span>
                 </div>
+                <span className="post-time">{exp.duration.split('—')[0].trim()}</span>
               </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Badge variant="outline">
-                {exp.type === "Full-Stack Development" ? "📱 Accountability" : "🎨 Frontend"}
-              </Badge>
-              <CardTitle className="text-xl">{exp.project}</CardTitle>
-              <CardDescription className="text-sm">
-                {exp.description}
-              </CardDescription>
-              <div className="flex items-center justify-between pt-2 border-t">
-                <span className="text-sm text-muted-foreground">{index + 15} reactions</span>
-                <span className="text-sm text-muted-foreground">{index + 8} Comments</span>
+            </div>
+            <div className="post-tag">
+              {exp.type === "Full-Stack Development" ? "📱 Accountability" : "🎨 Frontend"}
+            </div>
+            <h3 className="post-title">{exp.project}</h3>
+            <p className="post-content">
+              {exp.description}
+            </p>
+            <div className="post-reactions">
+              <div className="reaction-avatars">
+                <span className="reaction-text">{index + 15} reactions</span>
               </div>
-            </CardContent>
-            <CardFooter className="flex gap-2">
-              <Button variant="ghost" size="sm" className="flex-1">
+              <span className="post-comments">{index + 8} Comments</span>
+            </div>
+            <div className="post-actions">
+              <button className="post-action-btn">
                 <Flame size={16} />
                 Inspiring
-              </Button>
-              <Button variant="ghost" size="sm" className="flex-1">
+              </button>
+              <button className="post-action-btn">
                 <MessageCircle size={16} />
                 Comment
-              </Button>
-              <Button variant="ghost" size="sm" className="flex-1">
+              </button>
+              <button className="post-action-btn">
                 <Share2 size={16} />
                 Share
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+              </button>
+            </div>
+          </div>
+          ))}
       </>
     );
 
     const renderAboutSection = () => (
       <>
-        <Card className="mb-4">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <User size={20} />
-              <CardTitle>About</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <h3 className="text-lg font-semibold mb-3">{personal.title}</h3>
-              <p className="text-sm text-muted-foreground mb-2">
-                I'm a Web Developer and Front-End Developer with a passion for creating beautiful, responsive, and user-friendly web experiences. Currently pursuing IT at City College of Calamba, I specialize in modern front-end technologies like React, JavaScript, and CSS.
-              </p>
-              <p className="text-sm text-muted-foreground mb-2">
-                I focus on building clean, intuitive interfaces with attention to design details, accessibility, and performance. From pixel-perfect layouts to smooth animations, I craft websites that not only look great but also deliver exceptional user experiences.
-              </p>
-              <p className="text-sm text-muted-foreground">
-                My goal is to bridge the gap between design and development, turning creative visions into functional, high-quality web applications that make a real impact.
-              </p>
-            </div>
-            <div className="flex gap-2 flex-wrap">
-              <Badge variant="secondary">📍 {personal.location}</Badge>
-              <Badge variant="secondary">📧 {personal.email}</Badge>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Briefcase size={20} />
-              <CardTitle>Recent Experience</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {experience.slice(0, 2).map((exp) => (
-              <div key={exp.id} className="flex justify-between items-start pb-4 border-b last:border-0 last:pb-0">
-                <div className="space-y-1">
-                  <h4 className="font-semibold">{exp.project}</h4>
-                  <p className="text-sm text-muted-foreground">{exp.position} — {exp.company}</p>
-                </div>
-                <Badge variant="outline">{exp.duration}</Badge>
+        <div className="feed-post">
+          <div className="section-header">
+            <User size={20} />
+            <h2 className="section-title">About</h2>
+          </div>
+            <h3 className="post-title">{personal.title}</h3>
+            <p className="post-content">
+              I'm a Web Developer and Front-End Developer with a passion for creating beautiful, responsive, and user-friendly web experiences. Currently pursuing IT at City College of Calamba, I specialize in modern front-end technologies like React, JavaScript, and CSS.
+            </p>
+            <p className="post-content">
+              I focus on building clean, intuitive interfaces with attention to design details, accessibility, and performance. From pixel-perfect layouts to smooth animations, I craft websites that not only look great but also deliver exceptional user experiences.
+            </p>
+            <p className="post-content">
+              My goal is to bridge the gap between design and development, turning creative visions into functional, high-quality web applications that make a real impact.
+            </p>
+          <div className="about-grid">
+            <div className="about-chip">📍 {personal.location}</div>
+            <div className="about-chip">📧 {personal.email}</div>
+          </div>
+        </div>
+        <div className="feed-post">
+          <div className="section-header">
+            <Briefcase size={20} />
+            <h2 className="section-title">Recent Experience</h2>
+          </div>
+          {experience.slice(0, 2).map((exp) => (
+            <div key={exp.id} className="about-exp-row">
+              <div>
+                <div className="post-title">{exp.project}</div>
+                <div className="post-content">{exp.position} — {exp.company}</div>
               </div>
-            ))}
-          </CardContent>
-        </Card>
+              <div className="about-chip">{exp.duration}</div>
+            </div>
+          ))}
+        </div>
       </>
     );
 
     const renderCertificationsSection = () => (
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Award size={20} />
-            <CardTitle>Certifications</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <div className="feed-post">
+        <div className="section-header">
+          <Award size={20} />
+          <h2 className="section-title">Certifications</h2>
+        </div>
+        <div className="cert-list">
           {certifications.map((cert) => (
-            <div key={cert.id} className="flex items-start gap-3 pb-4 border-b last:border-0 last:pb-0">
-              <div className="text-2xl">🎖️</div>
-              <div className="flex-1 space-y-1">
-                <h4 className="font-semibold">{cert.name}</h4>
-                <p className="text-sm text-muted-foreground">{cert.issuer}</p>
+            <div key={cert.id} className="cert-row">
+              <div className="cert-icon">🎖️</div>
+              <div className="cert-info">
+                <div className="post-title">{cert.name}</div>
+                <div className="post-content">{cert.issuer}</div>
               </div>
-              <Badge variant="secondary">{cert.year}</Badge>
+              <div className="about-chip">{cert.year}</div>
             </div>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
 
     const renderContactSection = () => (
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Mail size={20} />
-            <CardTitle>Get In Touch</CardTitle>
+      <div className="feed-post">
+        <div className="section-header">
+          <Mail size={20} />
+          <h2 className="section-title">Get In Touch</h2>
+        </div>
+        <p className="post-content">
+          Let's collaborate on AI-powered web apps or integrate automation into your workflows. Reach out anytime!
+        </p>
+        <div className="contact-grid">
+          <div className="contact-card">
+            <div className="contact-icon">✉️</div>
+            <div>
+              <div className="post-title">Email</div>
+              <div className="post-content">{personal.email}</div>
+            </div>
           </div>
-          <CardDescription>
-            Let's collaborate on AI-powered web apps or integrate automation into your workflows. Reach out anytime!
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-1">
-          <Card className="border-2">
-            <CardContent className="flex items-center gap-3 pt-6">
-              <div className="text-3xl">✉️</div>
-              <div className="space-y-1">
-                <h4 className="font-semibold">Email</h4>
-                <p className="text-sm text-muted-foreground">{personal.email}</p>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="border-2">
-            <CardContent className="flex items-center gap-3 pt-6">
-              <div className="text-3xl">📞</div>
-              <div className="space-y-1">
-                <h4 className="font-semibold">Phone</h4>
-                <p className="text-sm text-muted-foreground">{personal.phone}</p>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="border-2">
-            <CardContent className="flex items-center gap-3 pt-6">
-              <div className="text-3xl">🌐</div>
-              <div className="space-y-1">
-                <h4 className="font-semibold">Portfolio</h4>
-                <a 
-                  className="text-sm text-primary hover:underline" 
-                  href={social?.portfolio || '#'} 
-                  target="_blank" 
-                  rel="noreferrer"
-                >
-                  {social?.portfolio || 'Portfolio link'}
-                </a>
-              </div>
-            </CardContent>
-          </Card>
-        </CardContent>
-      </Card>
+          <div className="contact-card">
+            <div className="contact-icon">📞</div>
+            <div>
+              <div className="post-title">Phone</div>
+              <div className="post-content">{personal.phone}</div>
+            </div>
+          </div>
+          <div className="contact-card">
+            <div className="contact-icon">🌐</div>
+            <div>
+              <div className="post-title">Portfolio</div>
+              <a className="post-content" href={social?.portfolio || '#'} target="_blank" rel="noreferrer">{social?.portfolio || 'Portfolio link'}</a>
+            </div>
+          </div>
+        </div>
+      </div>
     );
 
     return (
@@ -347,23 +297,18 @@ const HomePage = () => {
           </nav>
 
 
-          <div className="header-actions flex items-center gap-2">
-            <Button variant="ghost" size="icon">
-              <Mail size={20} />
-            </Button>
-            <div className="relative">
-              <Button variant="ghost" size="icon">
-                <Bell size={20} />
-              </Button>
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                {certifications.length}
-              </Badge>
-            </div>
-            <Avatar className="cursor-pointer">
-              <AvatarImage src={ProfilePhoto} alt={personal.name} />
-              <AvatarFallback>{personal.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-            </Avatar>
-          </div>
+        <div className="header-actions">
+          <button className="header-icon-btn">
+            <Mail size={20} />
+          </button>
+          <button className="header-icon-btn header-notif">
+            <Bell size={20} />
+            <span className="notif-badge">{certifications.length}</span>
+          </button>
+          <button className="header-avatar">
+            <img src={ProfilePhoto} alt={personal.name} />
+          </button>
+        </div>
       </header>
 
       {/* Main Content */}
@@ -419,6 +364,7 @@ const HomePage = () => {
                     twitter: "🐦",
                     portfolio: "🌐"
                   };
+                  if (!url) return null;
                   return (
                     <a key={key} href={url} target="_blank" rel="noreferrer" className="quick-link-item">
                       <div className="quick-link-icon">{socialEmojis[key] || "🔗"}</div>

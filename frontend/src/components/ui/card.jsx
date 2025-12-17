@@ -1,50 +1,50 @@
 import React from 'react';
 import './Card.css';
 
-export function Card({ children, className = '', ...props }) {
+export const Card = ({ className = '', children, ...props }) => {
   return (
     <div className={`ui-card ${className}`} {...props}>
       {children}
     </div>
   );
-}
+};
 
-export function CardHeader({ children, className = '', ...props }) {
+export const CardHeader = ({ className = '', children, ...props }) => {
   return (
-    <div className={`ui-card-header ${className}`} {...props}>
+    <div className={`ui-card__header ${className}`} {...props}>
       {children}
     </div>
   );
-}
+};
 
-export function CardTitle({ children, className = '', ...props }) {
+export const CardTitle = ({ className = '', children, ...props }) => {
   return (
-    <h3 className={`ui-card-title ${className}`} {...props}>
+    <h3 className={`ui-card__title ${className}`} {...props}>
       {children}
     </h3>
   );
-}
+};
 
-export function CardDescription({ children, className = '', ...props }) {
+export const CardDescription = ({ className = '', children, ...props }) => {
   return (
-    <p className={`ui-card-description ${className}`} {...props}>
+    <p className={`ui-card__description ${className}`} {...props}>
       {children}
     </p>
   );
-}
+};
 
-export function CardContent({ children, className = '', ...props }) {
+export const CardContent = ({ className = '', children, ...props }) => {
   return (
-    <div className={`ui-card-content ${className}`} {...props}>
+    <div className={`ui-card__content ${className}`} {...props}>
       {children}
     </div>
   );
-}
+};
 
-export function CardFooter({ children, className = '', ...props }) {
+export const CardFooter = ({ className = '', children, ...props }) => {
   return (
-    <div className={`ui-card-footer ${className}`} {...props}>
+    <div className={`ui-card__footer ${className}`} {...props}>
       {children}
     </div>
   );
-}
+};

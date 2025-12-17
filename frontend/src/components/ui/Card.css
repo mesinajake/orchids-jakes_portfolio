@@ -1,53 +1,91 @@
 .ui-card {
-  background-color: var(--color-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-normal);
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-radius: calc(var(--radius) * 2);
+  border: 1px solid hsl(var(--border));
+  box-shadow: var(--shadow);
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
 }
 
 .ui-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  border-color: hsl(var(--border) / 0.8);
 }
 
-.ui-card-header {
-  padding: 1.5rem;
+.ui-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.ui-card:hover::before {
+  opacity: 1;
+}
+
+.ui-card__header {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  padding-bottom: var(--space-4);
 }
 
-.ui-card-title {
-  font-size: 1.5rem;
+.ui-card__title {
+  font-size: 1.25rem;
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.4;
   letter-spacing: -0.025em;
-  color: var(--color-card-foreground);
+  color: hsl(var(--foreground));
 }
 
-.ui-card-description {
+.ui-card__description {
   font-size: 0.875rem;
-  color: var(--color-muted-foreground);
-  line-height: 1.5;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.6;
 }
 
-.ui-card-content {
-  padding: 1.5rem;
+.ui-card__content {
+  padding: var(--space-6);
   padding-top: 0;
 }
 
-.ui-card-footer {
-  padding: 1.5rem;
-  padding-top: 0;
+.ui-card__footer {
   display: flex;
   align-items: center;
+  padding: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid hsl(var(--border));
 }
 
-/* Border variants */
-.ui-card.border-2 {
-  border-width: 2px;
+/* Card variants */
+.ui-card--interactive {
+  cursor: pointer;
 }
 
-.ui-card.border-primary\/50 {
-  border-color: rgba(15, 23, 42, 0.5);
+.ui-card--interactive:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow);
+}
+
+.ui-card--flat {
+  box-shadow: none;
+  border: 1px solid hsl(var(--border));
+}
+
+.ui-card--elevated {
+  box-shadow: var(--shadow-xl);
+  border: none;
+}
+
+.ui-card--elevated:hover {
+  box-shadow: var(--shadow-2xl);
 }

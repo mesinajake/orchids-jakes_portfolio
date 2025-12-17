@@ -1,0 +1,48 @@
+.ui-input {
+  display: flex;
+  width: 100%;
+  height: 2.5rem;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--input));
+  background-color: hsl(var(--background));
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.875rem;
+  color: hsl(var(--foreground));
+  transition: all var(--transition-base);
+  font-family: var(--font-sans);
+  outline: none;
+}
+
+.ui-input::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+
+.ui-input:hover {
+  border-color: hsl(var(--input) / 0.8);
+}
+
+.ui-input:focus {
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.1);
+}
+
+.ui-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background-color: hsl(var(--muted));
+}
+
+.ui-input--error {
+  border-color: hsl(var(--destructive));
+}
+
+.ui-input--error:focus {
+  border-color: hsl(var(--destructive));
+  box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.1);
+}
+
+/* Textarea variant */
+textarea.ui-input {
+  min-height: 5rem;
+  resize: vertical;
+}
