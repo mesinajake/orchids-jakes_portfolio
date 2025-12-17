@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ExternalLink, ArrowRight } from 'lucide-react';
+import { ExternalLink, ArrowRight } from './icons';
 
 const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
   // Handle kasus ketika ProjectLink kosong

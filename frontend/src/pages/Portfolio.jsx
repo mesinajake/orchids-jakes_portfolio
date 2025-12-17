@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Mail, Github, Linkedin, Phone, MapPin, Calendar, ExternalLink, ChevronRight, Download, Eye, X, Sun, Moon } from "lucide-react";
+import { Mail, Github, Linkedin, Phone, MapPin, Calendar, ExternalLink, ChevronRight, Download, Eye, X, Sun, Moon } from "../components/icons";
 import { motion, useScroll, useTransform } from "framer-motion";
 import "../styles/clean.css";
 import "./Portfolio.css";
@@ -209,7 +209,7 @@ const Portfolio = () => {
             <div className="project-tech">
               <span className="tech-tag">React</span>
               <span className="tech-tag">Node.js</span>
-              <span className="tech-tag">PostgreSQL</span>
+
               <span className="tech-tag">DeepSeek R1</span>
               <span className="tech-tag">Express</span>
             </div>
@@ -263,7 +263,7 @@ const Portfolio = () => {
                   <span className="tech-tag">HTML5</span>
                   <span className="tech-tag">CSS3</span>
                   <span className="tech-tag">JavaScript</span>
-                  <span className="tech-tag">TypeScript</span>
+
                 </div>
               </div>
               <div className="skill-category">

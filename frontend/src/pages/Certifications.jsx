@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Award, Calendar, ExternalLink } from "lucide-react";
+import { Award, Calendar, ExternalLink } from "../components/icons";
 import { useNavigate } from "react-router-dom";
 import "../styles/clean.css";
 

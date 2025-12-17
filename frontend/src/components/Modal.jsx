@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, ArrowRight, ExternalLink } from 'lucide-react';
+import { Eye, ArrowRight, ExternalLink } from './icons';
 
 const ProjectCardModal = ({ title, description, link }) => {
   const [isOpen, setIsOpen] = useState(false);

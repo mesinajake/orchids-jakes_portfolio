@@ -45,13 +45,6 @@
         "description": "ES6+, async/await, promises, and functional programming for enterprise applications"
       },
       {
-        "name": "TypeScript",
-        "level": 80,
-        "icon": "typescript.svg",
-        "years": 2,
-        "description": "Type-safe development for scalable applications"
-      },
-      {
         "name": "HTML5",
         "level": 90,
         "icon": "html.svg",
@@ -94,13 +87,6 @@
         "icon": "mongodb.svg",
         "years": 3,
         "description": "Designed 8 MongoDB schemas with geospatial indexing and aggregation pipelines"
-      },
-      {
-        "name": "PostgreSQL",
-        "level": 80,
-        "icon": "postgresql.svg",
-        "years": 2,
-        "description": "Relational database design and optimization for K-Wise kiosk system"
       },
       {
         "name": "JWT Authentication",
@@ -276,7 +262,7 @@
         "Achieved <300ms UI response time with 99.5% uptime",
         "Implemented LRU caching for 1000+ product images"
       ],
-      "technologies": ["React", "Node.js", "PostgreSQL", "Ollama", "DeepSeek R1", "Express", "SSE", "React Context"],
+        "technologies": ["React", "Node.js", "Ollama", "DeepSeek R1", "Express", "SSE", "React Context"],
       "githubUrl": "https://github.com/jakemesina/k-wise",
       "figmaUrl": "https://figma.com/k-wise-design"
     }
@@ -387,7 +373,7 @@
     },
     {
       "question": "What technologies do you use?",
-      "answer": "My core stack is React, Node.js, Express, MongoDB, and PostgreSQL. I'm proficient in TypeScript, JWT authentication, and RESTful API design. For AI, I work with Ollama, LLaMA 3.2, and DeepSeek R1. I'm also experienced with performance optimization, real-time systems (SSE), and developer tools like Git, GitHub Copilot, and Figma."
+        "answer": "My core stack is React, Node.js, Express, and MongoDB. I'm proficient in JWT authentication and RESTful API design. For AI, I work with Ollama, LLaMA 3.2, and DeepSeek R1. I'm also experienced with performance optimization, real-time systems (SSE), and developer tools like Git, GitHub Copilot, and Figma."
     },
     {
       "question": "Are you available for hire?",

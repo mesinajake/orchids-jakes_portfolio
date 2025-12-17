@@ -1,5 +1,5 @@
 import React from "react";
-import { Mail, Github, Linkedin } from "lucide-react";
+import { Mail, Github, Linkedin } from "../components/icons";
 import "../styles/clean.css";
 import "./HomeClean.css";
 
@@ -91,7 +91,7 @@ const Home = () => {
               <div className="tech-items">
                 <span className="tech-badge">React.js</span>
                 <span className="tech-badge">JavaScript</span>
-                <span className="tech-badge">TypeScript</span>
+
                 <span className="tech-badge">HTML5</span>
                 <span className="tech-badge">CSS3</span>
                 <span className="tech-badge">Tailwind CSS</span>
@@ -103,7 +103,7 @@ const Home = () => {
                 <span className="tech-badge">Node.js</span>
                 <span className="tech-badge">Express.js</span>
                 <span className="tech-badge">MongoDB</span>
-                <span className="tech-badge">PostgreSQL</span>
+
                 <span className="tech-badge">JWT</span>
                 <span className="tech-badge">REST APIs</span>
               </div>

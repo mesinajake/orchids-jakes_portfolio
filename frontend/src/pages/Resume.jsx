@@ -1,5 +1,5 @@
 import React from "react";
-import { Mail, Github, Linkedin, Phone, MapPin, ExternalLink } from "lucide-react";
+import { Mail, Github, Linkedin, Phone, MapPin, ExternalLink } from "../components/icons";
 import "../styles/clean.css";
 import "./Resume.css";
 
@@ -50,11 +50,11 @@ const Resume = () => {
           <div className="skills-grid">
             <div className="skill-row">
               <span className="skill-label">Frontend:</span>
-              <span className="skill-value">React.js, JavaScript, TypeScript, HTML5, CSS3, Tailwind CSS</span>
+                <span className="skill-value">React.js, JavaScript, HTML5, CSS3, Tailwind CSS</span>
             </div>
             <div className="skill-row">
               <span className="skill-label">Backend:</span>
-              <span className="skill-value">Node.js, Express.js, MongoDB, PostgreSQL, REST APIs, JWT Authentication</span>
+              <span className="skill-value">Node.js, Express.js, MongoDB, REST APIs, JWT Authentication</span>
             </div>
             <div className="skill-row">
               <span className="skill-label">AI & Tools:</span>

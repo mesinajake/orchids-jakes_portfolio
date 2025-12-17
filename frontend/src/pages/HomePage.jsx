@@ -1,9 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Mail, Bell, User, Trophy, Flame, Calendar, 
-  Briefcase, GraduationCap, Users, MessageSquare,
-  Award, ExternalLink, Pin, Heart, MessageCircle, Share2, Code, Cpu
-} from "lucide-react";
+import {
+  Mail,
+  Bell,
+  User,
+  Trophy,
+  Flame,
+  Calendar,
+  Briefcase,
+  GraduationCap,
+  Users,
+  MessageSquare,
+  Award,
+  ExternalLink,
+  Pin,
+  Heart,
+  MessageCircle,
+  Share2,
+  Code,
+  Cpu,
+  Github,
+  Linkedin,
+  Instagram,
+  Twitter,
+  Globe,
+  Phone,
+} from "../components/icons";
 import "./HomePage.css";
 import ProfilePhoto from "../assets/profile_jake.jpg";
 
@@ -331,23 +352,6 @@ const HomePage = () => {
               </p>
             </div>
 
-            <div className="profile-stats">
-              <div className="stat-card">
-                <div className="stat-icon">💻</div>
-                <div className="stat-content">
-                  <div className="stat-label">Developer</div>
-                  <div className="stat-value">{personal.technicalProficiency.overall}%</div>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">🏆</div>
-                <div className="stat-content">
-                  <div className="stat-label">#2</div>
-                  <div className="stat-value">Rank</div>
-                </div>
-              </div>
-            </div>
-
               <div className="quick-links">
                 <h3 className="quick-links-title">SOCIAL LINKS</h3>
                 {socialLinks.length === 0 && (
@@ -357,17 +361,21 @@ const HomePage = () => {
                   </div>
                 )}
                 {socialLinks.map(([key, url]) => {
-                  const socialEmojis = {
-                    github: "🐙",
-                    linkedin: "💼",
-                    instagram: "📸",
-                    twitter: "🐦",
-                    portfolio: "🌐"
+                  const iconMap = {
+                    github: Github,
+                    linkedin: Linkedin,
+                    instagram: Instagram,
+                    twitter: Twitter,
+                    portfolio: Globe,
                   };
-                  if (!url) return null;
+
+                  const Icon = iconMap[key];
+
                   return (
                     <a key={key} href={url} target="_blank" rel="noreferrer" className="quick-link-item">
-                      <div className="quick-link-icon">{socialEmojis[key] || "🔗"}</div>
+                      <div className="quick-link-icon">
+                        {Icon ? <Icon size={16} /> : <ExternalLink size={16} />}
+                      </div>
                       <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
                       <span className="quick-link-arrow">›</span>
                     </a>

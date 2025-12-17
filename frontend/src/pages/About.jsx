@@ -7,7 +7,7 @@ import {
   ArrowUpRight,
   Sparkles,
   UserCheck,
-} from "lucide-react";
+} from "../components/icons";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import './About.css';

@@ -6,7 +6,7 @@ import {
   ExternalLink,
   Instagram,
   Sparkles,
-} from "lucide-react";
+} from "../components/icons";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import "aos/dist/aos.css";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, X, Send, Minimize2, Maximize2 } from 'lucide-react';
+import { MessageCircle, X, Send, Minimize2, Maximize2 } from './icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ChatBot.css';
 import profilePhoto from '../assets/profile_jake.jpg';
