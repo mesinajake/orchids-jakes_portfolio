@@ -4,10 +4,10 @@ import {
   Briefcase, GraduationCap, Users, MessageSquare,
   Award, ExternalLink, Pin, Heart, MessageCircle, Share2, Code, Cpu
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "../components/ui/Button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/Card";
+import { Badge } from "../components/ui/Badge";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/Avatar";
 import "./HomePage.css";
 import ProfilePhoto from "../assets/profile_jake.jpg";
 
