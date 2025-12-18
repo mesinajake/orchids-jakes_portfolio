@@ -7,29 +7,36 @@ import {
   faAward,
   faBars,
   faBell,
+  faBolt,
   faBox,
+  faBrain,
   faBriefcase,
   faCalendar,
   faChevronRight,
   faCircleCheck,
   faCode,
   faComment,
+  faDatabase,
   faDownload,
   faEnvelope,
   faEye,
   faFileLines,
-  faShareNodes,
   faFire,
   faGlobe,
   faGraduationCap,
   faHeart,
   faLayerGroup,
   faLocationDot,
+  faLock,
   faMessage,
   faMicrochip,
   faMoon,
   faPaperPlane,
   faPhone,
+  faRobot,
+  faServer,
+  faShareNodes,
+  faShieldHalved,
   faStar,
   faSun,
   faTableColumns,
@@ -43,12 +50,22 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import {
+  faCss3Alt,
+  faDocker,
+  faFigma,
+  faGitAlt,
   faGithub,
+  faHtml5,
   faInstagram,
+  faJs,
   faLinkedin,
+  faNodeJs,
+  faPython,
+  faReact,
+  faTiktok,
+  faVuejs,
   faXTwitter,
   faYoutube,
-  faTiktok,
 } from "@fortawesome/free-brands-svg-icons";
 
 function createIconComponent(icon) {
@@ -123,3 +140,48 @@ export const Instagram = createIconComponent(faInstagram);
 export const Youtube = createIconComponent(faYoutube);
 export const TikTok = createIconComponent(faTiktok);
 export const Twitter = createIconComponent(faXTwitter);
+
+// Tech Icons
+export const ReactIcon = createIconComponent(faReact);
+export const JsIcon = createIconComponent(faJs);
+export const HtmlIcon = createIconComponent(faHtml5);
+export const CssIcon = createIconComponent(faCss3Alt);
+export const NodeIcon = createIconComponent(faNodeJs);
+export const PythonIcon = createIconComponent(faPython);
+export const VueIcon = createIconComponent(faVuejs);
+export const DockerIcon = createIconComponent(faDocker);
+export const FigmaIcon = createIconComponent(faFigma);
+export const GitIcon = createIconComponent(faGitAlt);
+export const DatabaseIcon = createIconComponent(faDatabase);
+export const ServerIcon = createIconComponent(faServer);
+export const RobotIcon = createIconComponent(faRobot);
+export const BrainIcon = createIconComponent(faBrain);
+export const ShieldIcon = createIconComponent(faShieldHalved);
+export const LockIcon = createIconComponent(faLock);
+export const BoltIcon = createIconComponent(faBolt);
+
+export const TechIcon = ({ name, ...props }) => {
+  const normalized = name.toLowerCase();
+  if (normalized.includes("react")) return <ReactIcon {...props} />;
+  if (normalized.includes("javascript") || normalized === "js")
+    return <JsIcon {...props} />;
+  if (normalized.includes("html")) return <HtmlIcon {...props} />;
+  if (normalized.includes("css")) return <CssIcon {...props} />;
+  if (normalized.includes("node")) return <NodeIcon {...props} />;
+  if (normalized.includes("python")) return <PythonIcon {...props} />;
+  if (normalized.includes("vue")) return <VueIcon {...props} />;
+  if (normalized.includes("docker")) return <DockerIcon {...props} />;
+  if (normalized.includes("figma")) return <FigmaIcon {...props} />;
+  if (normalized.includes("git")) return <GitIcon {...props} />;
+  if (normalized.includes("mongo") || normalized.includes("database"))
+    return <DatabaseIcon {...props} />;
+  if (normalized.includes("express") || normalized.includes("server"))
+    return <ServerIcon {...props} />;
+  if (normalized.includes("ai") || normalized.includes("llama") || normalized.includes("deepseek") || normalized.includes("ollama"))
+    return <RobotIcon {...props} />;
+  if (normalized.includes("jwt") || normalized.includes("security") || normalized.includes("auth"))
+    return <ShieldIcon {...props} />;
+  if (normalized.includes("vite")) return <BoltIcon {...props} />;
+  
+  return <Code {...props} />;
+};

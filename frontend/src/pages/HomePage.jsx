@@ -24,6 +24,7 @@ import {
   Twitter,
   Globe,
   Phone,
+  TechIcon,
 } from "../components/icons";
 import "./HomePage.css";
 import ProfilePhoto from "../assets/profile_jake.jpg";
@@ -225,18 +226,18 @@ const HomePage = () => {
           <Award size={20} />
           <h2 className="section-title">Certifications</h2>
         </div>
-        <div className="cert-list">
-          {certifications.map((cert) => (
-            <div key={cert.id} className="cert-row">
-              <div className="cert-icon">🎖️</div>
-              <div className="cert-info">
-                <div className="post-title">{cert.name}</div>
-                <div className="post-content">{cert.issuer}</div>
+            <div className="cert-list">
+            {certifications.map((cert, index) => (
+              <div key={cert.name || index} className="cert-row">
+                <div className="cert-icon">🎖️</div>
+                <div className="cert-info">
+                  <div className="post-title">{cert.name}</div>
+                  <div className="post-content">{cert.issuer}</div>
+                </div>
+                <div className="about-chip">{cert.year}</div>
               </div>
-              <div className="about-chip">{cert.year}</div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
       </div>
     );
 
@@ -403,12 +404,12 @@ const HomePage = () => {
               <button className="widget-info-btn">ⓘ</button>
             </div>
             <div className="education-widget-list">
-              {education.map((edu) => (
-                <div key={edu.id} className="education-widget-item">
+              {education.map((edu, index) => (
+                <div key={edu.institution || index} className="education-widget-item">
                   <div className="education-widget-icon">🎓</div>
                   <div>
                     <div className="education-widget-degree">{edu.degree}</div>
-                    <div className="education-widget-school">{edu.school}</div>
+                    <div className="education-widget-school">{edu.institution}</div>
                     <div className="education-widget-duration">{edu.duration}</div>
                   </div>
                 </div>
@@ -416,37 +417,35 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className="leaderboard-widget techstack-widget">
-            <div className="widget-header">
-              <Code size={20} className="widget-icon" />
-              <h3 className="widget-title">Tech Stack</h3>
-              <button className="widget-link">All ›</button>
-            </div>
-            <div className="techstack-widget-group">
-              <div className="tech-category-title">Frontend</div>
-              {skills.frontend.slice(0, 6).map((skill) => (
-                <div key={skill.name} className="techstack-item">
-                  <span className="tech-name">{skill.name}</span>
-                  <div className="tech-level-bar">
-                    <div className="tech-level-fill" style={{ width: `${skill.level}%` }}></div>
-                  </div>
-                  <span className="tech-level-text">{skill.level}%</span>
+            <div className="leaderboard-widget techstack-widget">
+              <div className="widget-header">
+                <Cpu size={20} className="widget-icon" />
+                <h3 className="widget-title">Tech Stack</h3>
+                <button className="widget-link">All ›</button>
+              </div>
+              <div className="techstack-widget-group">
+                <div className="tech-category-title">Frontend</div>
+                <div className="tech-icons-grid">
+                  {skills.frontend.slice(0, 8).map((skill) => (
+                    <div key={skill.name} className="tech-icon-item" title={skill.name}>
+                      <TechIcon name={skill.name} size={24} className="tech-brand-icon" />
+                      <span className="tech-icon-name">{skill.name}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <div className="techstack-widget-group">
-              <div className="tech-category-title">Backend</div>
-              {skills.backend.slice(0, 6).map((skill) => (
-                <div key={skill.name} className="techstack-item">
-                  <span className="tech-name">{skill.name}</span>
-                  <div className="tech-level-bar">
-                    <div className="tech-level-fill" style={{ width: `${skill.level}%` }}></div>
-                  </div>
-                  <span className="tech-level-text">{skill.level}%</span>
+              </div>
+              <div className="techstack-widget-group">
+                <div className="tech-category-title">Backend & AI</div>
+                <div className="tech-icons-grid">
+                  {[...skills.backend, ...skills.ai].slice(0, 8).map((skill) => (
+                    <div key={skill.name} className="tech-icon-item" title={skill.name}>
+                      <TechIcon name={skill.name} size={24} className="tech-brand-icon" />
+                      <span className="tech-icon-name">{skill.name}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
         </aside>
       </div>
     </div>
