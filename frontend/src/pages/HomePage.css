@@ -396,26 +396,16 @@
   color: #1d1d1f;
   font-size: 13px;
   font-weight: 500;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   margin-bottom: 4px;
+  border: 1px solid transparent;
 }
 
 .quick-link-item:hover {
   background: #ffffff;
-  color: var(--hover-color, #0071e3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transform: translateX(4px);
-}
-
-.quick-link-item:hover .quick-link-icon {
-  background: #ffffff;
-  color: var(--hover-color, #0071e3);
-  transform: scale(1.1);
-}
-
-.quick-link-item:hover .quick-link-arrow {
-  color: var(--hover-color, #0071e3);
-  transform: translateX(2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: #e5e5e7;
 }
 
 .quick-link-icon {
@@ -427,12 +417,29 @@
   align-items: center;
   justify-content: center;
   font-size: 16px;
+  transition: all 0.2s ease;
+  color: #1d1d1f;
+}
+
+.quick-link-item:hover .quick-link-icon {
+  background: var(--hover-color, #5856d6);
+  color: #ffffff;
+}
+
+.quick-link-item:hover span:not(.quick-link-arrow) {
+  color: var(--hover-color, #5856d6);
 }
 
 .quick-link-arrow {
   margin-left: auto;
   color: #c7c7cc;
   font-size: 18px;
+  transition: all 0.2s ease;
+}
+
+.quick-link-item:hover .quick-link-arrow {
+  color: var(--hover-color, #5856d6);
+  transform: translateX(2px);
 }
 
 .home-feed {

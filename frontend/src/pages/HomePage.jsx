@@ -72,17 +72,16 @@ const HomePage = () => {
       return "#0071e3";
     };
 
-    const getSocialColor = (key) => {
+    const getBrandColor = (key) => {
       const colors = {
-        github: "#333333",
-        linkedin: "#0077B5",
+        github: "#181717",
+        linkedin: "#0A66C2",
         instagram: "#E4405F",
         twitter: "#1DA1F2",
         portfolio: "#0071e3",
       };
       return colors[key.toLowerCase()] || "#0071e3";
     };
-
 
     const feedTabs = [
       { id: "All", label: "All", icon: null },
@@ -387,14 +386,14 @@ const HomePage = () => {
                     <span>No social links provided</span>
                   </div>
                 )}
-                  {socialLinks.map(([key, url]) => {
-                    const iconMap = {
-                      github: Github,
-                      linkedin: Linkedin,
-                      instagram: Instagram,
-                      twitter: Twitter,
-                      portfolio: Globe,
-                    };
+                {socialLinks.map(([key, url]) => {
+                  const iconMap = {
+                    github: Github,
+                    linkedin: Linkedin,
+                    instagram: Instagram,
+                    twitter: Twitter,
+                    portfolio: Globe,
+                  };
 
                     const Icon = iconMap[key];
 
@@ -405,7 +404,7 @@ const HomePage = () => {
                         target="_blank" 
                         rel="noreferrer" 
                         className="quick-link-item"
-                        style={{ '--hover-color': getSocialColor(key) }}
+                        style={{ '--hover-color': getBrandColor(key) }}
                       >
                         <div className="quick-link-icon">
                           {Icon ? <Icon size={16} /> : <ExternalLink size={16} />}
@@ -414,8 +413,7 @@ const HomePage = () => {
                         <span className="quick-link-arrow">›</span>
                       </a>
                     );
-                  })}
-
+                })}
               </div>
 
           </div>
