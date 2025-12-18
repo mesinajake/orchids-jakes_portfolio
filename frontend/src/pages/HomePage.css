@@ -1176,35 +1176,9 @@
 .tech-category-title {
   font-size: 13px;
   font-weight: 800;
-  color: #1d1d1f;
+  color: #000;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 12px;
-  opacity: 0.9;
-}
-
-
-.tech-icon-name {
-  font-size: 10px;
-  font-weight: 600;
-  color: #6e6e73;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;
-}
-
-.techstack-widget-group {
-  margin-top: 16px;
-}
-
-.tech-category-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: #86868b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   margin-bottom: 12px;
 }
 

@@ -96,29 +96,7 @@
         "description": "Secure token-based authentication with refresh token rotation"
       }
     ],
-    "ai": [
-      {
-        "name": "Ollama",
-        "level": 75,
-        "icon": "ollama.svg",
-        "years": 1,
-        "description": "Local LLM integration for privacy-first AI processing with zero cloud costs"
-      },
-      {
-        "name": "LLaMA 3.2",
-        "level": 75,
-        "icon": "llama.svg",
-        "years": 1,
-        "description": "Reduced manual screening time from 5-7 minutes to 30 seconds (90% improvement)"
-      },
-      {
-        "name": "DeepSeek R1",
-        "level": 70,
-        "icon": "deepseek.svg",
-        "years": 1,
-        "description": "Built hybrid AI engine with 3,200+ compatibility rules for K-Wise"
-      }
-    ],
+    "ai": [],
     "tools": [
       {
         "name": "Git & GitHub",
@@ -169,7 +147,7 @@
       "endDate": null,
       "location": "Remote",
       "type": "Full-Stack Development",
-      "description": "Enterprise-grade job marketplace with local LLM integration (Ollama + LLaMA 3.2) for automated resume-to-job matching",
+        "description": "Enterprise-grade job marketplace with intelligent automation for automated resume-to-job matching",
       "keyMetrics": [
         {
           "metric": "90% Time Reduction",
@@ -202,7 +180,7 @@
         "Zero cloud costs through local LLM processing",
         "Integrated 3 external job APIs seamlessly"
       ],
-      "technologies": ["Node.js", "Express.js", "MongoDB", "React", "Ollama", "LLaMA 3.2", "JWT", "RESTful APIs"],
+        "technologies": ["Node.js", "Express.js", "MongoDB", "React", "JWT", "RESTful APIs"],
       "techProficiency": {
         "nodejs": 85,
         "mongodb": 88,
@@ -262,7 +240,7 @@
         "Achieved <300ms UI response time with 99.5% uptime",
         "Implemented LRU caching for 1000+ product images"
       ],
-        "technologies": ["React", "Node.js", "Ollama", "DeepSeek R1", "Express", "SSE", "React Context"],
+          "technologies": ["React", "Node.js", "Express", "SSE", "React Context"],
       "githubUrl": "https://github.com/jakemesina/k-wise",
       "figmaUrl": "https://figma.com/k-wise-design"
     }
@@ -363,18 +341,18 @@
     ]
   },
   "commonQuestions": [
-    {
-      "question": "What's your experience with AI integration?",
-      "answer": "I specialize in integrating local LLMs like Ollama with LLaMA 3.2 and DeepSeek R1 into production applications. In AppliTrak, I built AI-powered resume screening that reduced processing time by 90%. In K-Wise, I created a hybrid AI engine with 3,200+ rules for real-time compatibility checking. I focus on privacy-first, cost-effective solutions using local processing rather than expensive cloud APIs."
-    },
+      {
+        "question": "What's your experience with AI integration?",
+        "answer": "I specialize in integrating intelligent automation into production applications. In AppliTrak, I built a resume screening system that reduced processing time by 90%. In K-Wise, I created a hybrid engine with 3,200+ rules for real-time compatibility checking. I focus on privacy-first, cost-effective solutions that deliver measurable business value."
+      },
     {
       "question": "Tell me about your best project",
       "answer": "AppliTrak is my flagship project—an enterprise job portal with automated resume-to-job matching using local AI. The system handles 60+ REST endpoints, multi-role authentication, and integrates 3 external job APIs. I'm most proud of reducing manual screening from 5-7 minutes to 30 seconds while maintaining 75% AI accuracy and zero cloud costs through local LLM processing."
     },
-    {
-      "question": "What technologies do you use?",
-        "answer": "My core stack is React, Node.js, Express, and MongoDB. I'm proficient in JWT authentication and RESTful API design. For AI, I work with Ollama, LLaMA 3.2, and DeepSeek R1. I'm also experienced with performance optimization, real-time systems (SSE), and developer tools like Git, GitHub Copilot, and Figma."
-    },
+      {
+        "question": "What technologies do you use?",
+          "answer": "My core stack is React, Node.js, Express, and MongoDB. I'm proficient in JWT authentication and RESTful API design. I'm also experienced with performance optimization, real-time systems (SSE), and developer tools like Git, GitHub Copilot, and Figma."
+      },
     {
       "question": "Are you available for hire?",
       "answer": "Yes! I'm actively seeking full-time opportunities in full-stack development, AI integration, or building scalable systems. I'm based in Calamba, Laguna but open to remote or hybrid arrangements. I'd love to discuss how I can contribute to your team. Feel free to reach me at mesinajake9@gmail.com or +639473492672."
