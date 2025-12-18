@@ -58,6 +58,20 @@ const HomePage = () => {
 
     const streak = calculateStreak();
 
+  const getTechColor = (name) => {
+    const normalized = name.toLowerCase();
+    if (normalized.includes("react")) return "#61DAFB";
+    if (normalized.includes("javascript") || normalized === "js") return "#F7DF1E";
+    if (normalized.includes("html")) return "#E34F26";
+    if (normalized.includes("css")) return "#1572B6";
+    if (normalized.includes("vite")) return "#646CFF";
+    if (normalized.includes("node")) return "#3C873A";
+    if (normalized.includes("express")) return "#808080"; // Grayish for Express
+    if (normalized.includes("mongo")) return "#47A248";
+    if (normalized.includes("jwt")) return "#d500f9";
+    return "#0071e3";
+  };
+
     const feedTabs = [
       { id: "All", label: "All", icon: null },
       { id: "Projects", label: "Project Showcase", icon: Briefcase },
@@ -423,28 +437,39 @@ const HomePage = () => {
                 <h3 className="widget-title">Tech Stack</h3>
                 <button className="widget-link">All ›</button>
               </div>
-              <div className="techstack-widget-group">
-                <div className="tech-category-title">Frontend</div>
-                <div className="tech-icons-grid">
-                  {skills.frontend.slice(0, 8).map((skill) => (
-                    <div key={skill.name} className="tech-icon-item" title={skill.name}>
-                      <TechIcon name={skill.name} size={24} className="tech-brand-icon" />
-                      <span className="tech-icon-name">{skill.name}</span>
-                    </div>
-                  ))}
+                <div className="techstack-widget-group">
+                  <div className="tech-category-title">Frontend</div>
+                  <div className="tech-icons-grid">
+                    {skills.frontend.slice(0, 8).map((skill) => (
+                      <div 
+                        key={skill.name} 
+                        className="tech-icon-item" 
+                        title={skill.name}
+                        style={{ '--hover-color': getTechColor(skill.name) }}
+                      >
+                        <TechIcon name={skill.name} size={24} className="tech-brand-icon" />
+                        <span className="tech-icon-name">{skill.name}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="techstack-widget-group">
-                <div className="tech-category-title">Backend & AI</div>
-                <div className="tech-icons-grid">
-                  {[...skills.backend, ...skills.ai].slice(0, 8).map((skill) => (
-                    <div key={skill.name} className="tech-icon-item" title={skill.name}>
-                      <TechIcon name={skill.name} size={24} className="tech-brand-icon" />
-                      <span className="tech-icon-name">{skill.name}</span>
-                    </div>
-                  ))}
+                <div className="techstack-widget-group">
+                  <div className="tech-category-title">Backend & AI</div>
+                  <div className="tech-icons-grid">
+                    {[...skills.backend, ...skills.ai].slice(0, 8).map((skill) => (
+                      <div 
+                        key={skill.name} 
+                        className="tech-icon-item" 
+                        title={skill.name}
+                        style={{ '--hover-color': getTechColor(skill.name) }}
+                      >
+                        <TechIcon name={skill.name} size={24} className="tech-brand-icon" />
+                        <span className="tech-icon-name">{skill.name}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+
             </div>
         </aside>
       </div>

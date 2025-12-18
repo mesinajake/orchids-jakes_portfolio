@@ -1116,7 +1116,7 @@
 
 .tech-icons-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   padding: 4px 0;
 }
@@ -1148,8 +1148,41 @@
 
 .tech-icon-item:hover .tech-brand-icon {
   transform: scale(1.1);
-  color: #0071e3;
+  color: var(--hover-color, #0071e3);
 }
+
+.tech-icon-item:hover {
+  background: #ffffff;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  border-color: var(--hover-color, #e5e5e7);
+}
+
+.tech-icon-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: #6e6e73;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.techstack-widget-group {
+  margin-top: 16px;
+}
+
+.tech-category-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1d1d1f;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+
 
 .tech-icon-name {
   font-size: 10px;

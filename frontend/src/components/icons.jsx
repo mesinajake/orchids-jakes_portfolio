@@ -160,6 +160,29 @@ export const ShieldIcon = createIconComponent(faShieldHalved);
 export const LockIcon = createIconComponent(faLock);
 export const BoltIcon = createIconComponent(faBolt);
 
+export const JwtIcon = ({ size = 24, className, style, ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 48 48"
+    className={className}
+    style={style}
+    {...props}
+  >
+    <polygon fill="#546e7a" points="21.906,31.772 24.507,29.048 27.107,31.772 27.107,43 21.906,43" />
+    <polygon fill="#f50057" points="17.737,29.058 21.442,28.383 21.945,32.115 15.345,41.199 11.138,38.141" />
+    <polygon fill="#d500f9" points="15.962,24.409 19.355,26.041 17.569,29.356 6.89,32.825 5.283,27.879" />
+    <polygon fill="#29b6f6" points="17.256,19.607 19.042,22.922 15.649,24.554 4.97,21.084 6.577,16.137" />
+    <polygon fill="#00e5ff" points="21.126,16.482 20.623,20.214 16.918,19.539 10.318,10.455 14.526,7.398" />
+    <polygon fill="#546e7a" points="26.094,16.228 23.493,18.952 20.893,16.228 20.893,5 26.094,5" />
+    <polygon fill="#f50057" points="30.262,18.943 26.558,19.618 26.055,15.886 32.654,6.802 36.862,9.859" />
+    <polygon fill="#d500f9" points="32.039,23.59 28.645,21.958 30.431,18.643 41.11,15.174 42.717,20.12" />
+    <polygon fill="#29b6f6" points="30.744,28.393 28.958,25.078 32.351,23.447 43.03,26.916 41.423,31.863" />
+    <polygon fill="#00e5ff" points="26.874,31.518 27.378,27.786 31.082,28.461 37.682,37.545 33.474,40.602" />
+  </svg>
+);
+
 export const TechIcon = ({ name, ...props }) => {
   const normalized = name.toLowerCase();
   if (normalized.includes("react")) return <ReactIcon {...props} />;
@@ -177,11 +200,17 @@ export const TechIcon = ({ name, ...props }) => {
     return <DatabaseIcon {...props} />;
   if (normalized.includes("express") || normalized.includes("server"))
     return <ServerIcon {...props} />;
-  if (normalized.includes("ai") || normalized.includes("llama") || normalized.includes("deepseek") || normalized.includes("ollama"))
+  if (
+    normalized.includes("ai") ||
+    normalized.includes("llama") ||
+    normalized.includes("deepseek") ||
+    normalized.includes("ollama")
+  )
     return <RobotIcon {...props} />;
-  if (normalized.includes("jwt") || normalized.includes("security") || normalized.includes("auth"))
+  if (normalized.includes("jwt")) return <JwtIcon {...props} />;
+  if (normalized.includes("security") || normalized.includes("auth"))
     return <ShieldIcon {...props} />;
   if (normalized.includes("vite")) return <BoltIcon {...props} />;
-  
+
   return <Code {...props} />;
 };
