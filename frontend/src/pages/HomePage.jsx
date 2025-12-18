@@ -58,19 +58,31 @@ const HomePage = () => {
 
     const streak = calculateStreak();
 
-  const getTechColor = (name) => {
-    const normalized = name.toLowerCase();
-    if (normalized.includes("react")) return "#61DAFB";
-    if (normalized.includes("javascript") || normalized === "js") return "#F7DF1E";
-    if (normalized.includes("html")) return "#E34F26";
-    if (normalized.includes("css")) return "#1572B6";
-    if (normalized.includes("vite")) return "#646CFF";
-    if (normalized.includes("node")) return "#3C873A";
-    if (normalized.includes("express")) return "#000000";
-    if (normalized.includes("mongo")) return "#47A248";
-    if (normalized.includes("jwt")) return "#d500f9";
-    return "#0071e3";
-  };
+    const getTechColor = (name) => {
+      const normalized = name.toLowerCase();
+      if (normalized.includes("react")) return "#61DAFB";
+      if (normalized.includes("javascript") || normalized === "js") return "#F7DF1E";
+      if (normalized.includes("html")) return "#E34F26";
+      if (normalized.includes("css")) return "#1572B6";
+      if (normalized.includes("vite")) return "#646CFF";
+      if (normalized.includes("node")) return "#3C873A";
+      if (normalized.includes("express")) return "#000000";
+      if (normalized.includes("mongo")) return "#47A248";
+      if (normalized.includes("jwt")) return "#d500f9";
+      return "#0071e3";
+    };
+
+    const getSocialColor = (key) => {
+      const colors = {
+        github: "#333333",
+        linkedin: "#0077B5",
+        instagram: "#E4405F",
+        twitter: "#1DA1F2",
+        portfolio: "#0071e3",
+      };
+      return colors[key.toLowerCase()] || "#0071e3";
+    };
+
 
     const feedTabs = [
       { id: "All", label: "All", icon: null },
@@ -375,27 +387,35 @@ const HomePage = () => {
                     <span>No social links provided</span>
                   </div>
                 )}
-                {socialLinks.map(([key, url]) => {
-                  const iconMap = {
-                    github: Github,
-                    linkedin: Linkedin,
-                    instagram: Instagram,
-                    twitter: Twitter,
-                    portfolio: Globe,
-                  };
+                  {socialLinks.map(([key, url]) => {
+                    const iconMap = {
+                      github: Github,
+                      linkedin: Linkedin,
+                      instagram: Instagram,
+                      twitter: Twitter,
+                      portfolio: Globe,
+                    };
 
-                  const Icon = iconMap[key];
+                    const Icon = iconMap[key];
 
-                  return (
-                    <a key={key} href={url} target="_blank" rel="noreferrer" className="quick-link-item">
-                      <div className="quick-link-icon">
-                        {Icon ? <Icon size={16} /> : <ExternalLink size={16} />}
-                      </div>
-                      <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
-                      <span className="quick-link-arrow">›</span>
-                    </a>
-                  );
-                })}
+                    return (
+                      <a 
+                        key={key} 
+                        href={url} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="quick-link-item"
+                        style={{ '--hover-color': getSocialColor(key) }}
+                      >
+                        <div className="quick-link-icon">
+                          {Icon ? <Icon size={16} /> : <ExternalLink size={16} />}
+                        </div>
+                        <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                        <span className="quick-link-arrow">›</span>
+                      </a>
+                    );
+                  })}
+
               </div>
 
           </div>
