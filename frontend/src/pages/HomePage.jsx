@@ -66,7 +66,7 @@ const HomePage = () => {
     if (normalized.includes("css")) return "#1572B6";
     if (normalized.includes("vite")) return "#646CFF";
     if (normalized.includes("node")) return "#3C873A";
-    if (normalized.includes("express")) return "#808080"; // Grayish for Express
+    if (normalized.includes("express")) return "#000000";
     if (normalized.includes("mongo")) return "#47A248";
     if (normalized.includes("jwt")) return "#d500f9";
     return "#0071e3";
@@ -435,7 +435,6 @@ const HomePage = () => {
               <div className="widget-header">
                 <Cpu size={20} className="widget-icon" />
                 <h3 className="widget-title">Tech Stack</h3>
-                <button className="widget-link">All ›</button>
               </div>
                 <div className="techstack-widget-group">
                   <div className="tech-category-title">Frontend</div>
@@ -454,7 +453,7 @@ const HomePage = () => {
                   </div>
                 </div>
                 <div className="techstack-widget-group">
-                  <div className="tech-category-title">Backend & AI</div>
+                  <div className="tech-category-title">Backend</div>
                   <div className="tech-icons-grid">
                     {[...skills.backend, ...skills.ai].slice(0, 8).map((skill) => (
                       <div 

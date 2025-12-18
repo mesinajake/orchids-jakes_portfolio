@@ -717,14 +717,6 @@
   justify-content: center;
 }
 
-.widget-link {
-  background: transparent;
-  border: none;
-  color: #5856d6;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
 
 .streak-display {
   text-align: center;
@@ -1151,13 +1143,6 @@
   color: var(--hover-color, #0071e3);
 }
 
-.tech-icon-item:hover {
-  background: #ffffff;
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-  border-color: var(--hover-color, #e5e5e7);
-}
-
 .tech-icon-name {
   font-size: 10px;
   font-weight: 600;
@@ -1174,11 +1159,11 @@
 }
 
 .tech-category-title {
-  font-size: 13px;
-  font-weight: 800;
-  color: #000;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1d1d1f;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   margin-bottom: 12px;
 }
 
