@@ -84,17 +84,6 @@ const HomePage = () => {
       return "#0071e3";
     };
 
-  const getSocialColor = (name) => {
-    const normalized = name.toLowerCase();
-    if (normalized.includes("github")) return "#181717";
-    if (normalized.includes("linkedin")) return "#0A66C2";
-    if (normalized.includes("instagram")) return "#E4405F";
-    if (normalized.includes("twitter")) return "#1DA1F2";
-    if (normalized.includes("portfolio") || normalized.includes("globe")) return "#0071e3";
-    if (normalized.includes("mail")) return "#EA4335";
-    return "#5856d6";
-  };
-
     const feedTabs = [
       { id: "All", label: "All", icon: null },
       { id: "Projects", label: "Project Showcase", icon: Briefcase },

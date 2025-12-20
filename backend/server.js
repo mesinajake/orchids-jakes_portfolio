@@ -48,9 +48,9 @@ const chatLimiter = rateLimit({
 app.use('/api/chat', chatLimiter);
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/portfolio', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/portfolio', {
+  serverSelectionTimeoutMS: 5000,
+  bufferCommands: false,
 })
 .then(() => console.log('✅ MongoDB Connected Successfully'))
 .catch((err) => console.error('❌ MongoDB Connection Error:', err));
