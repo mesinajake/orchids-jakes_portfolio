@@ -114,7 +114,56 @@ const HomePage = () => {
           ))}
         </div>
 
-        {/* Pinned Post */}
+        {/* Pinned Posts */}
+        <div className="feed-post pinned-post">
+          <div className="pinned-header">
+            <Pin size={16} />
+            PINNED POST
+          </div>
+          <div className="post-header">
+            <img src={ProfilePhoto} alt={personal.name} className="post-avatar" />
+            <div className="post-author-info">
+              <div className="post-author-row">
+                <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
+                <span className="post-level">L5</span>
+              </div>
+              <span className="post-time">Just now</span>
+            </div>
+          </div>
+          <div className="post-tag">🚀 Project Showcase</div>
+          <h3 className="post-title">AppliTrak: AI-Powered Job Portal</h3>
+          <p className="post-content">
+            Just finished building AppliTrak! 🚀 An AI-powered job portal that uses local LLMs to match resumes with job descriptions in seconds. No cloud costs, 100% privacy, and 90% faster screening. Check out the dashboard and the AI analyzer in action! 💻✨ #AI #FullStack #PrivacyFirst
+          </p>
+          <div className="post-images">
+            <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/image-1766235642796.png?width=8000&height=8000&resize=contain" alt="AppliTrak Dashboard" className="post-image" />
+            <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-12-13-191932-1766235676192.png?width=8000&height=8000&resize=contain" alt="AppliTrak AI Analyzer" className="post-image" />
+          </div>
+          <div className="post-reactions">
+            <div className="reaction-avatars">
+              <div className="reaction-avatar">🔥</div>
+              <div className="reaction-avatar">❤️</div>
+              <div className="reaction-avatar">🚀</div>
+              <span className="reaction-text">You and 42 others</span>
+            </div>
+            <span className="post-comments">12 Comments</span>
+          </div>
+          <div className="post-actions">
+            <button className="post-action-btn">
+              <Flame size={16} />
+              Inspiring
+            </button>
+            <button className="post-action-btn">
+              <MessageCircle size={16} />
+              Comment
+            </button>
+            <button className="post-action-btn">
+              <Share2 size={16} />
+              Share
+            </button>
+          </div>
+        </div>
+
         <div className="feed-post pinned-post">
           <div className="pinned-header">
             <Pin size={16} />
@@ -127,23 +176,22 @@ const HomePage = () => {
                 <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
                 <span className="post-level">L4</span>
               </div>
-              <span className="post-time">2 days ago</span>
+              <span className="post-time">1 day ago</span>
             </div>
           </div>
-          <div className="post-tag">📢 Announcements</div>
-          <h3 className="post-title">🚀 Platform Updates - Exciting New Features!</h3>
+          <div className="post-tag">🖥️ Innovation</div>
+          <h3 className="post-title">K-Wise: AI-Driven Kiosk System</h3>
           <p className="post-content">
-            Hey everyone! 👋 We've been working hard to improve your learning experience, 
-            and we're excited to share some major updates: {experience[0].keyMetrics[0].description}...
+            Excited to reveal K-Wise! 🖥️ An AI-driven kiosk system that makes PC building accessible to everyone. With 3,200+ compatibility rules and real-time AI scoring, it's like having a tech expert by your side. 87% faster builds, 100% confidence. 🛠️🤖 #TechInnovation #AI #React #PCBuilding
           </p>
           <div className="post-reactions">
             <div className="reaction-avatars">
-              <div className="reaction-avatar">🔥</div>
-              <div className="reaction-avatar">😊</div>
+              <div className="reaction-avatar">⭐</div>
+              <div className="reaction-avatar">🙌</div>
               <div className="reaction-avatar">👍</div>
-              <span className="reaction-text">You and 13 others</span>
+              <span className="reaction-text">38 reactions</span>
             </div>
-            <span className="post-comments">21 Comments</span>
+            <span className="post-comments">9 Comments</span>
           </div>
           <div className="post-actions">
             <button className="post-action-btn">
