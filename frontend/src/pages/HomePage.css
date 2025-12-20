@@ -405,6 +405,15 @@
   color: var(--hover-color, #1d1d1f);
 }
 
+.quick-link-item:hover .quick-link-icon {
+  color: var(--hover-color);
+}
+
+.quick-link-item:hover .quick-link-arrow {
+  color: var(--hover-color);
+  transform: translateX(4px);
+}
+
 .quick-link-icon {
   width: 32px;
   height: 32px;
