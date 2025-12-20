@@ -132,9 +132,9 @@ const HomePage = () => {
           </div>
           <div className="post-tag">🚀 Project Showcase</div>
           <h3 className="post-title">AppliTrak: AI-Powered Job Portal</h3>
-          <p className="post-content">
-            Just finished building AppliTrak! 🚀 An AI-powered job portal that uses local LLMs to match resumes with job descriptions in seconds. No cloud costs, 100% privacy, and 90% faster screening. Check out the dashboard and the AI analyzer in action! 💻✨ #AI #FullStack #PrivacyFirst
-          </p>
+            <p className="post-content">
+              Building AppliTrak! 🚀 (Work in Progress) Making great strides on this AI-powered job portal that uses local LLMs to match resumes with job descriptions in seconds. No cloud costs, 100% privacy, and 90% faster screening. Check out the current progress on the dashboard and AI analyzer! 💻✨ #AI #FullStack #PrivacyFirst #WIP
+            </p>
           <div className="post-images">
             <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/image-1766235642796.png?width=8000&height=8000&resize=contain" alt="AppliTrak Dashboard" className="post-image" />
             <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-12-13-191932-1766235676192.png?width=8000&height=8000&resize=contain" alt="AppliTrak AI Analyzer" className="post-image" />
