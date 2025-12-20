@@ -164,27 +164,31 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="feed-post pinned-post">
-          <div className="pinned-header">
-            <Pin size={16} />
-            PINNED POST
-          </div>
-          <div className="post-header">
-            <img src={ProfilePhoto} alt={personal.name} className="post-avatar" />
-            <div className="post-author-info">
-              <div className="post-author-row">
-                <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
-                <span className="post-level">L4</span>
-              </div>
-              <span className="post-time">1 day ago</span>
+          <div className="feed-post pinned-post">
+            <div className="pinned-header">
+              <Pin size={16} />
+              PINNED POST
             </div>
-          </div>
-          <div className="post-tag">🖥️ Innovation</div>
-          <h3 className="post-title">K-Wise: AI-Driven Kiosk System</h3>
-          <p className="post-content">
-            Excited to reveal K-Wise! 🖥️ An AI-driven kiosk system that makes PC building accessible to everyone. With 3,200+ compatibility rules and real-time AI scoring, it's like having a tech expert by your side. 87% faster builds, 100% confidence. 🛠️🤖 #TechInnovation #AI #React #PCBuilding
-          </p>
-          <div className="post-reactions">
+            <div className="post-header">
+              <img src={ProfilePhoto} alt={personal.name} className="post-avatar" />
+              <div className="post-author-info">
+                <div className="post-author-row">
+                  <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
+                  <span className="post-level">L4</span>
+                </div>
+                <span className="post-time">1 day ago</span>
+              </div>
+            </div>
+            <div className="post-tag">🖥️ Innovation</div>
+            <h3 className="post-title">K-Wise: AI-Driven Kiosk System</h3>
+            <p className="post-content">
+              Meet K-Wise: The ultimate AI-driven kiosk system for PC builders! 🖥️✨ Tired of compatibility headaches? Our system uses 3,200+ rules to ensure every part fits perfectly. From budget builds to high-end rigs, K-Wise has your back with real-time AI scoring and recommendations. 🛠️🤖 #KWise #PCBuilding #AI #Innovation #TechExpert
+            </p>
+            <div className="post-images">
+              <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-11-09-220838-1766236137075.png?width=8000&height=8000&resize=contain" alt="K-Wise Comparison" className="post-image" />
+              <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-11-21-101549-1766236136977.png?width=8000&height=8000&resize=contain" alt="K-Wise Home" className="post-image" />
+            </div>
+            <div className="post-reactions">
             <div className="reaction-avatars">
               <div className="reaction-avatar">⭐</div>
               <div className="reaction-avatar">🙌</div>
