@@ -214,8 +214,10 @@ const HomePage = () => {
         </div>
 
         {/* Regular Posts */}
-        {experience.map((exp, index) => (
-          <div key={exp.id} className="feed-post">
+        {experience
+          .filter(exp => !["AppliTrak: AI-Powered Job Portal", "K-Wise: AI-Driven Kiosk System"].includes(exp.project))
+          .map((exp, index) => (
+            <div key={exp.id} className="feed-post">
             <div className="post-header">
               <img src={ProfilePhoto} alt={personal.name} className="post-avatar" />
               <div className="post-author-info">
