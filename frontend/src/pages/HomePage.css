@@ -405,17 +405,6 @@
   color: var(--hover-color, #1d1d1f);
 }
 
-.quick-link-item:hover .quick-link-icon {
-  background: white;
-  color: var(--hover-color, #1d1d1f);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.quick-link-item:hover .quick-link-arrow {
-  color: var(--hover-color, #c7c7cc);
-  transform: translateX(4px);
-}
-
 .quick-link-icon {
   width: 32px;
   height: 32px;
@@ -428,11 +417,22 @@
   transition: all 0.2s;
 }
 
+.quick-link-item:hover .quick-link-icon {
+  background: #ffffff;
+  color: var(--hover-color, #1d1d1f);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
 .quick-link-arrow {
   margin-left: auto;
   color: #c7c7cc;
   font-size: 18px;
   transition: all 0.2s;
+}
+
+.quick-link-item:hover .quick-link-arrow {
+  color: var(--hover-color, #1d1d1f);
+  transform: translateX(2px);
 }
 
 .home-feed {

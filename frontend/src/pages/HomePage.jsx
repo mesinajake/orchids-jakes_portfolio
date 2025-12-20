@@ -72,13 +72,15 @@ const HomePage = () => {
       return "#0071e3";
     };
 
-    const getSocialColor = (key) => {
-      const normalized = key.toLowerCase();
+    const getSocialColor = (name) => {
+      const normalized = name.toLowerCase();
       if (normalized.includes("github")) return "#181717";
-      if (normalized.includes("linkedin")) return "#0A66C2";
+      if (normalized.includes("linkedin")) return "#0077B5";
       if (normalized.includes("instagram")) return "#E4405F";
-      if (normalized.includes("twitter")) return "#1DA1F2";
-      if (normalized.includes("portfolio")) return "#0071e3";
+      if (normalized.includes("twitter") || normalized === "x") return "#1DA1F2";
+      if (normalized.includes("portfolio") || normalized === "globe") return "#0071e3";
+      if (normalized.includes("facebook")) return "#1877F2";
+      if (normalized.includes("mail") || normalized.includes("email")) return "#EA4335";
       return "#0071e3";
     };
 
@@ -396,22 +398,22 @@ const HomePage = () => {
 
                   const Icon = iconMap[key];
 
-                  return (
-                    <a 
-                      key={key} 
-                      href={url} 
-                      target="_blank" 
-                      rel="noreferrer" 
-                      className="quick-link-item"
-                      style={{ '--hover-color': getSocialColor(key) }}
-                    >
-                      <div className="quick-link-icon">
-                        {Icon ? <Icon size={16} /> : <ExternalLink size={16} />}
-                      </div>
-                      <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
-                      <span className="quick-link-arrow">›</span>
-                    </a>
-                  );
+                    return (
+                      <a 
+                        key={key} 
+                        href={url} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="quick-link-item"
+                        style={{ '--hover-color': getSocialColor(key) }}
+                      >
+                        <div className="quick-link-icon">
+                          {Icon ? <Icon size={16} /> : <ExternalLink size={16} />}
+                        </div>
+                        <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                        <span className="quick-link-arrow">›</span>
+                      </a>
+                    );
                 })}
               </div>
 
