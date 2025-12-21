@@ -26,14 +26,18 @@ import {
   Phone,
   TechIcon,
 } from "../components/icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
 import "./HomePage.css";
 import ProfilePhoto from "../assets/profile_jake.jpg";
+import PostModal from "../components/PostModal";
 
 const HomePage = () => {
   const [portfolioData, setPortfolioData] = useState(null);
   const [activeTab, setActiveTab] = useState("All");
   const [activeSection, setActiveSection] = useState("Home");
   const [darkMode, setDarkMode] = useState(false);
+  const [showPostModal, setShowPostModal] = useState(false);
 
   useEffect(() => {
     fetch('/portfolio.json')
@@ -90,14 +94,24 @@ const HomePage = () => {
       { id: "Frontend", label: "Frontend Dev", icon: Award },
     ];
 
-    const renderHomeFeed = () => (
+    const renderFeedControls = () => (
       <>
         <div className="feed-input">
           <img src={ProfilePhoto} alt="You" className="feed-input-avatar" />
-          <input type="text" placeholder="Write something..." className="feed-input-field" />
+          <input
+            type="text"
+            placeholder="What's on your mind?"
+            className="feed-input-field"
+            onClick={() => setShowPostModal(true)}
+            readOnly
+          />
           <div className="feed-input-actions">
-            <button className="feed-action-btn">🖼️</button>
-            <button className="feed-action-btn">🎥</button>
+            <button className="feed-action-btn image-btn" title="Add image" aria-label="Add image">
+              <FontAwesomeIcon icon={faImage} />
+            </button>
+            <button className="feed-action-btn video-btn" title="Add video" aria-label="Add video">
+              <FontAwesomeIcon icon={faVideo} />
+            </button>
           </div>
         </div>
 
@@ -113,7 +127,11 @@ const HomePage = () => {
             </button>
           ))}
         </div>
+      </>
+    );
 
+    const renderFeedPosts = () => (
+      <>
         {/* Pinned Posts */}
         <div className="feed-post pinned-post">
           <div className="pinned-header">
@@ -139,9 +157,7 @@ const HomePage = () => {
           </div>
           <div className="post-reactions">
             <div className="reaction-avatars">
-              <div className="reaction-avatar">🔥</div>
               <div className="reaction-avatar">❤️</div>
-              <div className="reaction-avatar">🚀</div>
               <span className="reaction-text">You and 42 others</span>
             </div>
             <span className="post-comments">12 Comments</span>
@@ -186,10 +202,8 @@ const HomePage = () => {
             </div>
             <div className="post-reactions">
             <div className="reaction-avatars">
-              <div className="reaction-avatar">⭐</div>
-              <div className="reaction-avatar">🙌</div>
               <div className="reaction-avatar">👍</div>
-              <span className="reaction-text">38 reactions</span>
+              <span className="reaction-text">You and 100 others</span>
             </div>
             <span className="post-comments">9 Comments</span>
           </div>
@@ -444,7 +458,9 @@ const HomePage = () => {
 
         {/* Center Feed */}
         <main className="home-feed">
-          {activeSection === 'Home' && renderHomeFeed()}
+          {renderFeedControls()}
+          {activeSection === 'Home' && renderFeedPosts()}
+          <PostModal open={showPostModal} onClose={() => setShowPostModal(false)} personal={portfolioData.personal} />
           {activeSection === 'About' && renderAboutSection()}
           {activeSection === 'Certifications' && renderCertificationsSection()}
           {activeSection === 'Contact' && renderContactSection()}
