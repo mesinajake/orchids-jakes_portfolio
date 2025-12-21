@@ -11,7 +11,7 @@ const Resume = () => {
         <header className="resume-header">
           <div className="resume-header-main">
             <h1 className="resume-name">Jake Mesina</h1>
-            <p className="resume-title">Full-Stack Developer & AI Integration Specialist</p>
+            <p className="resume-title">Aspiring Web Developer / Frontend Developer</p>
           </div>
           <div className="resume-contact">
             <a href="mailto:mesinajake9@gmail.com" className="contact-link">

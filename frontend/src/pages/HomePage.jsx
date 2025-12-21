@@ -125,12 +125,10 @@ const HomePage = () => {
             <div className="post-author-info">
               <div className="post-author-row">
                 <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
-                <span className="post-level">L5</span>
               </div>
               <span className="post-time">Just now</span>
             </div>
           </div>
-          <div className="post-tag">🚀 Project Showcase</div>
           <h3 className="post-title">AppliTrak: AI-Powered Job Portal</h3>
             <p className="post-content">
               Building AppliTrak! 🚀 (Work in Progress) Making great strides on this AI-powered job portal that uses local LLMs to match resumes with job descriptions in seconds. No cloud costs, 100% privacy, and 90% faster screening. Check out the current progress on the dashboard and AI analyzer! 💻✨ #AI #FullStack #PrivacyFirst #WIP
@@ -174,12 +172,10 @@ const HomePage = () => {
               <div className="post-author-info">
                 <div className="post-author-row">
                   <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
-                  <span className="post-level">L4</span>
                 </div>
                 <span className="post-time">1 day ago</span>
               </div>
             </div>
-            <div className="post-tag">🖥️ Innovation</div>
             <h3 className="post-title">K-Wise: AI-Driven Kiosk System</h3>
             <p className="post-content">
               Meet K-Wise: The ultimate AI-driven kiosk system for PC builders! 🖥️✨ Tired of compatibility headaches? Our system uses 3,200+ rules to ensure every part fits perfectly. From budget builds to high-end rigs, K-Wise has your back with real-time AI scoring and recommendations. 🛠️🤖 #KWise #PCBuilding #AI #Innovation #TechExpert
@@ -223,7 +219,6 @@ const HomePage = () => {
               <div className="post-author-info">
                 <div className="post-author-row">
                   <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
-                  <span className="post-level">L{index + 3}</span>
                 </div>
                 <span className="post-time">{exp.duration.split('—')[0].trim()}</span>
               </div>
@@ -264,7 +259,6 @@ const HomePage = () => {
       <>
         <div className="feed-post">
           <div className="section-header">
-            <User size={20} />
             <h2 className="section-title">About</h2>
           </div>
             <h3 className="post-title">{personal.title}</h3>
@@ -277,25 +271,6 @@ const HomePage = () => {
             <p className="post-content">
               My goal is to bridge the gap between design and development, turning creative visions into functional, high-quality web applications that make a real impact.
             </p>
-          <div className="about-grid">
-            <div className="about-chip">📍 {personal.location}</div>
-            <div className="about-chip">📧 {personal.email}</div>
-          </div>
-        </div>
-        <div className="feed-post">
-          <div className="section-header">
-            <Briefcase size={20} />
-            <h2 className="section-title">Recent Experience</h2>
-          </div>
-          {experience.slice(0, 2).map((exp) => (
-            <div key={exp.id} className="about-exp-row">
-              <div>
-                <div className="post-title">{exp.project}</div>
-                <div className="post-content">{exp.position} — {exp.company}</div>
-              </div>
-              <div className="about-chip">{exp.duration}</div>
-            </div>
-          ))}
         </div>
       </>
     );
@@ -303,13 +278,11 @@ const HomePage = () => {
     const renderCertificationsSection = () => (
       <div className="feed-post">
         <div className="section-header">
-          <Award size={20} />
           <h2 className="section-title">Certifications</h2>
         </div>
             <div className="cert-list">
             {certifications.map((cert, index) => (
               <div key={cert.name || index} className="cert-row">
-                <div className="cert-icon">🎖️</div>
                 <div className="cert-info">
                   <div className="post-title">{cert.name}</div>
                   <div className="post-content">{cert.issuer}</div>
@@ -324,7 +297,6 @@ const HomePage = () => {
     const renderContactSection = () => (
       <div className="feed-post">
         <div className="section-header">
-          <Mail size={20} />
           <h2 className="section-title">Get In Touch</h2>
         </div>
         <p className="post-content">
@@ -332,24 +304,21 @@ const HomePage = () => {
         </p>
         <div className="contact-grid">
           <div className="contact-card">
-            <div className="contact-icon">✉️</div>
             <div>
               <div className="post-title">Email</div>
               <div className="post-content">{personal.email}</div>
             </div>
           </div>
           <div className="contact-card">
-            <div className="contact-icon">📞</div>
             <div>
               <div className="post-title">Phone</div>
               <div className="post-content">{personal.phone}</div>
             </div>
           </div>
           <div className="contact-card">
-            <div className="contact-icon">🌐</div>
             <div>
               <div className="post-title">Portfolio</div>
-              <a className="post-content" href={social?.portfolio || '#'} target="_blank" rel="noreferrer">{social?.portfolio || 'Portfolio link'}</a>
+              <a className="post-content" href="https://jakemesinawebdev.vercel.app/" target="_blank" rel="noreferrer">https://jakemesinawebdev.vercel.app/</a>
             </div>
           </div>
         </div>
@@ -363,10 +332,9 @@ const HomePage = () => {
       <header className="home-header">
           <div className="header-left">
             <div className="logo">
-              <span className="logo-icon">🎓</span>
               <div className="logo-text">
-                <div className="logo-title">The Developer's</div>
-                <div className="logo-subtitle">Portfolio</div>
+                <div className="logo-title">Jake Mesina</div>
+                <div className="logo-subtitle">Aspiring Web Developer / Frontend Developer</div>
               </div>
             </div>
           </div>
@@ -455,7 +423,7 @@ const HomePage = () => {
                     return (
                       <a 
                         key={key} 
-                        href={url} 
+                        href={key === 'portfolio' ? 'https://jakemesinawebdev.vercel.app/' : url} 
                         target="_blank" 
                         rel="noreferrer" 
                         className="quick-link-item"
@@ -486,14 +454,11 @@ const HomePage = () => {
         <aside className="home-sidebar-right">
           <div className="streak-widget education-widget">
             <div className="widget-header">
-              <GraduationCap size={20} className="widget-icon" />
               <h3 className="widget-title">Education</h3>
-              <button className="widget-info-btn">ⓘ</button>
             </div>
             <div className="education-widget-list">
               {education.map((edu, index) => (
                 <div key={edu.institution || index} className="education-widget-item">
-                  <div className="education-widget-icon">🎓</div>
                   <div>
                     <div className="education-widget-degree">{edu.degree}</div>
                     <div className="education-widget-school">{edu.institution}</div>
@@ -506,7 +471,6 @@ const HomePage = () => {
 
             <div className="leaderboard-widget techstack-widget">
               <div className="widget-header">
-                <Cpu size={20} className="widget-icon" />
                 <h3 className="widget-title">Tech Stack</h3>
               </div>
                 <div className="techstack-widget-group">

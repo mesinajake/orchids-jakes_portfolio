@@ -24,7 +24,7 @@ const Home = () => {
         <div className="container">
           <div className="hero-content">
             <h1 className="hero-title">Jake Mesina</h1>
-            <p className="hero-subtitle">Full-Stack Developer & AI Integration Specialist</p>
+            <p className="hero-subtitle">Aspiring Web Developer / Frontend Developer</p>
             <p className="hero-description">
               Building AI-powered web applications that deliver measurable business impact. 
               Specialized in scalable systems with Node.js, React, and MongoDB.

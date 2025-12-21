@@ -659,12 +659,10 @@
 }
 
 .tech-category-title {
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 700;
   color: #1d1d1f;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
 }
 
 .tech-tags {
