@@ -38,6 +38,7 @@ const HomePage = () => {
   const [activeSection, setActiveSection] = useState("Home");
   const [darkMode, setDarkMode] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
+  const [feedInputValue, setFeedInputValue] = useState('');
 
   useEffect(() => {
     fetch('/portfolio.json')
@@ -97,11 +98,12 @@ const HomePage = () => {
     const renderFeedControls = () => (
       <>
         <div className="feed-input">
-          <img src={ProfilePhoto} alt="You" className="feed-input-avatar" />
+          <img src={ProfilePhoto} alt="You" className="feed-input-avatar" onClick={() => setShowPostModal(true)} />
           <input
             type="text"
             placeholder="What's on your mind?"
             className="feed-input-field"
+            value={feedInputValue}
             onClick={() => setShowPostModal(true)}
             readOnly
           />
@@ -460,7 +462,13 @@ const HomePage = () => {
         <main className="home-feed">
           {renderFeedControls()}
           {activeSection === 'Home' && renderFeedPosts()}
-          <PostModal open={showPostModal} onClose={() => setShowPostModal(false)} personal={portfolioData.personal} />
+          <PostModal
+            open={showPostModal}
+            onClose={() => setShowPostModal(false)}
+            draft={feedInputValue}
+            onDraftChange={(v) => setFeedInputValue(v)}
+            personal={portfolioData.personal}
+          />
           {activeSection === 'About' && renderAboutSection()}
           {activeSection === 'Certifications' && renderCertificationsSection()}
           {activeSection === 'Contact' && renderContactSection()}

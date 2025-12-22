@@ -542,7 +542,7 @@
 }
 
 .post-modal {
-  width: 640px;
+  width: 540px;
   max-width: calc(100% - 32px);
   background: #fff;
   border-radius: 12px;
@@ -574,13 +574,48 @@
 .post-modal-textarea { width:100%; border:none; outline:none; resize:vertical; font-size:16px; padding:8px; background:transparent }
 .post-modal-textarea::placeholder { color:#8e8e93 }
 
+/* Remove focus outline/border for the modal textarea */
+.post-modal-textarea:focus,
+.post-modal-textarea:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+
 .post-modal-additions { display:flex; align-items:center; gap:8px; margin-top:12px }
 .post-modal-add-btn { width:36px; height:36px; border-radius:8px; background:#f5f5f7; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer }
 .post-modal-add-more { margin-left:auto; font-size:13px; color:#6e6e73; display:flex; align-items:center; gap:6px }
 
+/* Icon colors for post modal buttons */
+.post-modal-add-btn.image-btn svg,
+.post-modal-add-btn.image-btn .svg-inline--fa { color: #34c759; }
+.post-modal-add-btn.video-btn svg,
+.post-modal-add-btn.video-btn .svg-inline--fa { color: #ff3b30; }
+.post-modal-add-btn.smile-btn svg,
+.post-modal-add-btn.smile-btn .svg-inline--fa { color: #ffd60a; }
+
+/* Hover: use the icon color as the button background */
+.post-modal-add-btn { transition: background-color 150ms ease, color 150ms ease; }
+.post-modal-add-btn.image-btn:hover { background: #34c759; color: #ffffff; }
+.post-modal-add-btn.image-btn:hover svg,
+.post-modal-add-btn.image-btn:hover .svg-inline--fa { color: #ffffff; }
+.post-modal-add-btn.video-btn:hover { background: #ff3b30; color: #ffffff; }
+.post-modal-add-btn.video-btn:hover svg,
+.post-modal-add-btn.video-btn:hover .svg-inline--fa { color: #ffffff; }
+.post-modal-add-btn.smile-btn:hover { background: #ffd60a; color: #1d1d1f; }
+.post-modal-add-btn.smile-btn:hover svg,
+.post-modal-add-btn.smile-btn:hover .svg-inline--fa { color: #1d1d1f; }
+
 .post-modal-footer { display:flex; gap:12px; justify-content:flex-end; padding:12px 20px; border-top:1px solid #eee }
 .post-modal-cancel { background:transparent; border:1px solid #e5e5e7; padding:8px 12px; border-radius:8px; cursor:pointer }
-.post-modal-post { background:#5856d6; color:white; border:none; padding:8px 16px; border-radius:8px; cursor:pointer }
+.post-modal-post { width: 100vw; background:#5856d6; color:white; border:none; padding:8px 16px; border-radius:8px; cursor:pointer }
+
+/* Disabled state for Post button */
+.post-modal-post[disabled],
+.post-modal-post[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 .feed-tabs {
   display: flex;
