@@ -1,538 +1,778 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import PostModal from "../components/PostModal";
+import "../styles/index.css";
+import ProfilePhoto from "../assets/profile_jake.jpg";
+
 import {
-  Mail,
-  Bell,
-  User,
-  Trophy,
-  Flame,
-  Calendar,
-  Briefcase,
-  GraduationCap,
-  Users,
-  MessageSquare,
-  Award,
-  ExternalLink,
-  Pin,
-  Heart,
-  MessageCircle,
-  Share2,
-  Code,
-  Cpu,
-  Github,
-  Linkedin,
-  Instagram,
-  Twitter,
-  Globe,
-  Phone,
   TechIcon,
 } from "../components/icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
-import "./HomePage.css";
-import ProfilePhoto from "../assets/profile_jake.jpg";
-import PostModal from "../components/PostModal";
 
+// ─── Helper: time-ago formatter ───────────────────────────────
+const timeAgo = (iso) => {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
+};
+
+// ─── Shared Post Actions Component ───────────────────────────
+const PostActions = ({ postId, likes, comments, onLike, onToggleComments, onShare }) => {
+  const [liked, setLiked] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
+
+  const handleLike = () => {
+    setLiked(!liked);
+    onLike(postId, !liked);
+  };
+
+  const handleShare = () => {
+    const url = `${window.location.origin}#post-${postId}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+    });
+    if (onShare) onShare(postId);
+  };
+
+  return (
+    <>
+      {/* Reaction summary */}
+      <div className="px-4 py-2 flex items-center justify-between text-muted-foreground text-xs">
+        <div className="flex items-center gap-1">
+          {likes > 0 && (
+            <>
+              <div className="flex -space-x-1">
+                <div className="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center border border-card">
+                  <span className="material-symbols-outlined text-[8px] text-white">thumb_up</span>
+                </div>
+                {likes > 5 && (
+                  <div className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center border border-card">
+                    <span className="material-symbols-outlined text-[8px] text-white">favorite</span>
+                  </div>
+                )}
+              </div>
+              <span className="ml-1 hover:underline cursor-pointer">{likes}</span>
+            </>
+          )}
+        </div>
+        {comments.length > 0 && (
+          <button onClick={() => onToggleComments(postId)} className="hover:underline cursor-pointer">
+            {comments.length} comment{comments.length !== 1 ? "s" : ""}
+          </button>
+        )}
+      </div>
+
+      {/* Action buttons */}
+      <div className="px-2 py-1 flex items-center border-t border-border">
+        <button
+          onClick={handleLike}
+          className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm transition-colors group ${liked ? "text-blue-500 font-semibold" : "text-muted-foreground hover:bg-slate-100 dark:hover:bg-slate-800"
+            }`}
+        >
+          <span className={`material-symbols-outlined ${liked ? "fill-1 text-blue-500" : "group-hover:text-blue-500"}`}>thumb_up</span>
+          Like
+        </button>
+        <button
+          onClick={() => onToggleComments(postId)}
+          className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-muted-foreground text-sm transition-colors group hover:bg-slate-100 dark:hover:bg-slate-800"
+        >
+          <span className="material-symbols-outlined group-hover:text-green-500">chat_bubble</span>
+          Comment
+        </button>
+        <button
+          onClick={handleShare}
+          className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-muted-foreground text-sm transition-colors group hover:bg-slate-100 dark:hover:bg-slate-800 relative"
+        >
+          <span className="material-symbols-outlined group-hover:text-primary">share</span>
+          {showCopied ? "Copied!" : "Share"}
+        </button>
+      </div>
+    </>
+  );
+};
+
+// ─── Comment Section Component ───────────────────────────────
+const CommentSection = ({ postId, comments, onAddComment }) => {
+  const [text, setText] = useState("");
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!text.trim()) return;
+    onAddComment(postId, text.trim());
+    setText("");
+  };
+
+  return (
+    <div className="px-4 py-3 border-t border-border space-y-3 animate-fade-in">
+      {/* Existing comments */}
+      {comments.map((c, i) => (
+        <div key={i} className="flex gap-2">
+          <div className="w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-600 flex items-center justify-center shrink-0">
+            <span className="material-symbols-outlined text-[14px]">person</span>
+          </div>
+          <div className="bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2 flex-1">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold">{c.author}</span>
+              <span className="text-[10px] text-muted-foreground">{timeAgo(c.timestamp)}</span>
+            </div>
+            <p className="text-sm mt-0.5">{c.text}</p>
+          </div>
+        </div>
+      ))}
+
+      {/* Comment input */}
+      <form onSubmit={handleSubmit} className="flex gap-2 items-center">
+        <img src={ProfilePhoto} alt="You" className="w-7 h-7 rounded-full object-cover shrink-0" />
+        <div className="flex-1 relative">
+          <input
+            ref={inputRef}
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Add a comment..."
+            className="w-full bg-slate-100 dark:bg-slate-800 text-sm text-slate-900 dark:text-slate-100 rounded-full px-4 py-2 pr-10 outline-none focus:ring-1 focus:ring-primary placeholder:text-slate-400 dark:placeholder:text-slate-500"
+          />
+          {text.trim() && (
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 transition-colors"
+            >
+              <span className="material-symbols-outlined text-lg">send</span>
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
+  );
+};
+
+
+// ═══════════════════════════════════════════════════════════════
+//  HomePage Main Component
+// ═══════════════════════════════════════════════════════════════
 const HomePage = () => {
   const [portfolioData, setPortfolioData] = useState(null);
   const [activeTab, setActiveTab] = useState("All");
   const [activeSection, setActiveSection] = useState("Home");
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [showPostModal, setShowPostModal] = useState(false);
-  const [feedInputValue, setFeedInputValue] = useState('');
 
+  // ── Interactive state ──────────────────────────────────────
+  const [userPosts, setUserPosts] = useState([]);           // Posts created by owner
+  const [postLikes, setPostLikes] = useState({});            // { [postId]: number }
+  const [postComments, setPostComments] = useState({});      // { [postId]: [{author,text,timestamp}] }
+  const [openComments, setOpenComments] = useState({});       // { [postId]: bool }
+
+  // Fetch Data
   useEffect(() => {
     fetch('/portfolio.json')
       .then(res => res.json())
-      .then(data => setPortfolioData(data))
+      .then(data => {
+        setPortfolioData(data);
+        // Seed initial likes from experience data
+        const initialLikes = {};
+        data.experience?.forEach((exp, i) => {
+          initialLikes[`exp-${exp.id}`] = 10 + i * 5;
+        });
+        initialLikes['pinned-applitrak'] = 42;
+        setPostLikes(initialLikes);
+
+        // Seed initial comments
+        setPostComments({
+          'pinned-applitrak': [
+            { author: "Tech Recruiter", text: "Impressive AI integration! Would love to discuss.", timestamp: new Date(Date.now() - 3600000).toISOString() },
+            { author: "Fellow Dev", text: "The 90% time reduction is incredible 🔥", timestamp: new Date(Date.now() - 1800000).toISOString() },
+          ],
+        });
+      })
       .catch(err => console.error('Error loading portfolio data:', err));
   }, []);
 
-  if (!portfolioData) return <div>Loading...</div>;
+  // Theme Toggle
+  useEffect(() => {
+    if (darkMode) document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
+  }, [darkMode]);
 
-    const { personal, experience, education, certifications, skills, social } = portfolioData;
+  if (!portfolioData) return <div className="flex items-center justify-center h-screen bg-background text-foreground">Loading...</div>;
 
-    const socialLinks = Object.entries(social || {}).filter(([, url]) => url);
+  const { personal, experience, education, certifications, skills, social } = portfolioData;
+  const socialLinks = Object.entries(social || {}).filter(([, url]) => url);
 
-    const calculateStreak = () => {
-
-    const startDate = new Date(personal.startDate);
-    const today = new Date();
-    const days = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-    return days;
+  // ── Interaction handlers ───────────────────────────────────
+  const handleNewPost = (post) => {
+    setUserPosts(prev => [post, ...prev]);
+    setPostLikes(prev => ({ ...prev, [post.id]: 0 }));
+    setPostComments(prev => ({ ...prev, [post.id]: [] }));
   };
 
-    const streak = calculateStreak();
+  const handleLike = (postId, isLiking) => {
+    setPostLikes(prev => ({
+      ...prev,
+      [postId]: (prev[postId] || 0) + (isLiking ? 1 : -1),
+    }));
+  };
 
-    const getTechColor = (name) => {
-      const normalized = name.toLowerCase();
-      if (normalized.includes("react")) return "#61DAFB";
-      if (normalized.includes("javascript") || normalized === "js") return "#F7DF1E";
-      if (normalized.includes("html")) return "#E34F26";
-      if (normalized.includes("css")) return "#1572B6";
-      if (normalized.includes("vite")) return "#646CFF";
-      if (normalized.includes("node")) return "#3C873A";
-      if (normalized.includes("express")) return "#000000";
-      if (normalized.includes("mongo")) return "#47A248";
-      if (normalized.includes("jwt")) return "#d500f9";
-      return "#0071e3";
+  const handleToggleComments = (postId) => {
+    setOpenComments(prev => ({ ...prev, [postId]: !prev[postId] }));
+  };
+
+  const handleAddComment = (postId, text) => {
+    const newComment = {
+      author: "Visitor",
+      text,
+      timestamp: new Date().toISOString(),
     };
+    setPostComments(prev => ({
+      ...prev,
+      [postId]: [...(prev[postId] || []), newComment],
+    }));
+  };
 
-    const getSocialColor = (name) => {
-      const normalized = name.toLowerCase();
-      if (normalized.includes("github")) return "#181717";
-      if (normalized.includes("linkedin")) return "#0077B5";
-      if (normalized.includes("instagram")) return "#E4405F";
-      if (normalized.includes("twitter") || normalized === "x") return "#1DA1F2";
-      if (normalized.includes("portfolio") || normalized === "globe") return "#0071e3";
-      if (normalized.includes("facebook")) return "#1877F2";
-      if (normalized.includes("mail") || normalized.includes("email")) return "#EA4335";
-      return "#0071e3";
+  const handleShare = (postId) => {
+    // Already handled in PostActions, but could log analytics here
+  };
+
+  const getTechColor = (name) => {
+    const normalized = name.toLowerCase();
+    if (normalized.includes("react")) return "text-cyan-400 border-cyan-400/20 bg-cyan-400/10";
+    if (normalized.includes("javascript") || normalized === "js") return "text-yellow-400 border-yellow-400/20 bg-yellow-400/10";
+    if (normalized.includes("html")) return "text-orange-500 border-orange-500/20 bg-orange-500/10";
+    if (normalized.includes("css")) return "text-blue-500 border-blue-500/20 bg-blue-500/10";
+    if (normalized.includes("vite")) return "text-purple-500 border-purple-500/20 bg-purple-500/10";
+    if (normalized.includes("node")) return "text-green-500 border-green-500/20 bg-green-500/10";
+    if (normalized.includes("mongo")) return "text-emerald-500 border-emerald-500/20 bg-emerald-500/10";
+    return "text-primary border-primary/20 bg-primary/10";
+  };
+
+  // ── Social icon mapper ─────────────────────────────────────
+  const getSocialIcon = (key) => {
+    const k = key.toLowerCase();
+    if (k === "github") return {
+      color: "text-slate-800 dark:text-white",
+      svg: <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>
     };
+    if (k === "linkedin") return {
+      color: "text-[#0A66C2]",
+      svg: <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
+    };
+    if (k === "instagram") return {
+      color: "text-[#E4405F]",
+      svg: <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 11-2.882 0 1.441 1.441 0 012.882 0z" /></svg>
+    };
+    if (k === "twitter" || k === "x") return {
+      color: "text-slate-800 dark:text-white",
+      svg: <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+    };
+    if (k === "portfolio" || k === "website") return {
+      color: "text-primary",
+      svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" /></svg>
+    };
+    // fallback
+    return {
+      color: "text-muted-foreground",
+      svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" /></svg>
+    };
+  };
 
-    const feedTabs = [
-      { id: "All", label: "All", icon: null },
-      { id: "Projects", label: "Project Showcase", icon: Briefcase },
-      { id: "Frontend", label: "Frontend Dev", icon: Award },
-    ];
-
-    const renderFeedControls = () => (
-      <>
-        <div className="feed-input">
-          <img src={ProfilePhoto} alt="You" className="feed-input-avatar" onClick={() => setShowPostModal(true)} />
-          <input
-            type="text"
-            placeholder="What's on your mind?"
-            className="feed-input-field"
-            value={feedInputValue}
+  // ── Feed Controls ──────────────────────────────────────────
+  const renderFeedControls = () => (
+    <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in mb-6">
+      <div className="flex gap-3">
+        <img src={ProfilePhoto} alt="Me" className="w-10 h-10 rounded-full object-cover" />
+        <div className="flex-1">
+          <button
             onClick={() => setShowPostModal(true)}
-            readOnly
+            className="w-full text-left bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-muted-foreground rounded-full px-4 py-2.5 text-sm transition-colors border border-transparent focus:border-primary outline-none"
+          >
+            START A PROJECT UPDATE...
+          </button>
+          <div className="flex gap-4 mt-3 ml-1">
+            <button onClick={() => setShowPostModal(true)} className="flex items-center gap-1.5 text-muted-foreground hover:text-sky-500 text-xs font-medium transition-colors">
+              <span className="material-symbols-outlined text-lg text-sky-500">image</span> Media
+            </button>
+            <button onClick={() => setShowPostModal(true)} className="flex items-center gap-1.5 text-muted-foreground hover:text-emerald-500 text-xs font-medium transition-colors">
+              <span className="material-symbols-outlined text-lg text-emerald-500">code</span> Snippet
+            </button>
+            <button onClick={() => setShowPostModal(true)} className="flex items-center gap-1.5 text-muted-foreground hover:text-amber-500 text-xs font-medium transition-colors">
+              <span className="material-symbols-outlined text-lg text-amber-500">calendar_month</span> Event
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── Feed Posts ──────────────────────────────────────────────
+  const renderFeedPosts = () => (
+    <div className="space-y-6">
+      {/* ── User-Created Posts (newest first) ── */}
+      {userPosts.map((post) => (
+        <article key={post.id} id={`post-${post.id}`} className="bg-card rounded-xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow animate-slide-up">
+          <div className="bg-emerald-500/10 px-4 py-1 flex items-center gap-2 border-b border-border/50">
+            <span className="material-symbols-outlined text-emerald-500 text-sm">auto_awesome</span>
+            <span className="text-[10px] font-bold text-emerald-500 tracking-wide">NEW POST</span>
+          </div>
+          <div className="p-4 flex items-start justify-between">
+            <div className="flex gap-3">
+              <img src={ProfilePhoto} alt={post.author} className="w-12 h-12 rounded-lg object-cover" />
+              <div>
+                <div className="flex items-center gap-1">
+                  <h3 className="font-bold text-sm">{post.author}</h3>
+                  <span className="material-symbols-outlined text-primary text-[16px] fill-1">verified</span>
+                </div>
+                <p className="text-muted-foreground text-[10px] mt-0.5 flex items-center gap-1">
+                  {timeAgo(post.timestamp)} • <span className="material-symbols-outlined text-[10px]">public</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="px-4 pb-3">
+            {post.title && <h4 className="font-bold text-sm mb-1">{post.title}</h4>}
+            {post.content && <p className="text-sm leading-relaxed whitespace-pre-wrap">{post.content}</p>}
+          </div>
+
+          {/* Attached Images */}
+          {post.images && post.images.length > 0 && (
+            <div className={`grid gap-1 px-4 mb-3 ${post.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+              {post.images.map((src, idx) => (
+                <img key={idx} src={src} alt={`Attachment ${idx + 1}`} className="w-full h-40 object-cover rounded-lg border border-border" />
+              ))}
+            </div>
+          )}
+
+          {/* Attached Video */}
+          {post.video && (
+            <div className="px-4 mb-3">
+              <video src={post.video} controls className="w-full rounded-lg border border-border max-h-60 bg-black" />
+            </div>
+          )}
+
+          {/* Attached Code Snippet */}
+          {post.codeSnippet && (
+            <div className="mx-4 mb-3 rounded-lg overflow-hidden border border-border">
+              <div className="bg-slate-800 px-3 py-1.5 flex items-center justify-between">
+                <span className="text-[10px] font-mono text-slate-400 uppercase">{post.codeLang || "code"}</span>
+                <button
+                  onClick={() => navigator.clipboard.writeText(post.codeSnippet)}
+                  className="text-[10px] text-slate-400 hover:text-white flex items-center gap-1 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-xs">content_copy</span> Copy
+                </button>
+              </div>
+              <pre className="bg-slate-900 p-3 text-xs font-mono text-green-400 overflow-x-auto leading-relaxed"><code>{post.codeSnippet}</code></pre>
+            </div>
+          )}
+
+          {/* Attached Event */}
+          {post.event && post.event.title && (
+            <div className="mx-4 mb-3 bg-amber-500/5 border border-amber-500/20 rounded-lg p-3 flex items-center gap-3">
+              <div className="w-12 h-12 bg-amber-500/10 rounded-lg flex flex-col items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-amber-500 text-xl">event</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-sm truncate">{post.event.title}</p>
+                <p className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
+                  {post.event.date && <span>{new Date(post.event.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>}
+                  {post.event.time && <span>• {post.event.time}</span>}
+                </p>
+              </div>
+              <span className="material-symbols-outlined text-amber-500 text-sm">arrow_forward</span>
+            </div>
+          )}
+
+          <PostActions
+            postId={post.id}
+            likes={postLikes[post.id] || 0}
+            comments={postComments[post.id] || []}
+            onLike={handleLike}
+            onToggleComments={handleToggleComments}
+            onShare={handleShare}
           />
-          <div className="feed-input-actions">
-            <button className="feed-action-btn image-btn" title="Add image" aria-label="Add image">
-              <FontAwesomeIcon icon={faImage} />
-            </button>
-            <button className="feed-action-btn video-btn" title="Add video" aria-label="Add video">
-              <FontAwesomeIcon icon={faVideo} />
-            </button>
+          {openComments[post.id] && (
+            <CommentSection
+              postId={post.id}
+              comments={postComments[post.id] || []}
+              onAddComment={handleAddComment}
+            />
+          )}
+        </article>
+      ))}
+
+      {/* ── Pinned Post: AppliTrak ── */}
+      <article id="post-pinned-applitrak" className="bg-card rounded-xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow animate-slide-up">
+        <div className="bg-primary/5 px-4 py-1 flex items-center gap-2 border-b border-border/50">
+          <span className="material-symbols-outlined text-primary text-sm">push_pin</span>
+          <span className="text-[10px] font-bold text-primary tracking-wide">PINNED POST</span>
+        </div>
+        <div className="p-4 flex items-start justify-between">
+          <div className="flex gap-3">
+            <img src={ProfilePhoto} alt={personal.name} className="w-12 h-12 rounded-lg object-cover" />
+            <div>
+              <div className="flex items-center gap-1">
+                <h3 className="font-bold text-sm hover:underline cursor-pointer">{personal.name}</h3>
+                <span className="material-symbols-outlined text-primary text-[16px] fill-1" title="Verified">verified</span>
+                <span className="text-muted-foreground text-xs">• 1st</span>
+              </div>
+              <div className="flex flex-col">
+                <p className="text-muted-foreground text-[11px]">{personal.title}</p>
+                <p className="text-muted-foreground text-[10px] mt-0.5 flex items-center gap-1">
+                  Just now • <span className="material-symbols-outlined text-[10px]">public</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <button className="text-muted-foreground hover:text-primary rounded-full p-1 transition-colors">
+            <span className="material-symbols-outlined">more_horiz</span>
+          </button>
+        </div>
+
+        <div className="px-4 pb-2">
+          <h4 className="font-bold text-sm mb-1">AppliTrak: AI-Powered Job Portal</h4>
+          <div className="text-sm leading-relaxed mb-4 text-foreground/90">
+            Building AppliTrak! 🚀 (Work in Progress) Making great strides on this <span className="text-primary font-medium">AI-powered job portal</span> that uses local LLMs.
+            <div className="mt-2 text-xs text-muted-foreground bg-slate-100 dark:bg-slate-800 p-2 rounded border border-border/50">
+              Reduced manual screening from 5-7 minutes to <span className="font-bold text-emerald-500">30 seconds</span>.
+            </div>
           </div>
         </div>
 
-        <div className="feed-tabs">
-          {feedTabs.map(tab => (
+        <div className="grid grid-cols-2 gap-1 px-4 mb-4">
+          <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/image-1766235642796.png?width=8000&height=8000&resize=contain" className="rounded-lg border border-border object-cover w-full h-32 bg-black" alt="Dashboard" />
+          <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-12-13-191932-1766235676192.png?width=8000&height=8000&resize=contain" className="rounded-lg border border-border object-cover w-full h-32 bg-black" alt="AI Analyzer" />
+        </div>
+
+        <PostActions
+          postId="pinned-applitrak"
+          likes={postLikes['pinned-applitrak'] || 0}
+          comments={postComments['pinned-applitrak'] || []}
+          onLike={handleLike}
+          onToggleComments={handleToggleComments}
+          onShare={handleShare}
+        />
+        {openComments['pinned-applitrak'] && (
+          <CommentSection
+            postId="pinned-applitrak"
+            comments={postComments['pinned-applitrak'] || []}
+            onAddComment={handleAddComment}
+          />
+        )}
+      </article>
+
+      {/* ── Dynamic Experience Posts ── */}
+      {experience.filter(exp => !exp.project.includes("AppliTrak")).map((exp, i) => {
+        const postId = `exp-${exp.id}`;
+        return (
+          <article key={exp.id} id={`post-${postId}`} className="bg-card rounded-xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow animate-slide-up" style={{ animationDelay: `${i * 0.1}s` }}>
+            <div className="p-4 flex items-start justify-between">
+              <div className="flex gap-3">
+                <img src={ProfilePhoto} alt={personal.name} className="w-12 h-12 rounded-lg object-cover" />
+                <div>
+                  <div className="flex items-center gap-1">
+                    <h3 className="font-bold text-sm hover:underline cursor-pointer">{personal.name}</h3>
+                    <span className="material-symbols-outlined text-primary text-[16px] fill-1">verified</span>
+                  </div>
+                  <p className="text-muted-foreground text-[11px]">{exp.position}</p>
+                  <p className="text-muted-foreground text-[10px] mt-0.5">{exp.duration}</p>
+                </div>
+              </div>
+            </div>
+            <div className="px-4 pb-2">
+              <h4 className="font-bold text-sm mb-1">{exp.project}</h4>
+              <p className="text-sm leading-relaxed mb-4 text-foreground/90">{exp.description}</p>
+
+              <div className="flex flex-wrap gap-2 mb-3">
+                {exp.technologies?.slice(0, 4).map(tech => (
+                  <span key={tech} className={`px-2 py-0.5 rounded text-[10px] font-medium border ${getTechColor(tech)}`}>
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {exp.githubUrl && (
+              <div className="px-4 py-3 bg-black/5 dark:bg-white/5 mx-4 mb-4 rounded-lg flex items-center justify-between border border-border">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-lg">code</span>
+                  <span className="text-xs font-mono">View Source Code</span>
+                </div>
+                <a href={exp.githubUrl} target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                  GitHub <span className="material-symbols-outlined text-xs">open_in_new</span>
+                </a>
+              </div>
+            )}
+
+            <PostActions
+              postId={postId}
+              likes={postLikes[postId] || 0}
+              comments={postComments[postId] || []}
+              onLike={handleLike}
+              onToggleComments={handleToggleComments}
+              onShare={handleShare}
+            />
+            {openComments[postId] && (
+              <CommentSection
+                postId={postId}
+                comments={postComments[postId] || []}
+                onAddComment={handleAddComment}
+              />
+            )}
+          </article>
+        );
+      })}
+    </div>
+  );
+
+  // ═══════════════════════════════════════════════════════════
+  //  RENDER
+  // ═══════════════════════════════════════════════════════════
+  return (
+    <div className="min-h-screen bg-background text-foreground font-sans transition-colors duration-300">
+
+      {/* Top Navigation Bar */}
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 glass backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+
+          <div className="flex items-center gap-4 flex-1">
+            <div className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity cursor-pointer">
+              <span className="material-symbols-outlined text-3xl">terminal</span>
+              <span className="text-xl font-bold tracking-tight hidden sm:block">DevPort</span>
+            </div>
+            <div className="relative w-full max-w-md hidden md:block">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-foreground/60 text-xl">search</span>
+              <input
+                type="text"
+                className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2 pl-10 pr-4 text-sm text-slate-900 dark:text-slate-100 focus:ring-1 focus:ring-primary placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none"
+                placeholder="Search projects, skills, or experience..."
+              />
+            </div>
+          </div>
+
+          <nav className="flex items-center gap-1 md:gap-6">
             <button
-              key={tab.id}
-              className={`feed-tab ${activeTab === tab.id ? 'feed-tab-active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.icon && <tab.icon size={16} />}
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </>
-    );
-
-    const renderFeedPosts = () => (
-      <>
-        {/* Pinned Posts */}
-        <div className="feed-post pinned-post">
-          <div className="pinned-header">
-            <Pin size={16} />
-            PINNED POST
-          </div>
-          <div className="post-header">
-            <img src={ProfilePhoto} alt={personal.name} className="post-avatar" />
-            <div className="post-author-info">
-              <div className="post-author-row">
-                <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
-              </div>
-              <span className="post-time">Just now</span>
-            </div>
-          </div>
-          <h3 className="post-title">AppliTrak: AI-Powered Job Portal</h3>
-            <p className="post-content">
-              Building AppliTrak! 🚀 (Work in Progress) Making great strides on this AI-powered job portal that uses local LLMs to match resumes with job descriptions in seconds. No cloud costs, 100% privacy, and 90% faster screening. Check out the current progress on the dashboard and AI analyzer! 💻✨ #AI #FullStack #PrivacyFirst #WIP
-            </p>
-          <div className="post-images">
-            <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/image-1766235642796.png?width=8000&height=8000&resize=contain" alt="AppliTrak Dashboard" className="post-image" />
-            <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-12-13-191932-1766235676192.png?width=8000&height=8000&resize=contain" alt="AppliTrak AI Analyzer" className="post-image" />
-          </div>
-          <div className="post-reactions">
-            <div className="reaction-avatars">
-              <div className="reaction-avatar">❤️</div>
-              <span className="reaction-text">You and 42 others</span>
-            </div>
-            <span className="post-comments">12 Comments</span>
-          </div>
-          <div className="post-actions">
-            <button className="post-action-btn">
-              <Flame size={16} />
-              Inspiring
-            </button>
-            <button className="post-action-btn">
-              <MessageCircle size={16} />
-              Comment
-            </button>
-            <button className="post-action-btn">
-              <Share2 size={16} />
-              Share
-            </button>
-          </div>
-        </div>
-
-          <div className="feed-post pinned-post">
-            <div className="pinned-header">
-              <Pin size={16} />
-              PINNED POST
-            </div>
-            <div className="post-header">
-              <img src={ProfilePhoto} alt={personal.name} className="post-avatar" />
-              <div className="post-author-info">
-                <div className="post-author-row">
-                  <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
-                </div>
-                <span className="post-time">1 day ago</span>
-              </div>
-            </div>
-            <h3 className="post-title">K-Wise: AI-Driven Kiosk System</h3>
-            <p className="post-content">
-              Meet K-Wise: The ultimate AI-driven kiosk system for PC builders! 🖥️✨ Tired of compatibility headaches? Our system uses 3,200+ rules to ensure every part fits perfectly. From budget builds to high-end rigs, K-Wise has your back with real-time AI scoring and recommendations. 🛠️🤖 #KWise #PCBuilding #AI #Innovation #TechExpert
-            </p>
-            <div className="post-images">
-              <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-11-09-220838-1766236137075.png?width=8000&height=8000&resize=contain" alt="K-Wise Comparison" className="post-image" />
-              <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-11-21-101549-1766236136977.png?width=8000&height=8000&resize=contain" alt="K-Wise Home" className="post-image" />
-            </div>
-            <div className="post-reactions">
-            <div className="reaction-avatars">
-              <div className="reaction-avatar">👍</div>
-              <span className="reaction-text">You and 100 others</span>
-            </div>
-            <span className="post-comments">9 Comments</span>
-          </div>
-          <div className="post-actions">
-            <button className="post-action-btn">
-              <Flame size={16} />
-              Inspiring
-            </button>
-            <button className="post-action-btn">
-              <MessageCircle size={16} />
-              Comment
-            </button>
-            <button className="post-action-btn">
-              <Share2 size={16} />
-              Share
-            </button>
-          </div>
-        </div>
-
-        {/* Regular Posts */}
-        {experience
-          .filter(exp => !["AppliTrak: AI-Powered Job Portal", "K-Wise: AI-Driven Kiosk System"].includes(exp.project))
-          .map((exp, index) => (
-            <div key={exp.id} className="feed-post">
-            <div className="post-header">
-              <img src={ProfilePhoto} alt={personal.name} className="post-avatar" />
-              <div className="post-author-info">
-                <div className="post-author-row">
-                  <span className="post-author-name">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}</span>
-                </div>
-                <span className="post-time">{exp.duration.split('—')[0].trim()}</span>
-              </div>
-            </div>
-            <div className="post-tag">
-              {exp.type === "Full-Stack Development" ? "📱 Accountability" : "🎨 Frontend"}
-            </div>
-            <h3 className="post-title">{exp.project}</h3>
-            <p className="post-content">
-              {exp.description}
-            </p>
-            <div className="post-reactions">
-              <div className="reaction-avatars">
-                <span className="reaction-text">{index + 15} reactions</span>
-              </div>
-              <span className="post-comments">{index + 8} Comments</span>
-            </div>
-            <div className="post-actions">
-              <button className="post-action-btn">
-                <Flame size={16} />
-                Inspiring
-              </button>
-              <button className="post-action-btn">
-                <MessageCircle size={16} />
-                Comment
-              </button>
-              <button className="post-action-btn">
-                <Share2 size={16} />
-                Share
-              </button>
-            </div>
-          </div>
-          ))}
-      </>
-    );
-
-    const renderAboutSection = () => (
-      <>
-        <div className="feed-post">
-          <div className="section-header">
-            <h2 className="section-title">About</h2>
-          </div>
-            <h3 className="post-title">{personal.title}</h3>
-            <p className="post-content">
-              I'm a Web Developer and Front-End Developer with a passion for creating beautiful, responsive, and user-friendly web experiences. Currently pursuing IT at City College of Calamba, I specialize in modern front-end technologies like React, JavaScript, and CSS.
-            </p>
-            <p className="post-content">
-              I focus on building clean, intuitive interfaces with attention to design details, accessibility, and performance. From pixel-perfect layouts to smooth animations, I craft websites that not only look great but also deliver exceptional user experiences.
-            </p>
-            <p className="post-content">
-              My goal is to bridge the gap between design and development, turning creative visions into functional, high-quality web applications that make a real impact.
-            </p>
-        </div>
-      </>
-    );
-
-    const renderCertificationsSection = () => (
-      <div className="feed-post">
-        <div className="section-header">
-          <h2 className="section-title">Certifications</h2>
-        </div>
-            <div className="cert-list">
-            {certifications.map((cert, index) => (
-              <div key={cert.name || index} className="cert-row">
-                <div className="cert-info">
-                  <div className="post-title">{cert.name}</div>
-                  <div className="post-content">{cert.issuer}</div>
-                </div>
-                <div className="about-chip">{cert.year}</div>
-              </div>
-            ))}
-          </div>
-      </div>
-    );
-
-    const renderContactSection = () => (
-      <div className="feed-post">
-        <div className="section-header">
-          <h2 className="section-title">Get In Touch</h2>
-        </div>
-        <p className="post-content">
-          Let's collaborate on AI-powered web apps or integrate automation into your workflows. Reach out anytime!
-        </p>
-        <div className="contact-grid">
-          <div className="contact-card">
-            <div>
-              <div className="post-title">Email</div>
-              <div className="post-content">{personal.email}</div>
-            </div>
-          </div>
-          <div className="contact-card">
-            <div>
-              <div className="post-title">Phone</div>
-              <div className="post-content">{personal.phone}</div>
-            </div>
-          </div>
-          <div className="contact-card">
-            <div>
-              <div className="post-title">Portfolio</div>
-              <a className="post-content" href="https://jakemesinawebdev.vercel.app/" target="_blank" rel="noreferrer">https://jakemesinawebdev.vercel.app/</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-
-    return (
-      <div className="home-layout">
-
-      {/* Header */}
-      <header className="home-header">
-          <div className="header-left">
-            <div className="logo">
-              <div className="logo-text">
-                <div className="logo-title">Jake Mesina</div>
-                <div className="logo-subtitle">Aspiring Web Developer / Frontend Developer</div>
-              </div>
-            </div>
-          </div>
-
-          <nav className="header-nav">
-            <button
-              className={`nav-tab ${activeSection === 'Home' ? 'nav-tab-active' : ''}`}
               onClick={() => setActiveSection('Home')}
+              className={`flex flex-col items-center pb-1 pt-2 px-2 transition-colors ${activeSection === 'Home' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
             >
-              Home
+              <span className="material-symbols-outlined">home</span>
+              <span className="text-[10px] font-medium hidden md:block mt-0.5">Home</span>
             </button>
             <button
-              className={`nav-tab ${activeSection === 'About' ? 'nav-tab-active' : ''}`}
               onClick={() => setActiveSection('About')}
+              className={`flex flex-col items-center pb-1 pt-2 px-2 transition-colors ${activeSection === 'About' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
             >
-              About
+              <span className="material-symbols-outlined">person</span>
+              <span className="text-[10px] font-medium hidden md:block mt-0.5">About</span>
             </button>
             <button
-              className={`nav-tab ${activeSection === 'Certifications' ? 'nav-tab-active' : ''}`}
               onClick={() => setActiveSection('Certifications')}
+              className={`flex flex-col items-center pb-1 pt-2 px-2 transition-colors ${activeSection === 'Certifications' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
             >
-              Certifications
+              <span className="material-symbols-outlined">workspace_premium</span>
+              <span className="text-[10px] font-medium hidden md:block mt-0.5">Certs</span>
             </button>
+            <div className="h-8 w-[1px] bg-border mx-2"></div>
+
             <button
-              className={`nav-tab ${activeSection === 'Contact' ? 'nav-tab-active' : ''}`}
-              onClick={() => setActiveSection('Contact')}
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground hover:text-primary"
             >
-              Get In Touch
+              <span className="material-symbols-outlined">{darkMode ? 'light_mode' : 'dark_mode'}</span>
             </button>
+
+            <div className="h-9 w-9 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center overflow-hidden">
+              <img src={ProfilePhoto} className="w-full h-full object-cover" alt="Profile" />
+            </div>
           </nav>
-
-
-        <div className="header-actions">
-          <button className="header-icon-btn">
-            <Mail size={20} />
-          </button>
-          <button className="header-icon-btn header-notif">
-            <Bell size={20} />
-            <span className="notif-badge">{certifications.length}</span>
-          </button>
-          <button className="header-avatar">
-            <img src={ProfilePhoto} alt={personal.name} />
-          </button>
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="home-main">
+      {/* Main Content Grid */}
+      <main className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-12 gap-6">
+
         {/* Left Sidebar */}
-        <aside className="home-sidebar-left">
-          <div className="profile-card">
-            <div className="profile-banner"></div>
-            <div className="profile-avatar-wrapper">
-              <img src={ProfilePhoto} alt={personal.name} className="profile-avatar" />
-              <span className="profile-status"></span>
-            </div>
-
-            <div className="profile-info">
-              <div className="profile-name-row">
-                <h2 className="profile-name-text">{personal.name.split(' ')[0]} {personal.name.split(' ')[1].charAt(0)}.</h2>
+        <aside className="md:col-span-3 space-y-4 hidden md:block">
+          <div className="bg-card rounded-xl border border-border">
+            <div className="h-20 bg-gradient-to-r from-primary to-blue-600"></div>
+            <div className="px-4 pb-6">
+              <div className="relative -mt-10 mb-3 text-center">
+                <img src={ProfilePhoto} className="w-20 h-20 rounded-xl border-4 border-card object-cover mx-auto shadow-lg" alt={personal.name} />
               </div>
-              <p className="profile-bio">
-                I build clean, intuitive interfaces with strong attention to design, accessibility, and performance—crafting websites that look great and deliver exceptional user experiences.
-              </p>
-            </div>
-
-              <div className="quick-links">
-                <h3 className="quick-links-title">SOCIAL LINKS</h3>
-                {socialLinks.length === 0 && (
-                  <div className="quick-link-item">
-                    <div className="quick-link-icon">ℹ️</div>
-                    <span>No social links provided</span>
-                  </div>
-                )}
-                {socialLinks.map(([key, url]) => {
-                  const iconMap = {
-                    github: Github,
-                    linkedin: Linkedin,
-                    instagram: Instagram,
-                    twitter: Twitter,
-                    portfolio: Globe,
-                  };
-
-                  const Icon = iconMap[key];
-
-                    return (
-                      <a 
-                        key={key} 
-                        href={key === 'portfolio' ? 'https://jakemesinawebdev.vercel.app/' : url} 
-                        target="_blank" 
-                        rel="noreferrer" 
-                        className="quick-link-item"
-                        style={{ '--hover-color': getSocialColor(key) }}
-                      >
-                        <div className="quick-link-icon">
-                          {Icon ? <Icon size={16} /> : <ExternalLink size={16} />}
-                        </div>
-                        <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
-                        <span className="quick-link-arrow">›</span>
-                      </a>
-                    );
-                })}
+              <div className="text-center">
+                <h1 className="text-lg font-bold">{personal.name}</h1>
+                <p className="text-muted-foreground text-xs leading-tight mt-1">{personal.title}</p>
+                <div className="flex items-center justify-center gap-1 text-muted-foreground text-[11px] mt-3">
+                  <span className="material-symbols-outlined text-[14px]">location_on</span>
+                  {personal.location.split(',')[0]}
+                </div>
               </div>
 
+              <div className="mt-6 pt-4 border-t border-border space-y-2">
+                <div className="flex justify-between items-center text-xs group cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-1.5 rounded transition-colors">
+                  <span className="text-muted-foreground group-hover:text-primary transition-colors">Experience</span>
+                  <span className="font-bold text-primary">{personal.yearsOfExperience} Years</span>
+                </div>
+                <div className="flex justify-between items-center text-xs group cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-1.5 rounded transition-colors">
+                  <span className="text-muted-foreground group-hover:text-primary transition-colors">Projects</span>
+                  <span className="font-bold text-primary">{experience.length + userPosts.length}</span>
+                </div>
+                <div className="flex justify-between items-center text-xs group cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-1.5 rounded transition-colors">
+                  <span className="text-muted-foreground group-hover:text-primary transition-colors">Certifications</span>
+                  <span className="font-bold text-primary">{certifications.length}</span>
+                </div>
+              </div>
+
+              <button className="w-full mt-4 py-2 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+                <span className="material-symbols-outlined text-sm">person_add</span>
+                Connect
+              </button>
+            </div>
+          </div>
+
+          {/* Social Links */}
+          <div className="bg-card rounded-xl border border-border p-4">
+            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Socials</h3>
+            <div className="space-y-2">
+              {socialLinks.map(([key, url]) => {
+                const icon = getSocialIcon(key);
+                return (
+                  <a key={key} href={url} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded transition-colors group">
+                    <span className={`w-5 h-5 flex items-center justify-center shrink-0 ${icon.color}`}>
+                      {icon.svg}
+                    </span>
+                    <span className="capitalize flex-1">{key}</span>
+                    <span className="material-symbols-outlined text-[12px] opacity-0 group-hover:opacity-100">arrow_outward</span>
+                  </a>
+                );
+              })}
+            </div>
           </div>
         </aside>
 
         {/* Center Feed */}
-        <main className="home-feed">
+        <section className="md:col-span-6 space-y-6">
           {renderFeedControls()}
-          {activeSection === 'Home' && renderFeedPosts()}
+
           <PostModal
             open={showPostModal}
             onClose={() => setShowPostModal(false)}
-            draft={feedInputValue}
-            onDraftChange={(v) => setFeedInputValue(v)}
             personal={portfolioData.personal}
+            onPost={handleNewPost}
           />
-          {activeSection === 'About' && renderAboutSection()}
-          {activeSection === 'Certifications' && renderCertificationsSection()}
-          {activeSection === 'Contact' && renderContactSection()}
-        </main>
+
+          {activeSection === 'Home' && renderFeedPosts()}
+
+          {activeSection === 'About' && (
+            <div className="bg-card rounded-xl border border-border p-6 animate-fade-in">
+              <h2 className="text-xl font-bold mb-4">About Me</h2>
+              <p className="text-muted-foreground leading-relaxed mb-4">{personal.bio}</p>
+              <h3 className="font-bold text-sm mb-2 mt-6">Core Traits</h3>
+              <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                {portfolioData.personality.traits.map(t => <li key={t}>{t}</li>)}
+              </ul>
+            </div>
+          )}
+
+          {activeSection === 'Certifications' && (
+            <div className="space-y-4 animate-fade-in">
+              {certifications.map(cert => (
+                <div key={cert.credentialId} className="bg-card rounded-xl border border-border p-4 flex gap-4 items-center">
+                  <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
+                    <span className="material-symbols-outlined text-2xl text-primary">verified</span>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-sm">{cert.name}</h3>
+                    <p className="text-xs text-muted-foreground">{cert.issuer} • {cert.date}</p>
+                  </div>
+                  <a href={cert.url} target="_blank" className="text-primary hover:underline text-xs">View</a>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
 
         {/* Right Sidebar */}
-        <aside className="home-sidebar-right">
-          <div className="streak-widget education-widget">
-            <div className="widget-header">
-              <h3 className="widget-title">Education</h3>
+        <aside className="md:col-span-3 space-y-6 hidden lg:block">
+          <div className="bg-card rounded-xl border border-border p-4">
+            <h2 className="font-bold text-sm flex items-center gap-2 mb-4">
+              <span className="material-symbols-outlined text-primary">terminal</span>
+              Technical Arsenal
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Frontend</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {skills.frontend.map(skill => (
+                    <span key={skill.name} className={`px-2 py-1 rounded text-[10px] font-medium border ${getTechColor(skill.name)}`}>
+                      {skill.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Backend</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {skills.backend.map(skill => (
+                    <span key={skill.name} className={`px-2 py-1 rounded text-[10px] font-medium border ${getTechColor(skill.name)}`}>
+                      {skill.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
-            <div className="education-widget-list">
-              {education.map((edu, index) => (
-                <div key={edu.institution || index} className="education-widget-item">
+          </div>
+
+          <div className="bg-card rounded-xl border border-border p-4">
+            <h2 className="font-bold text-sm mb-4">Education</h2>
+            <div className="space-y-4">
+              {education.map(edu => (
+                <div key={edu.institution} className="flex gap-3 items-start">
+                  <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
+                    <span className="material-symbols-outlined text-primary text-sm">school</span>
+                  </div>
                   <div>
-                    <div className="education-widget-degree">{edu.degree}</div>
-                    <div className="education-widget-school">{edu.institution}</div>
-                    <div className="education-widget-duration">{edu.duration}</div>
+                    <p className="text-[12px] font-medium leading-tight">{edu.degree}</p>
+                    <p className="text-[10px] text-muted-foreground mt-1">{edu.institution}</p>
+                    <p className="text-[10px] text-muted-foreground">{edu.duration}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-            <div className="leaderboard-widget techstack-widget">
-              <div className="widget-header">
-                <h3 className="widget-title">Tech Stack</h3>
-              </div>
-                <div className="techstack-widget-group">
-                  <div className="tech-category-title">Frontend</div>
-                  <div className="tech-icons-grid">
-                    {skills.frontend.slice(0, 8).map((skill) => (
-                      <div 
-                        key={skill.name} 
-                        className="tech-icon-item" 
-                        title={skill.name}
-                        style={{ '--hover-color': getTechColor(skill.name) }}
-                      >
-                        <TechIcon name={skill.name} size={24} className="tech-brand-icon" />
-                        <span className="tech-icon-name">{skill.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="techstack-widget-group">
-                  <div className="tech-category-title">Backend</div>
-                  <div className="tech-icons-grid">
-                    {[...skills.backend, ...skills.ai].slice(0, 8).map((skill) => (
-                      <div 
-                        key={skill.name} 
-                        className="tech-icon-item" 
-                        title={skill.name}
-                        style={{ '--hover-color': getTechColor(skill.name) }}
-                      >
-                        <TechIcon name={skill.name} size={24} className="tech-brand-icon" />
-                        <span className="tech-icon-name">{skill.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
+          <footer className="text-[10px] text-muted-foreground text-center space-y-2 pt-4 border-t border-border">
+            <div className="flex flex-wrap justify-center gap-2">
+              <a href="#" className="hover:text-primary">Privacy</a>
+              <a href="#" className="hover:text-primary">Terms</a>
+              <a href="#" className="hover:text-primary">Cookies</a>
             </div>
+            <p>© 2024 Jake Mesina. All rights reserved.</p>
+          </footer>
         </aside>
+      </main>
+
+      {/* Mobile Bottom Nav */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border h-14 flex items-center justify-around z-50">
+        <button onClick={() => setActiveSection('Home')} className={`flex flex-col items-center ${activeSection === 'Home' ? 'text-primary' : 'text-muted-foreground'}`}>
+          <span className="material-symbols-outlined">home</span>
+        </button>
+        <button onClick={() => setActiveSection('About')} className={`flex flex-col items-center ${activeSection === 'About' ? 'text-primary' : 'text-muted-foreground'}`}>
+          <span className="material-symbols-outlined">person</span>
+        </button>
+        <button onClick={() => setActiveSection('Certifications')} className={`flex flex-col items-center ${activeSection === 'Certifications' ? 'text-primary' : 'text-muted-foreground'}`}>
+          <span className="material-symbols-outlined">workspace_premium</span>
+        </button>
       </div>
+
     </div>
   );
 };
