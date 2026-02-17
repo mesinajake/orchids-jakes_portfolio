@@ -1,0 +1,393 @@
+{
+  "personal": {
+    "name": "Jake Mesina",
+    "title": "Aspiring Web Developer / Frontend Developer",
+    "location": "Calamba, Laguna, Philippines",
+    "email": "mesinajake9@gmail.com",
+    "phone": "+639473492672",
+    "tagline": "Building AI-Powered Web Applications That Deliver Real Business Impact",
+    "bio": "Full-stack developer specializing in AI-powered web applications with expertise in React, Node.js, and local LLM integration. Proven track record of building enterprise-grade systems that reduce operational time by 85%+ through intelligent automation. Passionate about creating user-centric solutions that blend cutting-edge AI with practical business value.",
+    "avatar": "/images/profile.webp",
+    "availableForHire": true,
+    "yearsOfExperience": 3,
+    "startDate": "2022-01-01",
+    "technicalProficiency": {
+      "overall": 82,
+      "nodejs": 85,
+      "mongodb": 88,
+      "jwtAuth": 92,
+      "react": 78,
+      "aiIntegration": 75,
+      "apiIntegration": 86
+    }
+  },
+  "social": {
+    "github": "https://github.com/jakemesina",
+    "linkedin": "https://linkedin.com/in/jakemesina",
+    "instagram": "",
+    "twitter": "",
+    "portfolio": "https://www.jakemesina.com"
+  },
+  "skills": {
+    "frontend": [
+      {
+        "name": "React.js",
+        "level": 78,
+        "icon": "reactjs.svg",
+        "years": 3,
+        "description": "React-based self-service kiosk with real-time AI integration, optimized to <300ms UI response time"
+      },
+      {
+        "name": "JavaScript",
+        "level": 85,
+        "icon": "javascript.svg",
+        "years": 3,
+        "description": "ES6+, async/await, promises, and functional programming for enterprise applications"
+      },
+      {
+        "name": "HTML5",
+        "level": 90,
+        "icon": "html.svg",
+        "years": 3,
+        "description": "Semantic markup, accessibility, and SEO best practices"
+      },
+      {
+        "name": "CSS3",
+        "level": 85,
+        "icon": "css.svg",
+        "years": 3,
+        "description": "Flexbox, Grid, animations, and responsive design"
+      },
+      {
+        "name": "Vite",
+        "level": 82,
+        "icon": "vite.svg",
+        "years": 2,
+        "description": "Fast build tool for modern React applications"
+      }
+    ],
+    "backend": [
+      {
+        "name": "Node.js",
+        "level": 85,
+        "icon": "nodejs.svg",
+        "years": 3,
+        "description": "Built 60+ RESTful endpoints with complete RBAC system"
+      },
+      {
+        "name": "Express.js",
+        "level": 88,
+        "icon": "express.svg",
+        "years": 3,
+        "description": "Enterprise-grade API architecture with middleware and error handling"
+      },
+      {
+        "name": "MongoDB",
+        "level": 88,
+        "icon": "mongodb.svg",
+        "years": 3,
+        "description": "Designed 8 MongoDB schemas with geospatial indexing and aggregation pipelines"
+      },
+      {
+        "name": "JWT Authentication",
+        "level": 92,
+        "icon": "jwt.svg",
+        "years": 3,
+        "description": "Secure token-based authentication with refresh token rotation"
+      }
+    ],
+    "ai": [],
+    "tools": [
+      {
+        "name": "Git & GitHub",
+        "level": 88,
+        "icon": "git.svg",
+        "description": "Version control and collaborative development workflows"
+      },
+      {
+        "name": "VS Code",
+        "level": 90,
+        "icon": "vscode.svg",
+        "description": "Primary development environment with extensions and Copilot integration"
+      },
+      {
+        "name": "GitHub Copilot",
+        "level": 85,
+        "icon": "copilot.svg",
+        "description": "AI-assisted coding for faster development cycles"
+      },
+      {
+        "name": "Figma",
+        "level": 75,
+        "icon": "figma.svg",
+        "description": "UI/UX design and prototyping for K-Wise kiosk system"
+      }
+    ],
+    "specialties": [
+      "RESTful APIs",
+      "JWT Authentication",
+      "RBAC (Role-Based Access Control)",
+      "Performance Optimization",
+      "Real-time Systems (SSE)",
+      "Document Parsing (PDF/DOCX/TXT)",
+      "Geospatial Indexing",
+      "LRU Caching",
+      "API Integration",
+      "Lazy Loading"
+    ]
+  },
+  "experience": [
+    {
+      "id": 1,
+      "company": "Personal Project",
+      "position": "Full-Stack Developer",
+      "project": "AppliTrak: AI-Powered Job Portal",
+      "duration": "May 2025 — Present",
+      "startDate": "2025-05-01",
+      "endDate": null,
+      "location": "Remote",
+      "type": "Full-Stack Development",
+        "description": "Enterprise-grade job marketplace with intelligent automation for automated resume-to-job matching",
+      "keyMetrics": [
+        {
+          "metric": "90% Time Reduction",
+          "description": "Reduced manual screening from 5-7 minutes to 30 seconds"
+        },
+        {
+          "metric": "60+ REST Endpoints",
+          "description": "Complete RBAC system with multi-role authentication"
+        },
+        {
+          "metric": "Zero Cloud Costs",
+          "description": "Privacy-first AI processing with local LLM"
+        },
+        {
+          "metric": "75% AI Accuracy",
+          "description": "Intelligent resume-to-job matching"
+        }
+      ],
+      "responsibilities": [
+        "Architected 60+ RESTful endpoints with complete RBAC system",
+        "Designed 8 MongoDB schemas with geospatial indexing",
+        "Implemented intelligent document parsing (PDF/DOCX/TXT) with secure file handling",
+        "Integrated 3 external job APIs with data normalization",
+        "Built real-time analytics using MongoDB aggregation pipelines",
+        "Developed privacy-first AI processing with zero cloud costs"
+      ],
+      "achievements": [
+        "Reduced manual screening time from 5-7 minutes to 30 seconds (90% improvement)",
+        "Achieved 75% AI accuracy in resume-to-job matching",
+        "Zero cloud costs through local LLM processing",
+        "Integrated 3 external job APIs seamlessly"
+      ],
+        "technologies": ["Node.js", "Express.js", "MongoDB", "React", "JWT", "RESTful APIs"],
+      "techProficiency": {
+        "nodejs": 85,
+        "mongodb": 88,
+        "jwt": 92,
+        "react": 78,
+        "ai": 75,
+        "apiIntegration": 86
+      }
+    },
+    {
+      "id": 2,
+      "company": "Personal Project",
+      "position": "Front-End Developer",
+      "project": "K-Wise: AI-Driven Kiosk System",
+      "duration": "Feb 2025 — Nov 2025",
+      "startDate": "2025-02-01",
+      "endDate": "2025-11-30",
+      "location": "Remote",
+      "type": "Front-End Development",
+      "description": "React-based self-service kiosk with real-time AI integration for PC building and compatibility checking",
+      "keyMetrics": [
+        {
+          "metric": "3.80/4.0 Satisfaction",
+          "description": "User satisfaction score from testing"
+        },
+        {
+          "metric": "32% Conversion Rate",
+          "description": "Users completing builds successfully"
+        },
+        {
+          "metric": "85% Consultation Elimination",
+          "description": "Reduced manual staff consultations"
+        },
+        {
+          "metric": "87% Build Time Reduction",
+          "description": "From 15 minutes to 2 minutes average"
+        },
+        {
+          "metric": "<300ms Response Time",
+          "description": "Optimized UI performance"
+        },
+        {
+          "metric": "99.5% Uptime",
+          "description": "System reliability"
+        }
+      ],
+      "responsibilities": [
+        "Built hybrid AI engine with 3,200+ compatibility rules + DeepSeek R1",
+        "Optimized to <300ms UI response time with 99.5% uptime",
+        "Implemented LRU caching for 1000+ product images with lazy loading",
+        "Integrated 150+ API endpoints with real-time compatibility scoring",
+        "Achieved 3.80/4.0 user satisfaction score and 32% conversion rate"
+      ],
+      "achievements": [
+        "Eliminated 85% of manual staff consultations through AI automation",
+        "Reduced average build time from 15 minutes to 2 minutes (87% improvement)",
+        "Achieved <300ms UI response time with 99.5% uptime",
+        "Implemented LRU caching for 1000+ product images"
+      ],
+          "technologies": ["React", "Node.js", "Express", "SSE", "React Context"],
+      "githubUrl": "https://github.com/jakemesina/k-wise",
+      "figmaUrl": "https://figma.com/k-wise-design"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor of Science in Information Technology",
+      "institution": "City College of Calamba",
+      "duration": "2022 — Present",
+      "startDate": "2022-01-01",
+      "endDate": null,
+      "location": "Calamba, Laguna, Philippines",
+      "status": "In Progress",
+      "relevantCoursework": [
+        "Web Development",
+        "Front-End Development",
+        "Responsive Web Design",
+        "Software Development",
+        "Database Management Systems",
+        "Data Structures and Algorithms"
+      ],
+      "achievements": [
+        "Built two major portfolio projects (AppliTrak, K-Wise)",
+        "Specialized in AI integration and full-stack development",
+        "Active in web development community and open source"
+      ]
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS APAC Solutions Architecture Virtual Experience",
+      "issuer": "Forage",
+      "date": "Sep 2025",
+      "month": "September",
+      "year": "2025",
+      "credentialId": "FORAGE-AWS-2025",
+      "url": "https://www.theforage.com/virtual-experience",
+      "logo": "aws.svg"
+    },
+    {
+      "name": "Skyscanner's Front-End Software Engineering",
+      "issuer": "Forage",
+      "date": "Sep 2025",
+      "month": "September",
+      "year": "2025",
+      "credentialId": "FORAGE-SKY-2025",
+      "url": "https://www.theforage.com/virtual-experience",
+      "logo": "skyscanner.svg"
+    },
+    {
+      "name": "Fundamentals of Statistics with Microsoft Excel",
+      "issuer": "Data Analytics Philippines",
+      "date": "May 2025",
+      "month": "May",
+      "year": "2025",
+      "credentialId": "DAP-STATS-2025",
+      "url": "https://dataanalytics.ph",
+      "logo": "data-analytics-ph.svg"
+    },
+    {
+      "name": "Accenture UK Developer and Technology Virtual Experience",
+      "issuer": "Forage",
+      "date": "Oct 2025",
+      "month": "October",
+      "year": "2025",
+      "credentialId": "FORAGE-ACC-2025",
+      "url": "https://www.theforage.com/virtual-experience",
+      "logo": "accenture.svg"
+    }
+  ],
+  "personality": {
+    "traits": [
+      "Passionate about AI and modern web development",
+      "Problem-solver focused on business impact and metrics",
+      "Performance-conscious with attention to optimization",
+      "Continuously learning and exploring new technologies",
+      "Values clean code, scalability, and user-centric design"
+    ],
+    "workStyle": [
+      "Focuses on practical solutions over hype",
+      "Measures success through real metrics and business impact",
+      "Privacy-first approach to AI integration",
+      "Cost-effective solutions using local processing when possible",
+      "Agile mindset with iterative development"
+    ],
+    "communicationStyle": [
+      "Professional yet approachable",
+      "Technical when needed but explains concepts clearly",
+      "Enthusiastic about AI and modern web development",
+      "Humble but confident about abilities"
+    ],
+    "interests": [
+      "Local LLM integration and AI automation",
+      "Performance optimization and real-time systems",
+      "Enterprise-grade application architecture",
+      "Privacy-first AI solutions",
+      "Latest JavaScript frameworks and tools"
+    ]
+  },
+  "commonQuestions": [
+      {
+        "question": "What's your experience with AI integration?",
+        "answer": "I specialize in integrating intelligent automation into production applications. In AppliTrak, I built a resume screening system that reduced processing time by 90%. In K-Wise, I created a hybrid engine with 3,200+ rules for real-time compatibility checking. I focus on privacy-first, cost-effective solutions that deliver measurable business value."
+      },
+    {
+      "question": "Tell me about your best project",
+      "answer": "AppliTrak is my flagship project—an enterprise job portal with automated resume-to-job matching using local AI. The system handles 60+ REST endpoints, multi-role authentication, and integrates 3 external job APIs. I'm most proud of reducing manual screening from 5-7 minutes to 30 seconds while maintaining 75% AI accuracy and zero cloud costs through local LLM processing."
+    },
+      {
+        "question": "What technologies do you use?",
+          "answer": "My core stack is React, Node.js, Express, and MongoDB. I'm proficient in JWT authentication and RESTful API design. I'm also experienced with performance optimization, real-time systems (SSE), and developer tools like Git, GitHub Copilot, and Figma."
+      },
+    {
+      "question": "Are you available for hire?",
+      "answer": "Yes! I'm actively seeking full-time opportunities in full-stack development, AI integration, or building scalable systems. I'm based in Calamba, Laguna but open to remote or hybrid arrangements. I'd love to discuss how I can contribute to your team. Feel free to reach me at mesinajake9@gmail.com or +639473492672."
+    },
+    {
+      "question": "How do you approach performance optimization?",
+      "answer": "I'm obsessive about performance because it directly impacts user experience. In K-Wise, I achieved <300ms response times through LRU caching, lazy loading for 1000+ images, and debounced API calls. I always measure impact with real metrics—like the 87% reduction in build time and 99.5% uptime. Performance isn't just about speed; it's about delivering value to users and businesses."
+    },
+    {
+      "question": "What's your approach to backend development?",
+      "answer": "I build enterprise-grade backends with Node.js and Express.js, focusing on RESTful APIs, JWT authentication, and RBAC systems. In AppliTrak, I architected 60+ endpoints with complete multi-role authentication. I design MongoDB schemas with proper indexing (including geospatial), implement aggregation pipelines for analytics, and ensure secure file handling for document parsing."
+    },
+    {
+      "question": "Can you explain your technical proficiency?",
+      "answer": "My overall technical proficiency is 82%, with strengths in JWT Authentication (92%), MongoDB (88%), API Integration (86%), Node.js (85%), and JavaScript (85%). I'm continually improving in AI Integration (75%) and React (78%). These numbers reflect my real-world project experience—for example, the 60+ REST endpoints in AppliTrak and 150+ API integrations in K-Wise."
+    },
+    {
+      "question": "What makes you different from other developers?",
+      "answer": "I focus on business impact, not just technical implementation. My projects show measurable results: 90% time reduction in AppliTrak, 85% consultation elimination in K-Wise, 87% build time improvement. I combine modern AI with practical solutions, prioritize privacy-first approaches, and always optimize for performance. I speak in metrics because numbers tell the real story of value delivered."
+    },
+    {
+      "question": "Can you start immediately?",
+      "answer": "My availability depends on current commitments. For the right opportunity, I can often start within 2-4 weeks. I believe in professional handovers and ensuring quality transitions."
+    }
+  ],
+  "quickQuestions": [
+    "What's your experience with AI?",
+    "Tell me about your projects",
+    "What technologies do you use?",
+    "Are you available for hire?",
+    "How can I contact you?"
+  ],
+  "metadata": {
+    "lastUpdated": "2025-12-02",
+    "version": "1.0.0",
+    "status": "active"
+  }
+}

@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import React from 'react';
 import "./styles/clean.css";
 import HomePage from "./pages/HomePage";
 import Portfolio from "./pages/Portfolio";

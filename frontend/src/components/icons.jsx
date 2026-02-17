@@ -1,164 +1,145 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowLeft,
-  faArrowRight,
-  faArrowUpRightFromSquare,
-  faAward,
-  faBars,
-  faBell,
-  faBolt,
-  faBox,
-  faBrain,
-  faBriefcase,
-  faCalendar,
-  faChevronRight,
-  faCircleCheck,
-  faCode,
-  faComment,
-  faDatabase,
-  faDownload,
-  faEnvelope,
-  faEye,
-  faFileLines,
-  faFire,
-  faGlobe,
-  faGraduationCap,
-  faHeart,
-  faLayerGroup,
-  faLocationDot,
-  faLock,
-  faMessage,
-  faMicrochip,
-  faMoon,
-  faPaperPlane,
-  faPhone,
-  faRobot,
-  faServer,
-  faShareNodes,
-  faShieldHalved,
-  faStar,
-  faSun,
-  faTableColumns,
-  faThumbtack,
-  faTrophy,
-  faUser,
-  faUserCheck,
-  faUsers,
-  faWindowMaximize,
-  faWindowMinimize,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  faCss3Alt,
-  faDocker,
-  faFigma,
-  faGitAlt,
-  faGithub,
-  faHtml5,
-  faInstagram,
-  faJs,
-  faLinkedin,
-  faNodeJs,
-  faPython,
-  faReact,
-  faTiktok,
-  faVuejs,
-  faXTwitter,
-  faYoutube,
-} from "@fortawesome/free-brands-svg-icons";
+  ArrowLeft as ArrowLeftIcon,
+  ArrowRight as ArrowRightIcon,
+  ArrowUpRight as ArrowUpRightIcon,
+  Award as AwardIcon,
+  Bell as BellIcon,
+  Bot as BotIcon,
+  Brain as BrainIconLucide,
+  Briefcase as BriefcaseIcon,
+  Calendar as CalendarIcon,
+  ChevronRight as ChevronRightIcon,
+  CircleCheck as CircleCheckIcon,
+  Code as CodeIcon,
+  Code2 as Code2Icon,
+  Cpu as CpuIcon,
+  Database as DatabaseIconLucide,
+  Download as DownloadIcon,
+  ExternalLink as ExternalLinkIcon,
+  Eye as EyeIcon,
+  Figma as FigmaIconLucide,
+  FileCode as FileCodeIcon,
+  FileCode2 as FileCode2Icon,
+  FileText as FileTextIcon,
+  Flame as FlameIcon,
+  GitBranch as GitBranchIcon,
+  Github as GithubIcon,
+  Globe as GlobeIcon,
+  GraduationCap as GraduationCapIcon,
+  Heart as HeartIcon,
+  Instagram as InstagramIcon,
+  Layers as LayersIcon,
+  LayoutGrid as LayoutGridIcon,
+  Linkedin as LinkedinIcon,
+  Lock as LockIconLucide,
+  Mail as MailIcon,
+  MapPin as MapPinIcon,
+  Maximize2 as Maximize2Icon,
+  Menu as MenuIcon,
+  MessageCircle as MessageCircleIcon,
+  MessageSquare as MessageSquareIcon,
+  Minimize2 as Minimize2Icon,
+  Moon as MoonIcon,
+  Music2 as Music2Icon,
+  Package as PackageLucideIcon,
+  Phone as PhoneIcon,
+  Pin as PinIcon,
+  Send as SendIcon,
+  Server as ServerIconLucide,
+  Share2 as Share2Icon,
+  ShieldCheck as ShieldCheckIcon,
+  Sparkles as SparklesIcon,
+  Star as StarIcon,
+  Sun as SunIcon,
+  Trophy as TrophyIcon,
+  Twitter as TwitterIcon,
+  User as UserIcon,
+  UserCheck as UserCheckIcon,
+  Users as UsersIcon,
+  X as XIcon,
+  Youtube as YoutubeIcon,
+  Zap as ZapIcon,
+} from "lucide-react";
 
-function createIconComponent(icon) {
-  const IconComponent = ({ size, className, style, ...props }) => {
-    const mergedStyle = {
-      ...(size ? { width: size, height: size } : null),
-      ...style,
-    };
-
-    return (
-      <FontAwesomeIcon
-        icon={icon}
-        className={className}
-        style={mergedStyle}
-        {...props}
-      />
-    );
-  };
+function createIconComponent(Icon) {
+  const IconComponent = ({ size = 20, className, style, ...props }) => (
+    <Icon size={size} className={className} style={style} {...props} />
+  );
 
   return IconComponent;
 }
 
 // Solid
-export const Mail = createIconComponent(faEnvelope);
-export const Bell = createIconComponent(faBell);
-export const User = createIconComponent(faUser);
-export const Users = createIconComponent(faUsers);
-export const Trophy = createIconComponent(faTrophy);
-export const Flame = createIconComponent(faFire);
-export const Calendar = createIconComponent(faCalendar);
-export const Briefcase = createIconComponent(faBriefcase);
-export const GraduationCap = createIconComponent(faGraduationCap);
-export const MessageSquare = createIconComponent(faMessage);
-export const MessageCircle = createIconComponent(faComment);
-export const Award = createIconComponent(faAward);
-export const ExternalLink = createIconComponent(faArrowUpRightFromSquare);
-export const ArrowUpRight = createIconComponent(faArrowUpRightFromSquare);
-export const ArrowLeft = createIconComponent(faArrowLeft);
-export const ArrowRight = createIconComponent(faArrowRight);
-export const Pin = createIconComponent(faThumbtack);
-export const Heart = createIconComponent(faHeart);
-export const Share2 = createIconComponent(faShareNodes);
-export const Code = createIconComponent(faCode);
-export const Code2 = createIconComponent(faCode);
-export const Cpu = createIconComponent(faMicrochip);
-export const Sparkles = createIconComponent(faStar);
-export const Phone = createIconComponent(faPhone);
-export const MapPin = createIconComponent(faLocationDot);
-export const ChevronRight = createIconComponent(faChevronRight);
-export const Download = createIconComponent(faDownload);
-export const Eye = createIconComponent(faEye);
-export const Minimize2 = createIconComponent(faWindowMinimize);
-export const Maximize2 = createIconComponent(faWindowMaximize);
-export const X = createIconComponent(faXmark);
-export const Sun = createIconComponent(faSun);
-export const Moon = createIconComponent(faMoon);
-export const FileText = createIconComponent(faFileLines);
-export const UserCheck = createIconComponent(faUserCheck);
-export const Globe = createIconComponent(faGlobe);
-export const Menu = createIconComponent(faBars);
-export const CheckCircle = createIconComponent(faCircleCheck);
-export const Layers = createIconComponent(faLayerGroup);
-export const Layout = createIconComponent(faTableColumns);
-export const Package = createIconComponent(faBox);
-export const Send = createIconComponent(faPaperPlane);
-export const Star = createIconComponent(faStar);
+export const Mail = createIconComponent(MailIcon);
+export const Bell = createIconComponent(BellIcon);
+export const User = createIconComponent(UserIcon);
+export const Users = createIconComponent(UsersIcon);
+export const Trophy = createIconComponent(TrophyIcon);
+export const Flame = createIconComponent(FlameIcon);
+export const Calendar = createIconComponent(CalendarIcon);
+export const Briefcase = createIconComponent(BriefcaseIcon);
+export const GraduationCap = createIconComponent(GraduationCapIcon);
+export const MessageSquare = createIconComponent(MessageSquareIcon);
+export const MessageCircle = createIconComponent(MessageCircleIcon);
+export const Award = createIconComponent(AwardIcon);
+export const ExternalLink = createIconComponent(ExternalLinkIcon);
+export const ArrowUpRight = createIconComponent(ArrowUpRightIcon);
+export const ArrowLeft = createIconComponent(ArrowLeftIcon);
+export const ArrowRight = createIconComponent(ArrowRightIcon);
+export const Pin = createIconComponent(PinIcon);
+export const Heart = createIconComponent(HeartIcon);
+export const Share2 = createIconComponent(Share2Icon);
+export const Code = createIconComponent(CodeIcon);
+export const Code2 = createIconComponent(Code2Icon);
+export const Cpu = createIconComponent(CpuIcon);
+export const Sparkles = createIconComponent(SparklesIcon);
+export const Phone = createIconComponent(PhoneIcon);
+export const MapPin = createIconComponent(MapPinIcon);
+export const ChevronRight = createIconComponent(ChevronRightIcon);
+export const Download = createIconComponent(DownloadIcon);
+export const Eye = createIconComponent(EyeIcon);
+export const Minimize2 = createIconComponent(Minimize2Icon);
+export const Maximize2 = createIconComponent(Maximize2Icon);
+export const X = createIconComponent(XIcon);
+export const Sun = createIconComponent(SunIcon);
+export const Moon = createIconComponent(MoonIcon);
+export const FileText = createIconComponent(FileTextIcon);
+export const UserCheck = createIconComponent(UserCheckIcon);
+export const Globe = createIconComponent(GlobeIcon);
+export const Menu = createIconComponent(MenuIcon);
+export const CheckCircle = createIconComponent(CircleCheckIcon);
+export const Layers = createIconComponent(LayersIcon);
+export const Layout = createIconComponent(LayoutGridIcon);
+export const Package = createIconComponent(PackageLucideIcon);
+export const Send = createIconComponent(SendIcon);
+export const Star = createIconComponent(StarIcon);
 
 // Brands
-export const Github = createIconComponent(faGithub);
-export const Linkedin = createIconComponent(faLinkedin);
-export const Instagram = createIconComponent(faInstagram);
-export const Youtube = createIconComponent(faYoutube);
-export const TikTok = createIconComponent(faTiktok);
-export const Twitter = createIconComponent(faXTwitter);
+export const Github = createIconComponent(GithubIcon);
+export const Linkedin = createIconComponent(LinkedinIcon);
+export const Instagram = createIconComponent(InstagramIcon);
+export const Youtube = createIconComponent(YoutubeIcon);
+export const TikTok = createIconComponent(Music2Icon);
+export const Twitter = createIconComponent(TwitterIcon);
 
 // Tech Icons
-export const ReactIcon = createIconComponent(faReact);
-export const JsIcon = createIconComponent(faJs);
-export const HtmlIcon = createIconComponent(faHtml5);
-export const CssIcon = createIconComponent(faCss3Alt);
-export const NodeIcon = createIconComponent(faNodeJs);
-export const PythonIcon = createIconComponent(faPython);
-export const VueIcon = createIconComponent(faVuejs);
-export const DockerIcon = createIconComponent(faDocker);
-export const FigmaIcon = createIconComponent(faFigma);
-export const GitIcon = createIconComponent(faGitAlt);
-export const DatabaseIcon = createIconComponent(faDatabase);
-export const ServerIcon = createIconComponent(faServer);
-export const RobotIcon = createIconComponent(faRobot);
-export const BrainIcon = createIconComponent(faBrain);
-export const ShieldIcon = createIconComponent(faShieldHalved);
-export const LockIcon = createIconComponent(faLock);
-export const BoltIcon = createIconComponent(faBolt);
+export const ReactIcon = createIconComponent(Code2Icon);
+export const JsIcon = createIconComponent(FileCode2Icon);
+export const HtmlIcon = createIconComponent(FileCodeIcon);
+export const CssIcon = createIconComponent(FileCodeIcon);
+export const NodeIcon = createIconComponent(ServerIconLucide);
+export const PythonIcon = createIconComponent(BotIcon);
+export const VueIcon = createIconComponent(LayoutGridIcon);
+export const DockerIcon = createIconComponent(PackageLucideIcon);
+export const FigmaIcon = createIconComponent(FigmaIconLucide);
+export const GitIcon = createIconComponent(GitBranchIcon);
+export const DatabaseIcon = createIconComponent(DatabaseIconLucide);
+export const ServerIcon = createIconComponent(ServerIconLucide);
+export const RobotIcon = createIconComponent(BotIcon);
+export const BrainIcon = createIconComponent(BrainIconLucide);
+export const ShieldIcon = createIconComponent(ShieldCheckIcon);
+export const LockIcon = createIconComponent(LockIconLucide);
+export const BoltIcon = createIconComponent(ZapIcon);
 
 export const JwtIcon = ({ size = 24, className, style, ...props }) => (
   <svg

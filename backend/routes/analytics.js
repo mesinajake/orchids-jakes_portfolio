@@ -39,7 +39,7 @@ router.get('/summary', async (req, res) => {
   try {
     const { days = 7 } = req.query;
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - parseInt(days));
+    startDate.setDate(startDate.getDate() - Number.parseInt(days, 10));
 
     const analytics = await Analytics.find({
       timestamp: { $gte: startDate }
