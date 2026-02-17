@@ -4,8 +4,10 @@
 
 @font-face {
   font-family: 'Helvena';
-  src: local('Helvena'), local('Helvetica Neue'), local('Helvetica');
+  src: url('../assets/fonts/Helvena-Variable.woff2') format('woff2'),
+    url('../assets/fonts/Helvena-Variable.woff') format('woff');
   font-weight: 100 900;
+  font-style: normal;
   font-display: swap;
 }
 
