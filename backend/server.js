@@ -18,26 +18,49 @@ config();
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
+function normalizeOrigin(value) {
+  return (value || "").trim().replace(/\/+$/, "");
+}
+
+function expandConfiguredOrigin(value) {
+  const normalized = normalizeOrigin(value);
+  if (!normalized) {
+    return [];
+  }
+
+  if (/^https?:\/\//i.test(normalized)) {
+    return [normalized];
+  }
+
+  // Allow domain-only entries by expanding to https/http forms.
+  return [`https://${normalized}`, `http://${normalized}`];
+}
+
 const defaultAllowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
   "http://localhost:3000",
 ];
 
-const configuredOrigins = (process.env.FRONTEND_URL || "")
+const configuredOriginsRaw = (process.env.FRONTEND_URL || "")
   .split(",")
-  .map((origin) => origin.trim())
+  .flatMap((origin) => expandConfiguredOrigin(origin))
   .filter(Boolean);
 
+const configuredOrigins = Array.from(new Set(configuredOriginsRaw));
+
 const allowedOrigins =
-  configuredOrigins.length > 0 ? configuredOrigins : defaultAllowedOrigins;
+  configuredOrigins.length > 0
+    ? configuredOrigins
+    : defaultAllowedOrigins.map((origin) => normalizeOrigin(origin));
 
 app.set("trust proxy", 1);
 app.use(helmet());
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      const requestOrigin = normalizeOrigin(origin);
+      if (!origin || allowedOrigins.includes(requestOrigin)) {
         return callback(null, true);
       }
 
