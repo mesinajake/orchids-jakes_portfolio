@@ -21,13 +21,21 @@ const timeAgo = (iso) => {
 };
 
 // ─── Shared Post Actions Component ───────────────────────────
-const PostActions = ({ postId, likes, comments, onLike, onToggleComments, onShare }) => {
-  const [liked, setLiked] = useState(false);
+const PostActions = ({ postId, likes, comments, isLiked = false, onLike, onToggleComments, onShare }) => {
+  const [liked, setLiked] = useState(Boolean(isLiked));
   const [showCopied, setShowCopied] = useState(false);
 
-  const handleLike = () => {
-    setLiked(!liked);
-    onLike(postId, !liked);
+  useEffect(() => {
+    setLiked(Boolean(isLiked));
+  }, [isLiked, postId]);
+
+  const handleLike = async () => {
+    const nextLiked = !liked;
+    setLiked(nextLiked);
+    const success = await onLike(postId, nextLiked);
+    if (success === false) {
+      setLiked(!nextLiked);
+    }
   };
 
   const handleShare = () => {
@@ -156,6 +164,198 @@ const CommentSection = ({ postId, comments, onAddComment }) => {
   );
 };
 
+const EditPostModal = ({
+  open,
+  values,
+  onChange,
+  onClose,
+  onSave,
+  isSaving,
+  error,
+}) => {
+  if (!open) return null;
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white dark:bg-slate-900 rounded-2xl border border-border shadow-2xl w-full max-w-lg animate-slide-up max-h-[90vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
+          <h2 className="font-bold text-base">Edit Post</h2>
+          <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition-colors">
+            <span className="material-symbols-outlined text-lg">close</span>
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
+          <input
+            type="text"
+            value={values.title}
+            onChange={(e) => onChange({ ...values, title: e.target.value })}
+            placeholder="Post title (optional)"
+            className="w-full bg-transparent text-sm font-semibold placeholder:text-muted-foreground outline-none border-b border-border pb-2"
+          />
+          <textarea
+            rows={6}
+            value={values.content}
+            onChange={(e) => onChange({ ...values, content: e.target.value })}
+            placeholder="Update your post content..."
+            className="w-full bg-transparent text-sm placeholder:text-muted-foreground outline-none resize-none leading-relaxed"
+          />
+        </div>
+
+        <div className="px-5 pb-4 shrink-0">
+          {error && <p className="text-xs text-red-500 mb-2">{error}</p>}
+          <div className="flex gap-2">
+            <button
+              onClick={onClose}
+              className="flex-1 py-2.5 rounded-full text-sm font-bold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={onSave}
+              disabled={isSaving}
+              className={`flex-1 py-2.5 rounded-full text-sm font-bold transition-all ${isSaving
+                  ? "bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed"
+                  : "bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20"
+                }`}
+            >
+              {isSaving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const DeletePostModal = ({
+  open,
+  title,
+  onCancel,
+  onConfirm,
+  isDeleting,
+  error,
+}) => {
+  if (!open) return null;
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+      onClick={onCancel}
+    >
+      <div
+        className="bg-white dark:bg-slate-900 rounded-2xl border border-border shadow-2xl w-full max-w-md animate-slide-up p-5"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+            <span className="material-symbols-outlined text-red-500">delete</span>
+          </div>
+          <div>
+            <h3 className="font-bold text-base">Delete Post</h3>
+            <p className="text-xs text-muted-foreground">This action cannot be undone.</p>
+          </div>
+        </div>
+
+        <p className="text-sm text-muted-foreground mb-4">
+          Are you sure you want to permanently delete
+          {title ? ` "${title}"` : " this post"}?
+        </p>
+
+        {error && <p className="text-xs text-red-500 mb-3">{error}</p>}
+
+        <div className="flex gap-2">
+          <button
+            onClick={onCancel}
+            className="flex-1 py-2.5 rounded-full text-sm font-bold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={isDeleting}
+            className={`flex-1 py-2.5 rounded-full text-sm font-bold transition-colors ${isDeleting
+                ? "bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed"
+                : "bg-red-500 text-white hover:bg-red-600"
+              }`}
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ImageLightbox = ({
+  open,
+  images,
+  currentIndex,
+  onClose,
+  onPrev,
+  onNext,
+}) => {
+  if (!open || !Array.isArray(images) || images.length === 0) return null;
+
+  const currentImage = images[currentIndex];
+  const canNavigate = images.length > 1;
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/95 z-[130] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        className="absolute top-4 left-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+        title="Close"
+      >
+        <span className="material-symbols-outlined">close</span>
+      </button>
+
+      {canNavigate && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+          title="Previous image"
+        >
+          <span className="material-symbols-outlined">chevron_left</span>
+        </button>
+      )}
+
+      <div className="max-w-[95vw] max-h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+        <img
+          src={currentImage}
+          alt={`Preview ${currentIndex + 1}`}
+          className="max-w-[95vw] max-h-[90vh] w-auto h-auto object-contain"
+        />
+      </div>
+
+      {canNavigate && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+          title="Next image"
+        >
+          <span className="material-symbols-outlined">chevron_right</span>
+        </button>
+      )}
+
+      {canNavigate && (
+        <p className="absolute bottom-4 text-xs text-white/80">
+          {currentIndex + 1} / {images.length}
+        </p>
+      )}
+    </div>
+  );
+};
+
 
 // ═══════════════════════════════════════════════════════════════
 //  HomePage Main Component
@@ -166,12 +366,25 @@ const HomePage = () => {
   const [activeSection, setActiveSection] = useState("Home");
   const [darkMode, setDarkMode] = useState(true);
   const [showPostModal, setShowPostModal] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+  const [ownerToken, setOwnerToken] = useState("");
+  const [editingPost, setEditingPost] = useState(null);
+  const [editPostForm, setEditPostForm] = useState({ title: "", content: "" });
+  const [isSavingEditPost, setIsSavingEditPost] = useState(false);
+  const [editPostError, setEditPostError] = useState("");
+  const [deletingPost, setDeletingPost] = useState(null);
+  const [isDeletingPost, setIsDeletingPost] = useState(false);
+  const [deletePostError, setDeletePostError] = useState("");
+  const [imageViewer, setImageViewer] = useState({ open: false, images: [], index: 0 });
 
   // ── Interactive state ──────────────────────────────────────
   const [userPosts, setUserPosts] = useState([]);           // Posts created by owner
   const [postLikes, setPostLikes] = useState({});            // { [postId]: number }
   const [postComments, setPostComments] = useState({});      // { [postId]: [{author,text,timestamp}] }
+  const [postLikedByMe, setPostLikedByMe] = useState({});    // { [postId]: bool }
   const [openComments, setOpenComments] = useState({});       // { [postId]: bool }
+  const [visitorSessionId, setVisitorSessionId] = useState("");
+  const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   // Fetch Data
   useEffect(() => {
@@ -185,18 +398,131 @@ const HomePage = () => {
           initialLikes[`exp-${exp.id}`] = 10 + i * 5;
         });
         initialLikes['pinned-applitrak'] = 42;
-        setPostLikes(initialLikes);
+        setPostLikes(prev => ({ ...initialLikes, ...prev }));
 
         // Seed initial comments
-        setPostComments({
+        setPostComments(prev => ({
+          ...prev,
           'pinned-applitrak': [
             { author: "Tech Recruiter", text: "Impressive AI integration! Would love to discuss.", timestamp: new Date(Date.now() - 3600000).toISOString() },
             { author: "Fellow Dev", text: "The 90% time reduction is incredible 🔥", timestamp: new Date(Date.now() - 1800000).toISOString() },
           ],
-        });
+        }));
       })
       .catch(err => console.error('Error loading portfolio data:', err));
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const validateOwnerSession = async () => {
+      const storedOwnerToken = localStorage.getItem("ownerSessionToken");
+      if (!storedOwnerToken) {
+        if (isMounted) {
+          setIsOwner(false);
+          setOwnerToken("");
+          setShowPostModal(false);
+          setEditingPost(null);
+          setDeletingPost(null);
+        }
+        return;
+      }
+
+      try {
+        const response = await fetch(`${apiBaseUrl}/api/owner/me`, {
+          headers: {
+            Authorization: `Bearer ${storedOwnerToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Owner session is invalid.");
+        }
+
+        if (isMounted) {
+          setIsOwner(true);
+          setOwnerToken(storedOwnerToken);
+        }
+      } catch (_error) {
+        localStorage.removeItem("ownerSessionToken");
+        if (isMounted) {
+          setIsOwner(false);
+          setOwnerToken("");
+          setShowPostModal(false);
+          setEditingPost(null);
+          setDeletingPost(null);
+        }
+      }
+    };
+
+    validateOwnerSession();
+    return () => {
+      isMounted = false;
+    };
+  }, [apiBaseUrl]);
+
+  useEffect(() => {
+    let sessionId = localStorage.getItem("portfolioVisitorSessionId");
+    if (!sessionId) {
+      sessionId = `visitor_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+      localStorage.setItem("portfolioVisitorSessionId", sessionId);
+    }
+    setVisitorSessionId(sessionId);
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (!visitorSessionId) return () => { isMounted = false; };
+
+    const loadPosts = async () => {
+      try {
+        const response = await fetch(`${apiBaseUrl}/api/posts?sessionId=${encodeURIComponent(visitorSessionId)}`);
+        if (!response.ok) {
+          throw new Error(`Failed with status ${response.status}`);
+        }
+
+        const payload = await response.json();
+        const fetchedPosts = Array.isArray(payload?.data) ? payload.data : [];
+        if (!isMounted) return;
+
+        setUserPosts(fetchedPosts);
+        setPostLikes(prev => {
+          const next = { ...prev };
+          fetchedPosts.forEach((post) => {
+            if (post?.id) {
+              next[post.id] = Number(post.likes) || 0;
+            }
+          });
+          return next;
+        });
+        setPostLikedByMe(prev => {
+          const next = { ...prev };
+          fetchedPosts.forEach((post) => {
+            if (post?.id) {
+              next[post.id] = Boolean(post.likedByCurrentSession);
+            }
+          });
+          return next;
+        });
+        setPostComments(prev => {
+          const next = { ...prev };
+          fetchedPosts.forEach((post) => {
+            if (post?.id) {
+              next[post.id] = Array.isArray(post.comments) ? post.comments : [];
+            }
+          });
+          return next;
+        });
+      } catch (error) {
+        console.error('Error loading persisted posts:', error);
+      }
+    };
+
+    loadPosts();
+    return () => {
+      isMounted = false;
+    };
+  }, [apiBaseUrl, visitorSessionId]);
 
   // Theme Toggle
   useEffect(() => {
@@ -204,39 +530,311 @@ const HomePage = () => {
     else document.documentElement.classList.remove('dark');
   }, [darkMode]);
 
+  useEffect(() => {
+    if (!imageViewer.open) return;
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setImageViewer({ open: false, images: [], index: 0 });
+        return;
+      }
+
+      if (event.key === "ArrowLeft") {
+        setImageViewer((prev) => {
+          if (!prev.open || prev.images.length < 2) return prev;
+          const nextIndex = (prev.index - 1 + prev.images.length) % prev.images.length;
+          return { ...prev, index: nextIndex };
+        });
+      }
+
+      if (event.key === "ArrowRight") {
+        setImageViewer((prev) => {
+          if (!prev.open || prev.images.length < 2) return prev;
+          const nextIndex = (prev.index + 1) % prev.images.length;
+          return { ...prev, index: nextIndex };
+        });
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [imageViewer.open]);
+
   if (!portfolioData) return <div className="flex items-center justify-center h-screen bg-background text-foreground">Loading...</div>;
 
   const { personal, experience, education, certifications, skills, social } = portfolioData;
-  const socialLinks = Object.entries(social || {}).filter(([, url]) => url);
+  const socialLinks = Object.entries(social || {}).filter(
+    ([key, url]) => url && key.toLowerCase() !== "linkedin"
+  );
 
   // ── Interaction handlers ───────────────────────────────────
   const handleNewPost = (post) => {
+    if (!isOwner || !post?.id) return;
     setUserPosts(prev => [post, ...prev]);
-    setPostLikes(prev => ({ ...prev, [post.id]: 0 }));
-    setPostComments(prev => ({ ...prev, [post.id]: [] }));
+    setPostLikes(prev => ({ ...prev, [post.id]: Number(post.likes) || 0 }));
+    setPostLikedByMe(prev => ({ ...prev, [post.id]: Boolean(post.likedByCurrentSession) }));
+    setPostComments(prev => ({ ...prev, [post.id]: Array.isArray(post.comments) ? post.comments : [] }));
   };
 
-  const handleLike = (postId, isLiking) => {
-    setPostLikes(prev => ({
-      ...prev,
-      [postId]: (prev[postId] || 0) + (isLiking ? 1 : -1),
-    }));
+  const handleLike = async (postId, isLiking) => {
+    if (!postId) return false;
+
+    if (postId.startsWith("pinned-") || postId.startsWith("exp-")) {
+      setPostLikes(prev => ({
+        ...prev,
+        [postId]: Math.max(0, (prev[postId] || 0) + (isLiking ? 1 : -1)),
+      }));
+      setPostLikedByMe(prev => ({ ...prev, [postId]: isLiking }));
+      return true;
+    }
+
+    if (!visitorSessionId) return false;
+
+    const previousLikes = Number(postLikes[postId]) || 0;
+    const previousLiked = Boolean(postLikedByMe[postId]);
+    const optimisticLikes = Math.max(0, previousLikes + (isLiking ? 1 : -1));
+
+    setPostLikedByMe(prev => ({ ...prev, [postId]: isLiking }));
+    setPostLikes(prev => ({ ...prev, [postId]: optimisticLikes }));
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/posts/${postId}/like`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionId: visitorSessionId,
+          isLiking,
+        }),
+      });
+
+      const payload = await response.json();
+      if (!response.ok || !payload?.data?.id) {
+        throw new Error(payload?.message || "Failed to update like.");
+      }
+
+      const updated = payload.data;
+      setPostLikes(prev => ({ ...prev, [postId]: Number(updated.likes) || 0 }));
+      setPostLikedByMe(prev => ({ ...prev, [postId]: Boolean(updated.likedByCurrentSession) }));
+      if (Array.isArray(updated.comments)) {
+        setPostComments(prev => ({ ...prev, [postId]: updated.comments }));
+      }
+      return true;
+    } catch (error) {
+      console.error("Error updating like:", error);
+      setPostLikes(prev => ({ ...prev, [postId]: previousLikes }));
+      setPostLikedByMe(prev => ({ ...prev, [postId]: previousLiked }));
+      return false;
+    }
   };
 
   const handleToggleComments = (postId) => {
     setOpenComments(prev => ({ ...prev, [postId]: !prev[postId] }));
   };
 
-  const handleAddComment = (postId, text) => {
-    const newComment = {
-      author: "Visitor",
-      text,
-      timestamp: new Date().toISOString(),
-    };
-    setPostComments(prev => ({
-      ...prev,
-      [postId]: [...(prev[postId] || []), newComment],
-    }));
+  const handleAddComment = async (postId, text) => {
+    if (!text?.trim()) return;
+
+    if (postId.startsWith("pinned-") || postId.startsWith("exp-")) {
+      const newComment = {
+        author: "Visitor",
+        text: text.trim(),
+        timestamp: new Date().toISOString(),
+      };
+      setPostComments(prev => ({
+        ...prev,
+        [postId]: [...(prev[postId] || []), newComment],
+      }));
+      return;
+    }
+
+    if (!visitorSessionId) return;
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/posts/${postId}/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionId: visitorSessionId,
+          author: "Visitor",
+          text: text.trim(),
+        }),
+      });
+
+      const payload = await response.json();
+      if (!response.ok || !payload?.data?.post?.id) {
+        throw new Error(payload?.message || "Failed to add comment.");
+      }
+
+      const updatedPost = payload.data.post;
+      setPostComments(prev => ({
+        ...prev,
+        [postId]: Array.isArray(updatedPost.comments) ? updatedPost.comments : [],
+      }));
+      setPostLikes(prev => ({
+        ...prev,
+        [postId]: Number(updatedPost.likes) || 0,
+      }));
+      setPostLikedByMe(prev => ({
+        ...prev,
+        [postId]: Boolean(updatedPost.likedByCurrentSession),
+      }));
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
+
+  const handleEditPost = (post) => {
+    if (!isOwner || !post?.id) return;
+    setEditingPost(post);
+    setEditPostForm({
+      title: post.title || "",
+      content: post.content || "",
+    });
+    setEditPostError("");
+  };
+
+  const closeEditPostModal = () => {
+    if (isSavingEditPost) return;
+    setEditingPost(null);
+    setEditPostError("");
+    setEditPostForm({ title: "", content: "" });
+  };
+
+  const saveEditedPost = async () => {
+    if (!isOwner || !ownerToken || !editingPost?.id) return;
+
+    setIsSavingEditPost(true);
+    setEditPostError("");
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/posts/${editingPost.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ownerToken}`,
+        },
+        body: JSON.stringify({
+          title: editPostForm.title.trim() || null,
+          content: editPostForm.content.trim(),
+        }),
+      });
+
+      const payload = await response.json();
+      if (!response.ok || !payload?.data?.id) {
+        throw new Error(payload?.message || "Failed to update post.");
+      }
+
+      setUserPosts(prev => prev.map((item) => (item.id === editingPost.id ? payload.data : item)));
+      setPostLikes(prev => ({ ...prev, [editingPost.id]: Number(payload.data.likes) || 0 }));
+      setPostLikedByMe(prev => ({ ...prev, [editingPost.id]: Boolean(payload.data.likedByCurrentSession) }));
+      setPostComments(prev => ({
+        ...prev,
+        [editingPost.id]: Array.isArray(payload.data.comments) ? payload.data.comments : [],
+      }));
+
+      closeEditPostModal();
+    } catch (error) {
+      console.error("Error updating post:", error);
+      setEditPostError(error.message || "Failed to update post.");
+    } finally {
+      setIsSavingEditPost(false);
+    }
+  };
+
+  const handleDeletePost = (post) => {
+    if (!isOwner || !post?.id) return;
+    setDeletingPost(post);
+    setDeletePostError("");
+  };
+
+  const closeDeletePostModal = () => {
+    if (isDeletingPost) return;
+    setDeletingPost(null);
+    setDeletePostError("");
+  };
+
+  const confirmDeletePost = async () => {
+    if (!isOwner || !ownerToken || !deletingPost?.id) return;
+
+    setIsDeletingPost(true);
+    setDeletePostError("");
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/posts/${deletingPost.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${ownerToken}`,
+        },
+      });
+
+      const payload = await response.json();
+      if (!response.ok || payload?.success !== true) {
+        throw new Error(payload?.message || "Failed to delete post.");
+      }
+
+      setUserPosts(prev => prev.filter((item) => item.id !== deletingPost.id));
+      setPostLikes(prev => {
+        const next = { ...prev };
+        delete next[deletingPost.id];
+        return next;
+      });
+      setPostComments(prev => {
+        const next = { ...prev };
+        delete next[deletingPost.id];
+        return next;
+      });
+      setPostLikedByMe(prev => {
+        const next = { ...prev };
+        delete next[deletingPost.id];
+        return next;
+      });
+      setOpenComments(prev => {
+        const next = { ...prev };
+        delete next[deletingPost.id];
+        return next;
+      });
+
+      closeDeletePostModal();
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      setDeletePostError(error.message || "Failed to delete post.");
+    } finally {
+      setIsDeletingPost(false);
+    }
+  };
+
+  const openImageViewer = (images, index = 0) => {
+    if (!Array.isArray(images) || images.length === 0) return;
+    const safeIndex = Math.max(0, Math.min(index, images.length - 1));
+    setImageViewer({
+      open: true,
+      images,
+      index: safeIndex,
+    });
+  };
+
+  const closeImageViewer = () => {
+    setImageViewer({ open: false, images: [], index: 0 });
+  };
+
+  const showPreviousImage = () => {
+    setImageViewer((prev) => {
+      if (!prev.open || prev.images.length < 2) return prev;
+      const nextIndex = (prev.index - 1 + prev.images.length) % prev.images.length;
+      return { ...prev, index: nextIndex };
+    });
+  };
+
+  const showNextImage = () => {
+    setImageViewer((prev) => {
+      if (!prev.open || prev.images.length < 2) return prev;
+      const nextIndex = (prev.index + 1) % prev.images.length;
+      return { ...prev, index: nextIndex };
+    });
   };
 
   const handleShare = (postId) => {
@@ -286,36 +884,46 @@ const HomePage = () => {
   };
 
   // ── Feed Controls ──────────────────────────────────────────
-  const renderFeedControls = () => (
-    <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in mb-6">
-      <div className="flex gap-3">
-        <img src={ProfilePhoto} alt="Me" className="w-10 h-10 rounded-full object-cover" />
-        <div className="flex-1">
-          <button
-            onClick={() => setShowPostModal(true)}
-            className="w-full text-left bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-muted-foreground rounded-full px-4 py-2.5 text-sm transition-colors border border-transparent focus:border-primary outline-none"
-          >
-            START A PROJECT UPDATE...
-          </button>
-          <div className="flex gap-4 mt-3 ml-1">
-            <button onClick={() => setShowPostModal(true)} className="flex items-center gap-1.5 text-muted-foreground hover:text-sky-500 text-xs font-medium transition-colors">
-              <span className="material-symbols-outlined text-lg text-sky-500">image</span> Media
+  const renderFeedControls = () => {
+    if (!isOwner) return null;
+
+    return (
+      <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in mb-6">
+        <div className="flex gap-3">
+          <img src={ProfilePhoto} alt="Me" className="w-10 h-10 rounded-full object-cover" />
+          <div className="flex-1">
+            <button
+              onClick={() => setShowPostModal(true)}
+              className="w-full text-left bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-muted-foreground rounded-full px-4 py-2.5 text-sm transition-colors border border-transparent focus:border-primary outline-none"
+            >
+              START A PROJECT UPDATE...
             </button>
-            <button onClick={() => setShowPostModal(true)} className="flex items-center gap-1.5 text-muted-foreground hover:text-emerald-500 text-xs font-medium transition-colors">
-              <span className="material-symbols-outlined text-lg text-emerald-500">code</span> Snippet
-            </button>
-            <button onClick={() => setShowPostModal(true)} className="flex items-center gap-1.5 text-muted-foreground hover:text-amber-500 text-xs font-medium transition-colors">
-              <span className="material-symbols-outlined text-lg text-amber-500">calendar_month</span> Event
-            </button>
+            <div className="flex gap-4 mt-3 ml-1">
+              <button onClick={() => setShowPostModal(true)} className="flex items-center gap-1.5 text-muted-foreground hover:text-sky-500 text-xs font-medium transition-colors">
+                <span className="material-symbols-outlined text-lg text-sky-500">image</span> Media
+              </button>
+              <button onClick={() => setShowPostModal(true)} className="flex items-center gap-1.5 text-muted-foreground hover:text-emerald-500 text-xs font-medium transition-colors">
+                <span className="material-symbols-outlined text-lg text-emerald-500">code</span> Snippet
+              </button>
+              <button onClick={() => setShowPostModal(true)} className="flex items-center gap-1.5 text-muted-foreground hover:text-amber-500 text-xs font-medium transition-colors">
+                <span className="material-symbols-outlined text-lg text-amber-500">calendar_month</span> Event
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // ── Feed Posts ──────────────────────────────────────────────
-  const renderFeedPosts = () => (
-    <div className="space-y-6">
+  const renderFeedPosts = () => {
+    const pinnedPostImages = [
+      "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/image-1766235642796.png?width=8000&height=8000&resize=contain",
+      "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-12-13-191932-1766235676192.png?width=8000&height=8000&resize=contain",
+    ];
+
+    return (
+      <div className="space-y-6">
       {/* ── User-Created Posts (newest first) ── */}
       {userPosts.map((post) => (
         <article key={post.id} id={`post-${post.id}`} className="bg-card rounded-xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow animate-slide-up">
@@ -332,10 +940,28 @@ const HomePage = () => {
                   <span className="material-symbols-outlined text-primary text-[16px] fill-1">verified</span>
                 </div>
                 <p className="text-muted-foreground text-[10px] mt-0.5 flex items-center gap-1">
-                  {timeAgo(post.timestamp)} • <span className="material-symbols-outlined text-[10px]">public</span>
+                  {timeAgo(post.timestamp)} | <span className="material-symbols-outlined text-[10px]">public</span>
                 </p>
               </div>
             </div>
+            {isOwner && (
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => handleEditPost(post)}
+                  className="w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-muted-foreground hover:text-primary"
+                  title="Edit post"
+                >
+                  <span className="material-symbols-outlined text-[18px]">edit</span>
+                </button>
+                <button
+                  onClick={() => handleDeletePost(post)}
+                  className="w-8 h-8 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-muted-foreground hover:text-red-500"
+                  title="Delete post"
+                >
+                  <span className="material-symbols-outlined text-[18px]">delete</span>
+                </button>
+              </div>
+            )}
           </div>
           <div className="px-4 pb-3">
             {post.title && <h4 className="font-bold text-sm mb-1">{post.title}</h4>}
@@ -346,7 +972,13 @@ const HomePage = () => {
           {post.images && post.images.length > 0 && (
             <div className={`grid gap-1 px-4 mb-3 ${post.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
               {post.images.map((src, idx) => (
-                <img key={idx} src={src} alt={`Attachment ${idx + 1}`} className="w-full h-40 object-cover rounded-lg border border-border" />
+                <img
+                  key={idx}
+                  src={src}
+                  alt={`Attachment ${idx + 1}`}
+                  onClick={() => openImageViewer(post.images, idx)}
+                  className="w-full max-h-96 h-auto object-contain rounded-lg border border-border bg-slate-100 dark:bg-slate-800 cursor-zoom-in"
+                />
               ))}
             </div>
           )}
@@ -384,7 +1016,7 @@ const HomePage = () => {
                 <p className="font-bold text-sm truncate">{post.event.title}</p>
                 <p className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
                   {post.event.date && <span>{new Date(post.event.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>}
-                  {post.event.time && <span>• {post.event.time}</span>}
+                  {post.event.time && <span>| {post.event.time}</span>}
                 </p>
               </div>
               <span className="material-symbols-outlined text-amber-500 text-sm">arrow_forward</span>
@@ -395,6 +1027,7 @@ const HomePage = () => {
             postId={post.id}
             likes={postLikes[post.id] || 0}
             comments={postComments[post.id] || []}
+            isLiked={Boolean(postLikedByMe[post.id])}
             onLike={handleLike}
             onToggleComments={handleToggleComments}
             onShare={handleShare}
@@ -422,12 +1055,12 @@ const HomePage = () => {
               <div className="flex items-center gap-1">
                 <h3 className="font-bold text-sm hover:underline cursor-pointer">{personal.name}</h3>
                 <span className="material-symbols-outlined text-primary text-[16px] fill-1" title="Verified">verified</span>
-                <span className="text-muted-foreground text-xs">• 1st</span>
+                <span className="text-muted-foreground text-xs">| 1st</span>
               </div>
               <div className="flex flex-col">
                 <p className="text-muted-foreground text-[11px]">{personal.title}</p>
                 <p className="text-muted-foreground text-[10px] mt-0.5 flex items-center gap-1">
-                  Just now • <span className="material-symbols-outlined text-[10px]">public</span>
+                  Just now | <span className="material-symbols-outlined text-[10px]">public</span>
                 </p>
               </div>
             </div>
@@ -440,7 +1073,7 @@ const HomePage = () => {
         <div className="px-4 pb-2">
           <h4 className="font-bold text-sm mb-1">AppliTrak: AI-Powered Job Portal</h4>
           <div className="text-sm leading-relaxed mb-4 text-foreground/90">
-            Building AppliTrak! 🚀 (Work in Progress) Making great strides on this <span className="text-primary font-medium">AI-powered job portal</span> that uses local LLMs.
+            Building AppliTrak! (Work in Progress) Making great strides on this <span className="text-primary font-medium">AI-powered job portal</span> that uses local LLMs.
             <div className="mt-2 text-xs text-muted-foreground bg-slate-100 dark:bg-slate-800 p-2 rounded border border-border/50">
               Reduced manual screening from 5-7 minutes to <span className="font-bold text-emerald-500">30 seconds</span>.
             </div>
@@ -448,14 +1081,22 @@ const HomePage = () => {
         </div>
 
         <div className="grid grid-cols-2 gap-1 px-4 mb-4">
-          <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/image-1766235642796.png?width=8000&height=8000&resize=contain" className="rounded-lg border border-border object-cover w-full h-32 bg-black" alt="Dashboard" />
-          <img src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-12-13-191932-1766235676192.png?width=8000&height=8000&resize=contain" className="rounded-lg border border-border object-cover w-full h-32 bg-black" alt="AI Analyzer" />
+          {pinnedPostImages.map((src, idx) => (
+            <img
+              key={src}
+              src={src}
+              className="rounded-lg border border-border object-contain w-full h-32 bg-black cursor-zoom-in"
+              alt={idx === 0 ? "Dashboard" : "AI Analyzer"}
+              onClick={() => openImageViewer(pinnedPostImages, idx)}
+            />
+          ))}
         </div>
 
         <PostActions
           postId="pinned-applitrak"
           likes={postLikes['pinned-applitrak'] || 0}
           comments={postComments['pinned-applitrak'] || []}
+          isLiked={Boolean(postLikedByMe['pinned-applitrak'])}
           onLike={handleLike}
           onToggleComments={handleToggleComments}
           onShare={handleShare}
@@ -516,6 +1157,7 @@ const HomePage = () => {
               postId={postId}
               likes={postLikes[postId] || 0}
               comments={postComments[postId] || []}
+              isLiked={Boolean(postLikedByMe[postId])}
               onLike={handleLike}
               onToggleComments={handleToggleComments}
               onShare={handleShare}
@@ -530,8 +1172,9 @@ const HomePage = () => {
           </article>
         );
       })}
-    </div>
-  );
+      </div>
+    );
+  };
 
   // ═══════════════════════════════════════════════════════════
   //  RENDER
@@ -602,11 +1245,11 @@ const HomePage = () => {
         {/* Left Sidebar */}
         <aside className="md:col-span-3 space-y-4 hidden md:block">
           <div className="bg-card rounded-xl border border-border">
-            <div className="h-20 bg-gradient-to-r from-primary to-blue-600"></div>
+            <div className="h-20 bg-gradient-to-r from-primary to-blue-600 rounded-t-xl"></div>
             <div className="px-4 pb-6">
               <div className="relative -mt-10 mb-3 text-center">
                 <img src={ProfilePhoto} className="w-20 h-20 rounded-xl border-4 border-card object-cover mx-auto shadow-lg" alt={personal.name} />
-              </div>
+              </div>{/*  */}
               <div className="text-center">
                 <h1 className="text-lg font-bold">{personal.name}</h1>
                 <p className="text-muted-foreground text-xs leading-tight mt-1">{personal.title}</p>
@@ -618,10 +1261,6 @@ const HomePage = () => {
 
               <div className="mt-6 pt-4 border-t border-border space-y-2">
                 <div className="flex justify-between items-center text-xs group cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-1.5 rounded transition-colors">
-                  <span className="text-muted-foreground group-hover:text-primary transition-colors">Experience</span>
-                  <span className="font-bold text-primary">{personal.yearsOfExperience} Years</span>
-                </div>
-                <div className="flex justify-between items-center text-xs group cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-1.5 rounded transition-colors">
                   <span className="text-muted-foreground group-hover:text-primary transition-colors">Projects</span>
                   <span className="font-bold text-primary">{experience.length + userPosts.length}</span>
                 </div>
@@ -631,10 +1270,15 @@ const HomePage = () => {
                 </div>
               </div>
 
-              <button className="w-full mt-4 py-2 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+              <a
+                href="https://www.linkedin.com/in/jake-mesina-b16908307/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full mt-4 py-2 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
+              >
                 <span className="material-symbols-outlined text-sm">person_add</span>
-                Connect
-              </button>
+                Connect on LinkedIn
+              </a>
             </div>
           </div>
 
@@ -662,12 +1306,39 @@ const HomePage = () => {
         <section className="md:col-span-6 space-y-6">
           {renderFeedControls()}
 
-          <PostModal
-            open={showPostModal}
-            onClose={() => setShowPostModal(false)}
-            personal={portfolioData.personal}
-            onPost={handleNewPost}
-          />
+          {isOwner && (
+            <PostModal
+              open={showPostModal}
+              onClose={() => setShowPostModal(false)}
+              personal={portfolioData.personal}
+              onPost={handleNewPost}
+              apiBaseUrl={apiBaseUrl}
+              ownerToken={ownerToken}
+            />
+          )}
+
+          {isOwner && (
+            <EditPostModal
+              open={Boolean(editingPost)}
+              values={editPostForm}
+              onChange={setEditPostForm}
+              onClose={closeEditPostModal}
+              onSave={saveEditedPost}
+              isSaving={isSavingEditPost}
+              error={editPostError}
+            />
+          )}
+
+          {isOwner && (
+            <DeletePostModal
+              open={Boolean(deletingPost)}
+              title={deletingPost?.title}
+              onCancel={closeDeletePostModal}
+              onConfirm={confirmDeletePost}
+              isDeleting={isDeletingPost}
+              error={deletePostError}
+            />
+          )}
 
           {activeSection === 'Home' && renderFeedPosts()}
 
@@ -691,7 +1362,7 @@ const HomePage = () => {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-sm">{cert.name}</h3>
-                    <p className="text-xs text-muted-foreground">{cert.issuer} • {cert.date}</p>
+                    <p className="text-xs text-muted-foreground">{cert.issuer} | {cert.date}</p>
                   </div>
                   <a href={cert.url} target="_blank" className="text-primary hover:underline text-xs">View</a>
                 </div>
@@ -755,10 +1426,19 @@ const HomePage = () => {
               <a href="#" className="hover:text-primary">Terms</a>
               <a href="#" className="hover:text-primary">Cookies</a>
             </div>
-            <p>© 2024 Jake Mesina. All rights reserved.</p>
+            <p>(c) 2024 Jake Mesina. All rights reserved.</p>
           </footer>
         </aside>
       </main>
+
+      <ImageLightbox
+        open={imageViewer.open}
+        images={imageViewer.images}
+        currentIndex={imageViewer.index}
+        onClose={closeImageViewer}
+        onPrev={showPreviousImage}
+        onNext={showNextImage}
+      />
 
       {/* Mobile Bottom Nav */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border h-14 flex items-center justify-around z-50">
@@ -778,3 +1458,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+

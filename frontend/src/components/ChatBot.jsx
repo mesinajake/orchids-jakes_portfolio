@@ -150,7 +150,7 @@ const ChatBot = () => {
                 </div>
                 <div className="chat-bot-header-text">
                   <h3>Chat with Jake</h3>
-                  <p>Online • Ready to help</p>
+                  <p>Online | Ready to help</p>
                 </div>
               </div>
               <div className="chat-bot-header-controls">
@@ -254,7 +254,7 @@ const ChatBot = () => {
                 {/* Footer */}
                 <div className="chat-bot-footer">
                   <p className="text-xs text-gray-500">
-                    Powered by AI • Not all information may be accurate
+                    Powered by AI | Not all information may be accurate
                   </p>
                 </div>
               </>
@@ -267,3 +267,4 @@ const ChatBot = () => {
 };
 
 export default ChatBot;
+

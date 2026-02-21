@@ -22,11 +22,11 @@
     }
   },
   "social": {
-    "github": "https://github.com/jakemesina",
-    "linkedin": "https://linkedin.com/in/jakemesina",
+    "github": "https://github.com/mesinajake",
+    "linkedin": "",
     "instagram": "",
     "twitter": "",
-    "portfolio": "https://www.jakemesina.com"
+    "portfolio": "https://jakemesinawebdev.vercel.app/"
   },
   "skills": {
     "frontend": [

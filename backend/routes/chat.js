@@ -44,44 +44,70 @@ const validateChat = [
   body("sessionId").trim().isLength({ min: 1, max: 100 }),
 ];
 
-function getApiKey() {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    return null;
-  }
-
-  return apiKey;
+function getGeminiApiKey() {
+  return process.env.GEMINI_API_KEY || null;
 }
 
-function buildMessages(chat) {
-  const recentMessages = chat.messages.slice(-10);
-  return [
-    { role: "system", content: SYSTEM_PROMPT },
-    ...recentMessages.map((message) => ({
-      role: message.role,
-      content: message.content,
-    })),
-  ];
+function getGeminiModel() {
+  return process.env.GEMINI_MODEL || process.env.AI_MODEL || "gemini-2.5-flash";
 }
 
-async function callOpenAI(messages, { stream = false } = {}) {
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    return { ok: false, status: 500, error: "OpenAI API key is not configured." };
+function getMaxTokens() {
+  return Number.parseInt(process.env.AI_MAX_TOKENS, 10) || 500;
+}
+
+function getTemperature() {
+  return Number.parseFloat(process.env.AI_TEMPERATURE) || 0.7;
+}
+
+function getRecentMessages(chat) {
+  return chat.messages.slice(-10);
+}
+
+function buildGeminiContents(recentMessages) {
+  return recentMessages
+    .filter((message) => message.role === "user" || message.role === "assistant")
+    .map((message) => ({
+      role: message.role === "assistant" ? "model" : "user",
+      parts: [{ text: message.content }],
+    }));
+}
+
+function extractGeminiText(payload) {
+  const parts = payload?.candidates?.[0]?.content?.parts;
+  if (!Array.isArray(parts)) {
+    return "";
   }
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  return parts
+    .map((part) => part?.text || "")
+    .join("")
+    .trim();
+}
+
+async function callGemini(contents) {
+  const apiKey = getGeminiApiKey();
+  if (!apiKey) {
+    return { ok: false, status: 500, error: "Gemini API key is not configured." };
+  }
+
+  const model = getGeminiModel();
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${apiKey}`;
+
+  const response = await fetch(endpoint, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: process.env.AI_MODEL || "gpt-4o-mini",
-      messages,
-      temperature: Number.parseFloat(process.env.AI_TEMPERATURE) || 0.7,
-      max_tokens: Number.parseInt(process.env.AI_MAX_TOKENS, 10) || 500,
-      stream,
+      systemInstruction: {
+        parts: [{ text: SYSTEM_PROMPT }],
+      },
+      contents: contents.length > 0 ? contents : [{ role: "user", parts: [{ text: "Hello" }] }],
+      generationConfig: {
+        temperature: getTemperature(),
+        maxOutputTokens: getMaxTokens(),
+      },
     }),
   });
 
@@ -90,11 +116,37 @@ async function callOpenAI(messages, { stream = false } = {}) {
     return {
       ok: false,
       status: response.status,
-      error: `OpenAI request failed: ${response.status} ${errorText}`,
+      error: `Gemini request failed: ${response.status} ${errorText}`,
     };
   }
 
-  return { ok: true, response };
+  const payload = await response.json();
+  const text = extractGeminiText(payload);
+  if (!text) {
+    return {
+      ok: false,
+      status: 502,
+      error: "Gemini returned an empty response.",
+    };
+  }
+
+  return { ok: true, text };
+}
+
+async function generateAssistantReply(chat) {
+  const recentMessages = getRecentMessages(chat);
+  const geminiResult = await callGemini(buildGeminiContents(recentMessages));
+
+  if (!geminiResult.ok) {
+    return {
+      ok: false,
+      provider: "gemini",
+      status: geminiResult.status,
+      error: geminiResult.error,
+    };
+  }
+
+  return { ok: true, provider: "gemini", reply: geminiResult.text };
 }
 
 async function getOrCreateChat(sessionId, req) {
@@ -128,29 +180,18 @@ router.post("/", validateChat, async (req, res) => {
       timestamp: new Date(),
     });
 
-    const openAIMessages = buildMessages(chat);
-    const result = await callOpenAI(openAIMessages);
+    const aiResult = await generateAssistantReply(chat);
 
-    if (!result.ok) {
-      return res.status(result.status).json({
+    if (!aiResult.ok) {
+      return res.status(aiResult.status).json({
         success: false,
-        message: result.error,
-      });
-    }
-
-    const completion = await result.response.json();
-    const aiResponse = completion?.choices?.[0]?.message?.content?.trim();
-
-    if (!aiResponse) {
-      return res.status(502).json({
-        success: false,
-        message: "OpenAI returned an empty response.",
+        message: aiResult.error,
       });
     }
 
     chat.messages.push({
       role: "assistant",
-      content: aiResponse,
+      content: aiResult.reply,
       timestamp: new Date(),
     });
 
@@ -159,7 +200,8 @@ router.post("/", validateChat, async (req, res) => {
 
     return res.json({
       success: true,
-      message: aiResponse,
+      message: aiResult.reply,
+      provider: aiResult.provider,
       sessionId: chat.sessionId,
     });
   } catch (error) {
@@ -192,61 +234,22 @@ router.post("/stream", validateChat, async (req, res) => {
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connection", "keep-alive");
 
-    const openAIMessages = buildMessages(chat);
-    const result = await callOpenAI(openAIMessages, { stream: true });
-
-    if (!result.ok) {
-      res.write(`data: ${JSON.stringify({ error: result.error })}\n\n`);
+    const aiResult = await generateAssistantReply(chat);
+    if (!aiResult.ok) {
+      res.write(`data: ${JSON.stringify({ error: aiResult.error })}\n\n`);
       res.end();
       return;
     }
 
-    const decoder = new TextDecoder();
-    let buffer = "";
-    let fullResponse = "";
+    chat.messages.push({
+      role: "assistant",
+      content: aiResult.reply,
+      timestamp: new Date(),
+    });
+    chat.updatedAt = new Date();
+    await chat.save();
 
-    for await (const chunk of result.response.body) {
-      buffer += decoder.decode(chunk, { stream: true });
-
-      let splitIndex = buffer.indexOf("\n\n");
-      while (splitIndex !== -1) {
-        const event = buffer.slice(0, splitIndex);
-        buffer = buffer.slice(splitIndex + 2);
-
-        const lines = event.split("\n");
-        for (const line of lines) {
-          const trimmed = line.trim();
-          if (!trimmed.startsWith("data:")) continue;
-
-          const payload = trimmed.slice(5).trim();
-          if (payload === "[DONE]") continue;
-
-          try {
-            const parsed = JSON.parse(payload);
-            const content = parsed?.choices?.[0]?.delta?.content || "";
-            if (!content) continue;
-
-            fullResponse += content;
-            res.write(`data: ${JSON.stringify({ content })}\n\n`);
-          } catch {
-            // Ignore malformed chunks.
-          }
-        }
-
-        splitIndex = buffer.indexOf("\n\n");
-      }
-    }
-
-    if (fullResponse) {
-      chat.messages.push({
-        role: "assistant",
-        content: fullResponse,
-        timestamp: new Date(),
-      });
-      chat.updatedAt = new Date();
-      await chat.save();
-    }
-
+    res.write(`data: ${JSON.stringify({ content: aiResult.reply })}\n\n`);
     res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
     res.end();
   } catch (error) {

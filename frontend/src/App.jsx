@@ -6,6 +6,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Certifications from "./pages/Certifications";
 import ChatBot from "./components/ChatBot";
+import OwnerLogin from "./pages/OwnerLogin";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
             <ChatBot />
           </>
         } />
+        <Route path="/owner" element={<OwnerLogin />} />
       </Routes>
     </BrowserRouter>
   );

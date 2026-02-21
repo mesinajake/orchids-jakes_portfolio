@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import ProfilePhoto from "../assets/profile_jake.jpg";
 
-const PostModal = ({ open, onClose, personal, onPost }) => {
+const PostModal = ({ open, onClose, personal, onPost, apiBaseUrl, ownerToken }) => {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
 
@@ -17,6 +17,8 @@ const PostModal = ({ open, onClose, personal, onPost }) => {
   const [showEventPanel, setShowEventPanel] = useState(false);
   const [showVideoOptions, setShowVideoOptions] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
@@ -34,6 +36,8 @@ const PostModal = ({ open, onClose, personal, onPost }) => {
       setEvent(null);
       setShowCodePanel(false); setShowEventPanel(false);
       setShowVideoOptions(false);
+      setIsSubmitting(false);
+      setSubmitError("");
       stopCamera();
     }
   }, [open]);
@@ -164,30 +168,109 @@ const PostModal = ({ open, onClose, personal, onPost }) => {
   // ═══════════════════════════════════════════════════════════
   //  POST SUBMIT
   // ═══════════════════════════════════════════════════════════
-  const canPost = content.trim() || images.length > 0 || video || codeSnippet.trim() || event;
+  const hasEventContent = Boolean(
+    event && (event.title?.trim() || event.date?.trim() || event.time?.trim())
+  );
+  const canPost = Boolean(content.trim() || images.length > 0 || video || codeSnippet.trim() || hasEventContent);
 
-  const handlePost = () => {
-    if (!canPost) return;
+  const toUploadFile = (value, fallbackName, fallbackType) => {
+    if (value instanceof File) return value;
+    if (value instanceof Blob) return new File([value], fallbackName, { type: value.type || fallbackType });
+    return null;
+  };
 
-    const newPost = {
-      id: `user-${Date.now()}`,
-      title: title.trim() || null,
-      content: content.trim(),
-      author: personal?.name || "You",
-      timestamp: new Date().toISOString(),
-      likes: 0,
-      comments: [],
-      isUserPost: true,
-      // Attachments
-      images: images.map(img => img.preview),
-      video: video ? video.preview : null,
-      codeSnippet: codeSnippet.trim() || null,
-      codeLang: codeSnippet.trim() ? codeLang : null,
-      event: event || null,
-    };
+  const uploadMediaFile = async (file) => {
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", file, file.name);
 
-    if (typeof onPost === "function") onPost(newPost);
-    handleClose();
+    const uploadResponse = await fetch(`${apiBaseUrl}/api/posts/media`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${ownerToken}`,
+      },
+      body: uploadFormData,
+    });
+
+    const uploadPayload = await uploadResponse.json();
+    if (!uploadResponse.ok || !uploadPayload?.data?.url || !uploadPayload?.data?.publicId) {
+      throw new Error(uploadPayload?.message || "Failed to upload media file.");
+    }
+
+    return uploadPayload.data;
+  };
+
+  const handlePost = async () => {
+    if (!canPost || isSubmitting) return;
+    if (!ownerToken) {
+      setSubmitError("Owner session expired. Please sign in again.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const uploadedImages = [];
+      for (let i = 0; i < images.length; i += 1) {
+        const imageFile = toUploadFile(images[i].file, `image-${Date.now()}-${i}.jpg`, "image/jpeg");
+        if (!imageFile) continue;
+        const uploadedImage = await uploadMediaFile(imageFile);
+        uploadedImages.push({
+          url: uploadedImage.url,
+          publicId: uploadedImage.publicId,
+        });
+      }
+
+      let uploadedVideo = null;
+      if (video?.file) {
+        const videoFile = toUploadFile(video.file, `video-${Date.now()}.webm`, "video/webm");
+        if (videoFile) {
+          const uploadResult = await uploadMediaFile(videoFile);
+          uploadedVideo = {
+            url: uploadResult.url,
+            publicId: uploadResult.publicId,
+          };
+        }
+      }
+
+      const postPayload = {
+        title: title.trim() || null,
+        content: content.trim(),
+        author: personal?.name || "Owner",
+        images: uploadedImages,
+        video: uploadedVideo,
+        codeSnippet: codeSnippet.trim() || null,
+        codeLang: codeSnippet.trim() ? codeLang : null,
+        event: hasEventContent
+          ? {
+            title: event?.title?.trim() || "",
+            date: event?.date?.trim() || "",
+            time: event?.time?.trim() || "",
+          }
+          : null,
+      };
+
+      const createResponse = await fetch(`${apiBaseUrl}/api/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ownerToken}`,
+        },
+        body: JSON.stringify(postPayload),
+      });
+
+      const createPayload = await createResponse.json();
+      if (!createResponse.ok || !createPayload?.data) {
+        throw new Error(createPayload?.message || "Failed to publish post.");
+      }
+
+      if (typeof onPost === "function") onPost(createPayload.data);
+      handleClose();
+    } catch (postError) {
+      setSubmitError(postError.message || "Unable to publish post.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!open) return null;
@@ -460,15 +543,18 @@ const PostModal = ({ open, onClose, personal, onPost }) => {
 
         {/* ── Post Button ── */}
         <div className="px-5 pb-4 shrink-0">
+          {submitError && (
+            <p className="text-xs text-red-500 mb-2">{submitError}</p>
+          )}
           <button
             onClick={handlePost}
-            disabled={!canPost}
-            className={`w-full py-2.5 rounded-full text-sm font-bold transition-all ${canPost
+            disabled={!canPost || isSubmitting}
+            className={`w-full py-2.5 rounded-full text-sm font-bold transition-all ${canPost && !isSubmitting
                 ? "bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20"
                 : "bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed"
               }`}
           >
-            Post
+            {isSubmitting ? "Publishing..." : "Post"}
           </button>
         </div>
       </div>
