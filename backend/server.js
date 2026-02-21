@@ -10,6 +10,8 @@ import chatRoutes from "./routes/chat.js";
 import contactRoutes from "./routes/contact.js";
 import portfolioRoutes from "./routes/portfolio.js";
 import analyticsRoutes from "./routes/analytics.js";
+import ownerRoutes from "./routes/owner.js";
+import postsRoutes from "./routes/posts.js";
 
 config();
 
@@ -72,6 +74,8 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/owner", ownerRoutes);
+app.use("/api/posts", postsRoutes);
 
 app.get("/api/health", (_req, res) => {
   res.json({
